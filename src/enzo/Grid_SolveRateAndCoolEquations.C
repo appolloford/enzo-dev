@@ -88,6 +88,40 @@ extern "C" void FORTRAN_NAME(solve_rate_cool)(
  	float *clPar1, float *clPar2, float *clPar3, float *clPar4, float *clPar5,
  	int *clDataSize, float *clCooling, float *clHeating);
 
+extern "C" void FORTRAN_NAME(krome_driver)(
+    float *d, float *e, float *ge, float *u, float *v, float *w,
+    float *De, float *CHI, float *OI, float *HNCI,
+    float *HCNI, float *H2I, float *CI, float *HI,
+    float *H2OI, float *OHI, float *O2I, float *CH2I,
+    float *H2COI, float *HCOI, float *MGI, float *NH3I,
+    float *NOI, float *CNI, float *COI, float *N2I,
+    float *NH2I, float *CH3I, float *CH4I, float *NI,
+    float *NHI, float *HeI, float *HNOI, float *CH3OHI,
+    float *CO2I, float *H2CNI, float *HNCOI,
+    float *NO2I, float *O2HI, float *OCNI, float *CH3OH_DUSTI,
+    float *HNCO_DUSTI, float *H2CO_DUSTI, float *CH4_DUSTI,
+    float *CO_DUSTI, float *H2O_DUSTI, float *NO_DUSTI,
+    float *CO2_DUSTI, float *N2_DUSTI, float *HCN_DUSTI,
+    float *NH3_DUSTI, float *O2_DUSTI, float *NO2_DUSTI,
+    float *HNO_DUSTI, float *O2H_DUSTI, float *H2CN_DUSTI,
+    float *MG_DUSTI, float *HNC_DUSTI, float *E_DUSTI,
+    float *HCOII, float *HII, float *HOCII, float *CII,
+    float *CH2II, float *CHII, float *H2COII,
+    float *MGII, float *NH3II, float *NOII, float *CNII,
+    float *COII, float *N2II, float *O2II, float *H2OII,
+    float *NH2II, float *OII, float *OHII, float *CH3II,
+    float *CH4II, float *NII, float *HCNII, float *NHII,
+    float *H2II, float *HeII, float *HNOII, float *H2NOII,
+    float *H3II, float *H3COII, float *H3OII,
+    float *HCNHII, float *HCO2II, float *HeHII,
+    float *N2HII, float *O2HII,  int *in, int *jn, int *kn,
+	hydro_method *imethod,
+    int *idual, int *idim,
+	int *is, int *js, int *ks, int *ie, int *je, int *ke, 
+	float *dt, float *aye,  
+	float *utem, float *uxyz, float *uaye, float *urho, float *utim,
+	float *gamma, float *fh, float *dtoh);
+
 
 int grid::SolveRateAndCoolEquations(int RTCoupledSolverIntermediateStep)
 {
@@ -107,8 +141,28 @@ int grid::SolveRateAndCoolEquations(int RTCoupledSolverIntermediateStep)
   /* Declarations */
 
   int DensNum, GENum, TENum, Vel1Num, Vel2Num, Vel3Num, B1Num, B2Num, B3Num;
-  int DeNum, HINum, HIINum, HeINum, HeIINum, HeIIINum, HMNum, H2INum, H2IINum,
-      DINum, DIINum, HDINum;
+  int HeIIINum, HMNum, DINum, DIINum, HDINum;
+  int DeNum, CHINum, OINum, HNCINum, HCNINum, H2INum,
+      CINum, HINum, H2OINum, OHINum, O2INum, CH2INum,
+      H2COINum, HCOINum, MGINum, NH3INum, NOINum,
+      CNINum, COINum, N2INum, NH2INum, CH3INum,
+      CH4INum, NINum, NHINum, HeINum, HNOINum,
+      CH3OHINum, CO2INum, H2CNINum, HNCOINum, NO2INum,
+      O2HINum, OCNINum, CH3OH_DUSTINum, HNCO_DUSTINum,
+      H2CO_DUSTINum, CH4_DUSTINum, CO_DUSTINum,
+      H2O_DUSTINum, NO_DUSTINum, CO2_DUSTINum,
+      N2_DUSTINum, HCN_DUSTINum, NH3_DUSTINum,
+      O2_DUSTINum, NO2_DUSTINum, HNO_DUSTINum,
+      O2H_DUSTINum, H2CN_DUSTINum, MG_DUSTINum,
+      HNC_DUSTINum, E_DUSTINum, HCOIINum, HIINum,
+      HOCIINum, CIINum, CH2IINum, CHIINum, H2COIINum,
+      MGIINum, NH3IINum, NOIINum, CNIINum, COIINum,
+      N2IINum, O2IINum, H2OIINum, NH2IINum, OIINum,
+      OHIINum, CH3IINum, CH4IINum, NIINum, HCNIINum,
+      NHIINum, H2IINum, HeIINum, HNOIINum, H2NOIINum,
+      H3IINum, H3COIINum, H3OIINum, HCNHIINum,
+      HCO2IINum, HeHIINum, N2HIINum, O2HIINum;
+
   FLOAT a = 1.0, dadt;
     
   /* Find fields: density, total energy, velocity1-3. */
@@ -118,11 +172,37 @@ int grid::SolveRateAndCoolEquations(int RTCoupledSolverIntermediateStep)
         ENZO_FAIL("Error in IdentifyPhysicalQuantities.");
   }
 
-  /* Find Multi-species fields. */
+  /* Find Multi-species fields. New routine from KROME */
 
   if (MultiSpecies)
     if (IdentifySpeciesFields(DeNum, HINum, HIINum, HeINum, HeIINum, HeIIINum, 
                       HMNum, H2INum, H2IINum, DINum, DIINum, HDINum) == FAIL) {
+            ENZO_FAIL("Error in grid->IdentifySpeciesFields.");
+    }
+
+  if (MultiSpecies)
+    if (IdentifySpeciesFieldsKrome(
+      DeNum, CHINum, OINum, HNCINum, HCNINum, H2INum,
+      CINum, HINum, H2OINum, OHINum, O2INum, CH2INum,
+      H2COINum, HCOINum, MGINum, NH3INum, NOINum,
+      CNINum, COINum, N2INum, NH2INum, CH3INum,
+      CH4INum, NINum, NHINum, HeINum, HNOINum,
+      CH3OHINum, CO2INum, H2CNINum, HNCOINum, NO2INum,
+      O2HINum, OCNINum, CH3OH_DUSTINum, HNCO_DUSTINum,
+      H2CO_DUSTINum, CH4_DUSTINum, CO_DUSTINum,
+      H2O_DUSTINum, NO_DUSTINum, CO2_DUSTINum,
+      N2_DUSTINum, HCN_DUSTINum, NH3_DUSTINum,
+      O2_DUSTINum, NO2_DUSTINum, HNO_DUSTINum,
+      O2H_DUSTINum, H2CN_DUSTINum, MG_DUSTINum,
+      HNC_DUSTINum, E_DUSTINum, HCOIINum, HIINum,
+      HOCIINum, CIINum, CH2IINum, CHIINum, H2COIINum,
+      MGIINum, NH3IINum, NOIINum, CNIINum, COIINum,
+      N2IINum, O2IINum, H2OIINum, NH2IINum, OIINum,
+      OHIINum, CH3IINum, CH4IINum, NIINum, HCNIINum,
+      NHIINum, H2IINum, HeIINum, HNOIINum, H2NOIINum,
+      H3IINum, H3COIINum, H3OIINum, HCNHIINum,
+      HCO2IINum, HeHIINum, N2HIINum, O2HIINum
+      ) == FAIL) {
             ENZO_FAIL("Error in grid->IdentifySpeciesFields.");
     }
 
@@ -249,6 +329,64 @@ int grid::SolveRateAndCoolEquations(int RTCoupledSolverIntermediateStep)
 
   /* Call the fortran routine to solve cooling equations. */
 
+
+  FORTRAN_NAME(krome_driver)(
+    density, totalenergy, gasenergy, velocity1, velocity2, velocity3,
+    BaryonField[DeNum], BaryonField[CHINum], BaryonField[OINum],
+    BaryonField[HNCINum], BaryonField[HCNINum],
+    BaryonField[H2INum], BaryonField[CINum],
+    BaryonField[HINum], BaryonField[H2OINum],
+    BaryonField[OHINum], BaryonField[O2INum],
+    BaryonField[CH2INum], BaryonField[H2COINum],
+    BaryonField[HCOINum], BaryonField[MGINum],
+    BaryonField[NH3INum], BaryonField[NOINum],
+    BaryonField[CNINum], BaryonField[COINum],
+    BaryonField[N2INum], BaryonField[NH2INum],
+    BaryonField[CH3INum], BaryonField[CH4INum],
+    BaryonField[NINum], BaryonField[NHINum],
+    BaryonField[HeINum], BaryonField[HNOINum],
+    BaryonField[CH3OHINum], BaryonField[CO2INum],
+    BaryonField[H2CNINum], BaryonField[HNCOINum],
+    BaryonField[NO2INum], BaryonField[O2HINum],
+    BaryonField[OCNINum], BaryonField[CH3OH_DUSTINum],
+    BaryonField[HNCO_DUSTINum], BaryonField[H2CO_DUSTINum],
+    BaryonField[CH4_DUSTINum], BaryonField[CO_DUSTINum],
+    BaryonField[H2O_DUSTINum], BaryonField[NO_DUSTINum],
+    BaryonField[CO2_DUSTINum], BaryonField[N2_DUSTINum],
+    BaryonField[HCN_DUSTINum], BaryonField[NH3_DUSTINum],
+    BaryonField[O2_DUSTINum], BaryonField[NO2_DUSTINum],
+    BaryonField[HNO_DUSTINum], BaryonField[O2H_DUSTINum],
+    BaryonField[H2CN_DUSTINum], BaryonField[MG_DUSTINum],
+    BaryonField[HNC_DUSTINum], BaryonField[E_DUSTINum],
+    BaryonField[HCOIINum], BaryonField[HIINum],
+    BaryonField[HOCIINum], BaryonField[CIINum],
+    BaryonField[CH2IINum], BaryonField[CHIINum],
+    BaryonField[H2COIINum], BaryonField[MGIINum],
+    BaryonField[NH3IINum], BaryonField[NOIINum],
+    BaryonField[CNIINum], BaryonField[COIINum],
+    BaryonField[N2IINum], BaryonField[O2IINum],
+    BaryonField[H2OIINum], BaryonField[NH2IINum],
+    BaryonField[OIINum], BaryonField[OHIINum],
+    BaryonField[CH3IINum], BaryonField[CH4IINum],
+    BaryonField[NIINum], BaryonField[HCNIINum],
+    BaryonField[NHIINum], BaryonField[H2IINum],
+    BaryonField[HeIINum], BaryonField[HNOIINum],
+    BaryonField[H2NOIINum], BaryonField[H3IINum],
+    BaryonField[H3COIINum], BaryonField[H3OIINum],
+    BaryonField[HCNHIINum], BaryonField[HCO2IINum],
+    BaryonField[HeHIINum], BaryonField[N2HIINum],
+    BaryonField[O2HIINum], 
+    GridDimension, GridDimension+1, GridDimension+2, 
+    &HydroMethod, 
+    &DualEnergyFormalism,
+    &GridRank, GridStartIndex, GridStartIndex+1, GridStartIndex+2, 
+    GridEndIndex, GridEndIndex+1, GridEndIndex+2,
+    &dtCool, &afloat, 
+    &TemperatureUnits, &LengthUnits, &aUnits, &DensityUnits, &TimeUnits,
+    &Gamma,
+    &CoolData.HydrogenFractionByMass, &CoolData.DeuteriumToHydrogenRatio);
+
+/*
   int ierr = 0;
   int addRT = (RadiativeTransfer) || (RadiativeTransferFLD);
   int RTcoupled = RadiativeTransferCoupledRateSolver;
@@ -332,6 +470,7 @@ int grid::SolveRateAndCoolEquations(int RTCoupledSolverIntermediateStep)
 	      GridDimension[0], GridDimension[1], GridDimension[2]);
       ENZO_FAIL("Error in FORTRAN rate/cool solver!\n");
   }
+*/
 
   if ( UseMHD ) {
     float B2, v2;

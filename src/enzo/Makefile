@@ -404,6 +404,9 @@ clean:
           auto_show*.C hydro_rk/*.o *.oo hydro_rk/*.oo \
           uuid/*.oo DEPEND TAGS \
           libconfig/*.o \
+		  myProblem/*.o \
+		  krome_enzo_patch/*.o \
+		  krome_enzo_patch/*.mod \
           python_bridge/problemtype_handler.C \
           python_bridge/problemtype_handler.h \
           python_bridge/problemtype_handler.o

@@ -1441,6 +1441,7 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     if (strstr(line, "TracerParticleCreation")) ret++;
     if (strstr(line, "TurbulenceSimulation")) ret++;
     if (strstr(line, "ProtostellarCollapse")) ret++;
+    if (strstr(line, "PrestellarCore")) ret++;
     if (strstr(line, "GalaxySimulation") 
 			&& !strstr(line,"RPSWind") && !strstr(line,"PreWind") ) ret++;
     if (strstr(line, "AgoraRestart")) ret++;
@@ -1975,6 +1976,7 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
   case 1:  NSpecies = 5;  break;
   case 2:  NSpecies = 8;  break;
   case 3:  NSpecies = 11; break;
+  case 4:  NSpecies = 92; break;
   default: NSpecies = 0;  break;
   }
 

@@ -1243,4 +1243,37 @@ OBJS_ECUDA_ALL = \
 	CUDAUtil.o \
 	SaveSubgridFluxCUDA.o 
 
+OBJS_MY_PROBLEM = \
+    myProblem/PrestellarCoreInitialize.o \
+    myProblem/Grid_PrestellarCoreInitialize.o \
+    myProblem/TurbulenceGenerator.o
+
+OBJS_KROME = \
+    Grid_IdentifySpeciesFieldsKrome.o\
+    krome_enzo_patch/opkda2.o\
+    krome_enzo_patch/opkda1.o\
+    krome_enzo_patch/opkdmain.o\
+    krome_enzo_patch/krome_commons.o\
+    krome_enzo_patch/krome_constants.o\
+    krome_enzo_patch/krome_fit.o\
+    krome_enzo_patch/krome_getphys.o\
+    krome_enzo_patch/krome_gadiab.o\
+    krome_enzo_patch/krome_grfuncs.o\
+    krome_enzo_patch/krome_phfuncs.o\
+    krome_enzo_patch/krome_user_commons.o\
+    krome_enzo_patch/krome_subs.o\
+    krome_enzo_patch/krome_stars.o\
+    krome_enzo_patch/krome_dust.o\
+    krome_enzo_patch/krome_photo.o\
+    krome_enzo_patch/krome_tabs.o\
+    krome_enzo_patch/krome_coolingGH.o\
+    krome_enzo_patch/krome_cooling.o\
+    krome_enzo_patch/krome_heating.o\
+    krome_enzo_patch/krome_ode.o\
+    krome_enzo_patch/krome_user.o\
+    krome_enzo_patch/krome_reduction.o\
+    krome_enzo_patch/krome.o\
+    krome_enzo_patch/krome_initab.o\
+    krome_enzo_patch/evaluate_tgas.o\
+    krome_enzo_patch/krome_driver.o
 

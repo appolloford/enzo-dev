@@ -84,6 +84,7 @@ int grid::UpdatePrim(float **dU, float c1, float c2)
     case 1:  NSpecies_renorm = 5;  break;
     case 2:  NSpecies_renorm = 8;  break;
     case 3:  NSpecies_renorm = 11; break;
+    case 4:  NSpecies_renorm = 92; break;
     default: NSpecies_renorm = 0;  break;
     }
 

@@ -973,6 +973,35 @@
 	$(error Illegal value '$(CONFIG_LOG2ALLOC)' for $$(CONFIG_LOG2ALLOC))
     endif
 
+#-----------------------------------------------------------------------
+# DETERMINE USE FFTW
+#-----------------------------------------------------------------------
+
+    ERROR_FFTW = 1
+
+    # compilers and settings if FFTW is yes
+
+    ifeq ($(CONFIG_FFTW),yes)
+        ERROR_FFTW = 0
+        ASSEMBLE_FFTW_INCLUDES    = $(MACH_INCLUDES_FFTW)
+        ASSEMBLE_FFTW_LIBS        = $(MACH_LIBS_FFTW)
+    endif
+
+    # compilers and settings if FFTW is no
+
+    ifeq ($(CONFIG_FFTW),no)
+        ERROR_FFTW = 0
+        ASSEMBLE_FFTW_DEFINES =
+    endif
+
+    # error if CONFIG_FFTW is incorrect
+
+    ifeq ($(ERROR_FFTW),1)
+       .PHONY: error_compilers
+       error_compilers:
+	$(error Illegal value '$(CONFIG_FFTW)' for $$(CONFIG_FFTW))
+    endif
+
 
 #=======================================================================
 # ASSIGN ALL OUTPUT VARIABLES
@@ -1035,7 +1064,7 @@
 
 
     INCLUDES = $(MACH_INCLUDES) \
-    	       $(ASSEMBLE_MPI_INCLUDES) \
+               $(ASSEMBLE_MPI_INCLUDES) \
                $(ASSEMBLE_HYPRE_INCLUDES) \
                $(ASSEMBLE_LCAPERF_INCLUDES) \
                $(ASSEMBLE_PYTHON_INCLUDES) \
@@ -1045,11 +1074,13 @@
                $(MAKEFILE_INCLUDES)   -I.
 
     OBJS_LIB = $(OBJS_CONFIG_LIB) \
-    	       $(OBJS_PHOTON_LIB) \
-    	       $(OBJS_LCAPERF_LIB) \
-	       $(OBJS_HYDRO_RK) \
-	       $(OBJS_ECUDA_LIB) \
-	       $(OBJS_PYTHON) 
+               $(OBJS_PHOTON_LIB) \
+               $(OBJS_LCAPERF_LIB) \
+               $(OBJS_HYDRO_RK) \
+               $(OBJS_ECUDA_LIB) \
+               $(OBJS_KROME) \
+               $(OBJS_MY_PROBLEM) \
+               $(OBJS_PYTHON) 
 
     LIBS = $(MACH_LIBS) \
            $(ASSEMBLE_MPI_LIBS) \
@@ -1059,6 +1090,7 @@
            $(ASSEMBLE_PYTHON_LIBS) \
            $(ASSEMBLE_NEW_PROBLEM_TYPES_LIBS) \
            $(ASSEMBLE_CUDA_LIBS) \
-           $(ASSEMBLE_GRACKLE_LIBS)
+           $(ASSEMBLE_GRACKLE_LIBS) \
+           $(ASSEMBLE_FFTW_LIBS)
 
 

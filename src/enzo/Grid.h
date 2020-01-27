@@ -1822,6 +1822,36 @@ int TransferSubgridActiveParticles(grid* Subgrids[], int NumberOfSubgrids,
 			    int &HMNum, int &H2INum, int &H2IINum,
                             int &DINum, int &DIINum, int &HDINum);
 
+  /* Identify Multi-species fields from KROME. */
+  int IdentifySpeciesFieldsKrome(int &DeNum, int &CHINum, int &OINum, int &HNCINum,
+    int &HCNINum, int &H2INum, int &CINum, int &HINum,
+    int &H2OINum, int &OHINum, int &O2INum, int &CH2INum,
+    int &H2COINum, int &HCOINum, int &MGINum,
+    int &NH3INum, int &NOINum, int &CNINum, int &COINum,
+    int &N2INum, int &NH2INum, int &CH3INum,
+    int &CH4INum, int &NINum, int &NHINum, int &HeINum,
+    int &HNOINum, int &CH3OHINum, int &CO2INum,
+    int &H2CNINum, int &HNCOINum, int &NO2INum,
+    int &O2HINum, int &OCNINum, int &CH3OH_DUSTINum,
+    int &HNCO_DUSTINum, int &H2CO_DUSTINum, int &CH4_DUSTINum,
+    int &CO_DUSTINum, int &H2O_DUSTINum, int &NO_DUSTINum,
+    int &CO2_DUSTINum, int &N2_DUSTINum, int &HCN_DUSTINum,
+    int &NH3_DUSTINum, int &O2_DUSTINum, int &NO2_DUSTINum,
+    int &HNO_DUSTINum, int &O2H_DUSTINum, int &H2CN_DUSTINum,
+    int &MG_DUSTINum, int &HNC_DUSTINum, int &E_DUSTINum,
+    int &HCOIINum, int &HIINum, int &HOCIINum,
+    int &CIINum, int &CH2IINum, int &CHIINum,
+    int &H2COIINum, int &MGIINum, int &NH3IINum,
+    int &NOIINum, int &CNIINum, int &COIINum,
+    int &N2IINum, int &O2IINum, int &H2OIINum,
+    int &NH2IINum, int &OIINum, int &OHIINum,
+    int &CH3IINum, int &CH4IINum, int &NIINum,
+    int &HCNIINum, int &NHIINum, int &H2IINum,
+    int &HeIINum, int &HNOIINum, int &H2NOIINum,
+    int &H3IINum, int &H3COIINum, int &H3OIINum,
+    int &HCNHIINum, int &HCO2IINum, int &HeHIINum,
+    int &N2HIINum, int &O2HIINum);
+
   /* Identify shock fields. */
   int IdentifyShockSpeciesFields(int &MachNum,int &PSTempNum, int &PSDenNum);
 
@@ -1894,6 +1924,28 @@ int zEulerSweep(int j, int NumberOfSubgrids, fluxes *SubgridFluxes[],
 					 float CoreEnergy,
 					 float CoreRadius,
 					 float AngularVelocity);
+
+/* Prestellar core collapse problem: initialize grid (returns SUCCESS or FAIL) */
+  int PrestellarCoreInitializeGrid(float CoreRadius,
+                     float CoreDensity,
+                     float CoreSurfaceDensity,
+                     float CoreDensityJump,
+                     float CoreInternalEnergy,
+                     float CoreAngularVelocity,
+                     float CoreBzField,
+                     float CoreAmbientBzField,
+                     float CoreVelocityDispersion,
+                     float CoreTurbulenceKStart,
+                     float CoreTurbulenceKEnd,
+                     float CoreOPR,
+                     float CoreCODeplete,
+                     int RandomSeed,
+                     int level,
+                     int* baseDims,
+                     float* CoreInitAb,
+                     float* CoreMoleMass,
+                     float* CoreTurbulence,
+                     bool SetBaryonField);
 
 /* HydroShockTubes problems: initialize grid (returns SUCCESS or FAIL) */
 
