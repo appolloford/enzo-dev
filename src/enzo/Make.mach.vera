@@ -29,9 +29,9 @@ LOCAL_PACKAGES       =
 
 LOCAL_MPI_INSTALL    = 
 LOCAL_FC_INSTALL     = 
-LOCAL_HDF5_INSTALL   = $(SNIC_NOBACKUP)/usr/hdf5
+LOCAL_HDF5_INSTALL   = $(HOME)/usr/hdf5
 LOCAL_HYPRE_INSTALL  = $(HOME)
-LOCAL_GRACKLE_INSTALL= $(SNIC_NOBACKUP)/usr/grackle
+LOCAL_GRACKLE_INSTALL= $(HOME)/usr/grackle-3.1
 LOCAL_FFTW_INSTALL   = 
 
 #-----------------------------------------------------------------------
