@@ -200,6 +200,10 @@ EXTERN int FluxCorrection;
 EXTERN int UseCoolingTimestep;
 EXTERN float CoolingTimestepSafetyFactor;
 
+/* Parameters for cooling timestep floor */
+EXTERN int UseCoolingTimestepFloor;
+EXTERN float CoolingTimestepFloor;
+
 /* This specifies the interpolation method (see typedefs.h). */
 
 EXTERN interpolation_type InterpolationMethod;
@@ -366,6 +370,9 @@ EXTERN CloudyCoolingDataType CloudyCoolingData;
 /* Gadget Equilibrium cooling on/off flag */
 
 EXTERN int GadgetEquilibriumCooling;
+
+/* Tabular Resistivity for Ambipolar Diffusion*/
+EXTERN ResistivityDataType ResistivityData;
 
 /* Random Forcing on/off flag and associated data. */ //AK
 
@@ -865,6 +872,16 @@ EXTERN int UseViscosity;
 EXTERN float ViscosityCoefficient;
 EXTERN int UseAmbipolarDiffusion;
 EXTERN int UseResistivity;
+
+/* Ambipolar Diffusion Parameters */
+EXTERN int ADResistivityType;         // 1 - , 2 - 
+EXTERN float ADResistivityScale;        // For ResistivityType = 1, the factor in front of B^2/rho^1.5
+EXTERN int ADJouleHeating;  
+EXTERN int ADDynamicHierarchy;
+EXTERN int ADUseLogInterp;
+
+/* Flag for using Grackle's calculate_temperature routine */
+EXTERN int UseGrackleTemp;
 
 /* Gravity parameters */
 

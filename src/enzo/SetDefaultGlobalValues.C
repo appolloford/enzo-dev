@@ -208,6 +208,8 @@ int SetDefaultGlobalValues(TopGridData &MetaData)
 
   UseCoolingTimestep = FALSE;
   CoolingTimestepSafetyFactor = 0.1;
+  UseCoolingTimestepFloor   = 0;
+  CoolingTimestepFloor      = 0.;
 
   InterpolationMethod       = SecondOrderA;      // ?
   ConservativeInterpolation = TRUE;              // true for ppm
@@ -832,6 +834,16 @@ int SetDefaultGlobalValues(TopGridData &MetaData)
   ViscosityCoefficient       = 0.;
   UseAmbipolarDiffusion	     = 0;
   UseResistivity	     = 0;
+
+  /* Values for ambipolar diffusion module.*/
+  ADResistivityType          = INT_UNDEFINED;         
+  ADResistivityScale         = 0;        
+  ADJouleHeating             = 0;
+  ADDynamicHierarchy         = 0;
+  ADUseLogInterp             = 1;
+
+  /* Use Grackle's Temperature Field */
+  UseGrackleTemp             = 0;
 
   StringKick = 0;
   StringKickDimension = 0;

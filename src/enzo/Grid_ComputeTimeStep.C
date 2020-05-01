@@ -41,6 +41,7 @@ int CosmologyComputeExpansionFactor(FLOAT time, FLOAT *a, FLOAT *dadt);
 int GetUnits(float *DensityUnits, float *LengthUnits,
 	     float *TemperatureUnits, float *TimeUnits,
 	     float *VelocityUnits, FLOAT Time);
+float GetResistivity(float rho, float B, float T,float Time);
 extern "C" void PFORTRAN_NAME(calc_dt)(
                   int *rank, int *idim, int *jdim, int *kdim,
                   int *i1, int *i2, int *j1, int *j2, int *k1, int *k2,
@@ -83,6 +84,7 @@ float grid::ComputeTimeStep()
   float dtCR           = huge_number;
   float dtGasDrag      = huge_number;
   float dtCooling      = huge_number;
+  float dtAD           = 0.0;
   int dim, i, j, k, index, result;
   float dtQuantum        = huge_number;  //FDM
 
@@ -99,7 +101,7 @@ float grid::ComputeTimeStep()
   int size = 1;
   for (dim = 0; dim < GridRank; dim++)
     size *= GridDimension[dim];
- 
+
   /* If using comoving coordinates, compute the expansion factor a.  Otherwise,
      set it to one. */
  
@@ -108,6 +110,14 @@ float grid::ComputeTimeStep()
     CosmologyComputeExpansionFactor(Time, &a, &dadt);
   float afloat = float(a);
  
+  float *Temp = new float[size];
+  float T;
+  /* The ambipolar diffusion module requires the temperature*/
+  if (UseAmbipolarDiffusion) {
+    if (this->ComputeTemperatureField(Temp) == FAIL) {
+      ENZO_FAIL("ComputeTimeStep(): Error when calling ComputeTemperatureField()\n");
+    }
+  }
   /* 1) Compute Courant condition for baryons. */
  
   if (NumberOfBaryonFields > 0 && (HydroMethod != HD_RK) && (HydroMethod != MHD_RK)) {
@@ -289,6 +299,7 @@ float grid::ComputeTimeStep()
       v_signal_x, v_signal_y, v_signal_z, cf, cf2, temp1, Bx, By, Bz, B2, ca2;
     int n = 0;
     float rho_dt, B_dt, v_dt;
+    float Bmag, dtAD_temp, eta;
     for (k = 0; k < GridDimension[2]; k++) {
       for (j = 0; j < GridDimension[1]; j++) {
 	for (i = 0; i < GridDimension[0]; i++, n++) {
@@ -341,6 +352,17 @@ float grid::ComputeTimeStep()
 
 	  dt_ltemp = my_MAX(dt_x, dt_y, dt_z);
 
+      /* If ADDynamicHierarchy is set, AD the timestep is included elsewhere.*/
+      if (UseAmbipolarDiffusion) {
+        Bmag = sqrt(B2);
+        T = Temp[n];
+        eta = GetResistivity(rho,Bmag,T,Time); 
+
+        dtAD_temp = 10.e0*eta*max(dxinv*dxinv,dyinv*dyinv);
+
+        dtAD = max(dtAD,dtAD_temp);
+      }
+
 	  if (dt_ltemp > dt_temp) {
 	    dt_temp = dt_ltemp;
 	    rho_dt = rho;
@@ -353,6 +375,8 @@ float grid::ComputeTimeStep()
       }
     }
     dtMHD = CourantSafetyNumber / dt_temp;
+    if (UseAmbipolarDiffusion)
+      dtAD = 1.0/dtAD;
     //    fprintf(stderr, "ok %g %g %g\n", dt_x,dt_y,dt_z);
     //    if (dtMHD*TimeUnits/yr < 5) {
     //float ca = B_dt/sqrt(rho_dt)*VelocityUnits;
@@ -453,6 +477,9 @@ float grid::ComputeTimeStep()
       }
     }
     dtCooling *= CoolingTimestepSafetyFactor;
+    if (UseCoolingTimestepFloor) {
+      dtCooling = max(dtCooling,CoolingTimestepFloor);
+    }
  
     delete [] cooling_time;
   }
@@ -496,6 +523,8 @@ float grid::ComputeTimeStep()
   dt = min(dt, dtCR);
   dt = min(dt, dtGasDrag);
   dt = min(dt, dtCooling);
+  if (UseAmbipolarDiffusion)
+    dt = min(dt, dtAD);
   dt = min(dt, dtQuantum); //FDM
   
 #ifdef TRANSFER
@@ -565,10 +594,14 @@ float grid::ComputeTimeStep()
       printf("Cond = %"ESYM" ",(dtConduction));
     if (UseGasDrag)
       printf("Drag = %"ESYM" ",(dtGasDrag));
+    if (UseAmbipolarDiffusion )
+      printf("AD   = %"ESYM" ",dtAD);
     if (QuantumPressure)
       printf("Quantum = %"ESYM" ",(dtQuantum));//FDM
     printf(")\n");
   }
  
+  delete [] Temp;
+
   return dt;
 }

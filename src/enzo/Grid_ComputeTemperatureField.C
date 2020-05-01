@@ -15,6 +15,7 @@
 // Compute the pressure at the requested time.  The pressure here is
 //   just the ideal-gas equation-of-state.
  
+#include "preincludes.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -55,6 +56,17 @@ int grid::ComputeTemperatureField(float *temperature,int IncludeCRs)
   int DeNum, HINum, HIINum, HeINum, HeIINum, HeIIINum, HMNum, H2INum, H2IINum,
       DINum, DIINum, HDINum;
  
+#ifdef USE_GRACKLE
+  /* if Grackle is used, use its temperature calculating routine instead*/
+  if (grackle_data->use_grackle && UseGrackleTemp) {
+    if(this->GrackleTemperatureWrapper(temperature) == FAIL) {
+      return FAIL;
+    }
+
+  return SUCCESS;
+  }
+#endif
+
   /* If Gadget equilibrium cooling is on, call the appropriate routine,
      then exit - don't use the rest of the routine. */
 

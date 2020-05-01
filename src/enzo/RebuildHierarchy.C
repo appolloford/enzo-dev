@@ -102,7 +102,7 @@ int RebuildHierarchy(TopGridData *MetaData,
     return SUCCESS;
   }
 
-  if (ConductionDynamicRebuildHierarchy) {
+  if (ConductionDynamicRebuildHierarchy || ADDynamicHierarchy) {
     if (TimeSinceRebuildHierarchy[level] < dtRebuildHierarchy[level]) {
       return SUCCESS;
     }

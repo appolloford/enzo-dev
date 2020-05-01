@@ -105,7 +105,7 @@ int Group_ReadAllData(char *name, HierarchyEntry *TopGrid, TopGridData &MetaData
   FILE *tptr;
   FILE *mptr;
 
-  hid_t       file_id, Hfile_id;
+  hid_t       file_id, Hfile_id=-1;
   hid_t       attr_id, dset_id;
   hid_t       file_acc_template;
   size_t      memory_increment; // in bytes
