@@ -82,6 +82,7 @@ int WriteParameterFile(FILE *fptr, TopGridData &MetaData, char *name = NULL)
     SmallT *= tempu;
     MaximumAlvenSpeed *= velu;
     EOSSoundSpeed *=  velu;
+    CoolingTimestepFloor *= tu;
 
     /*
     for (int i = 0; i < MAX_FLAGGING_METHODS; i++) {
@@ -346,6 +347,8 @@ int WriteParameterFile(FILE *fptr, TopGridData &MetaData, char *name = NULL)
   fprintf(fptr, "FluxCorrection                 = %"ISYM"\n", FluxCorrection);
   fprintf(fptr, "UseCoolingTimestep             = %"ISYM"\n", UseCoolingTimestep);
   fprintf(fptr, "CoolingTimestepSafetyFactor    = %"GSYM"\n", CoolingTimestepSafetyFactor);
+  fprintf(fptr, "UseCoolingTimestepFloor        = %"ISYM"\n", UseCoolingTimestepFloor);
+  fprintf(fptr, "CoolingTimestepFloor           = %"FSYM"\n", CoolingTimestepFloor);
   fprintf(fptr, "InterpolationMethod            = %"ISYM"\n", InterpolationMethod);
   fprintf(fptr, "ConservativeInterpolation      = %"ISYM"\n", ConservativeInterpolation);
   fprintf(fptr, "MinimumEfficiency              = %"GSYM"\n", MinimumEfficiency);
@@ -1150,6 +1153,16 @@ int WriteParameterFile(FILE *fptr, TopGridData &MetaData, char *name = NULL)
 #ifdef ECUDA
   fprintf(fptr, "UseCUDA = %"ISYM"\n", UseCUDA);
 #endif
+  // Parameters for Ambipolar Diffusion Method
+  fprintf(fptr, "ADResistivityType          = %d\n",ADResistivityType);
+  fprintf(fptr, "ADJouleHeating             = %d\n",ADJouleHeating);
+  fprintf(fptr, "ADResistivityScale         = %f\n",ADResistivityScale);
+  fprintf(fptr, "ADDynamicHierarchy         = %d\n",ADDynamicHierarchy);
+  fprintf(fptr, "ADUseLogInterp             = %d\n",ADUseLogInterp);
+  fprintf(fptr, "ADResistivityFile          = %s\n",ResistivityData.ResistivityTableFile);
+
+  /* Grackle Temperature */
+  fprintf(fptr, "UseGrackleTemp             = %d\n",UseGrackleTemp);
 
   /* Poisson Solver */
 
@@ -1227,6 +1240,7 @@ int WriteParameterFile(FILE *fptr, TopGridData &MetaData, char *name = NULL)
     MaximumAlvenSpeed /= velu;
     EOSSoundSpeed /=  velu;
     MustRefineParticlesMinimumMass /= massu;
+    CoolingTimestepFloor /= tu;
     /*
     for (int i = 0; i < MAX_FLAGGING_METHODS; i++) {
       if (MinimumMassForRefinement[i] != FLOAT_UNDEFINED) {
