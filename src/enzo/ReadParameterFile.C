@@ -55,6 +55,7 @@ int InitializeRateData(FLOAT Time);
 int InitializeEquilibriumCoolData(FLOAT Time);
 int InitializeGadgetEquilibriumCoolData(FLOAT Time);
 int InitializeRadiationFieldData(FLOAT Time);
+int InitializeResistivity(void);
 int GetUnits(float *DensityUnits, float *LengthUnits,
 	     float *TemperatureUnits, float *TimeUnits,
 	     float *VelocityUnits, double *MassUnits, FLOAT Time);
@@ -347,6 +348,8 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     ret += sscanf(line, "FluxCorrection         = %"ISYM, &FluxCorrection);
     ret += sscanf(line, "UseCoolingTimestep     = %"ISYM, &UseCoolingTimestep);
     ret += sscanf(line, "CoolingTimestepSafetyFactor = %"FSYM, &CoolingTimestepSafetyFactor);
+    ret += sscanf(line, "UseCoolingTimestepFloor     = %"ISYM, &UseCoolingTimestepFloor);
+    ret += sscanf(line, "CoolingTimestepFloor     = %"FSYM, &CoolingTimestepFloor);
     ret += sscanf(line, "InterpolationMethod    = %"ISYM, &InterpolationMethod);
     ret += sscanf(line, "ConservativeInterpolation = %"ISYM,
 		  &ConservativeInterpolation);
@@ -1230,6 +1233,19 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     ret += sscanf(line, "PositiveReconstruction = %"ISYM, &PositiveReconstruction);
     ret += sscanf(line, "ReconstructionMethod = %"ISYM, &ReconstructionMethod);
     ret += sscanf(line, "MixSpeciesAndColors = %"ISYM"", &MixSpeciesAndColors);
+    // Parameters for Ambipolar Diffusion Method
+    ret += sscanf(line, "ADResistivityType = %"ISYM,&ADResistivityType);
+    ret += sscanf(line, "ADJouleHeating = %"ISYM,&ADJouleHeating);
+    ret += sscanf(line, "ADResistivityScale = %"FSYM,&ADResistivityScale);
+    ret += sscanf(line, "ADDynamicHierarchy = %"ISYM,&ADDynamicHierarchy);
+    ret += sscanf(line, "ADUseLogInterp = %"ISYM,&ADUseLogInterp);
+
+    ret += sscanf(line, "UseGrackleTemp = %"ISYM,&UseGrackleTemp);    
+
+    if (sscanf(line, "ADResistivityFile = %s", dummy) == 1) {
+      ResistivityData.ResistivityTableFile = dummy;
+      ret++;
+    }
 
     ret += sscanf(line, "EOSType = %"ISYM, &EOSType);
     ret += sscanf(line, "EOSSoundSpeed = %"FSYM, &EOSSoundSpeed);
@@ -1501,6 +1517,21 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
                  DrivenFlowSeed);
   }
 
+  /*Check the type of resistivity and read the tabular resistivity, if necessary*/
+  if (UseAmbipolarDiffusion && (ADResistivityType == INT_UNDEFINED)) {
+    ENZO_FAIL("Ambipolar diffusion enabled but no resisivity type set. Terminating.");
+  }
+
+  if (UseAmbipolarDiffusion && (ADResistivityType == 3)) {
+    fprintf(stderr,"Calling InitializeResistivity()\n");
+    if (InitializeResistivity() == FAIL) {
+      ENZO_FAIL("Failure to read tabular resistivities.");
+    }
+  }
+  if (!UseAmbipolarDiffusion && (ADDynamicHierarchy == 1)) {
+    ENZO_FAIL("ADDynamicHierarchy is enabled while ambipolar diffusion disabled.\n");
+  }
+
   /* In order to use filtered fields we need additional ghost zones */
   if (SGSFilterStencil/2 + 2 > NumberOfGhostZones)
     ENZO_FAIL("SGS filtering needs additional ghost zones!\n");
@@ -1677,6 +1708,7 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     SmallT /= TemperatureUnits;
     MaximumAlvenSpeed /= VelocityUnits;
     EOSSoundSpeed /=  VelocityUnits;
+    CoolingTimestepFloor /= TimeUnits;
     float h, cs, dpdrho, dpde;
     EOS(SmallP, SmallRho, SmallEint, h, cs, dpdrho, dpde, EOSType, 1);
     if (debug && (HydroMethod == HD_RK || HydroMethod == MHD_RK))
@@ -1692,6 +1724,7 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     }
 
   }
+    printf("Cooling Timestep Floor (in code Units): %e\n",CoolingTimestepFloor);
 
   /* For !restart, this only ruins the units because MinimumOverDensityForRefinement is already
      set in SetDefaultGlobalValues and not FLOAT_UNDEFINED.

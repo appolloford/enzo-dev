@@ -194,6 +194,7 @@ int grid::UpdateMHDPrim(float **dU, float c1, float c2)
 
 	  printf("UpdateMHDPrim: rho <0 at %"ISYM" %"ISYM" %"ISYM": rho_old=%"FSYM", rho=%"FSYM", rho_new=%"FSYM", dU[iD]=%"FSYM"\n", 
 		 i, j, k, rho_old, rho, D_new, dU[iD][n]);
+      printf("%f %f %f %f %f %f\n",Bx_old,By_old,Bz_old,Bx_new,By_new,Bz_new);
 	  D_new = max(rho, SmallRho);
 	  printf("UpdateMHDPrim: use rho: %"FSYM"\n", D_new);
 	  //	  D_new = rho;
@@ -214,6 +215,7 @@ int grid::UpdateMHDPrim(float **dU, float c1, float c2)
 	  printf("UpdateMHDPrim: tau < 0. etot_old=%"GSYM", etot=%"GSYM", etot_new=%"GSYM", v2=%"GSYM", v2old=%"GSYM", dU[iTau] = %"GSYM", dtFixed = %"GSYM"\n", 
 		 Tau_old/rho_old, Tau/rho, Tau_new/D_new, v2, v2_old, dU[iEtot][n]*CellWidth[0][0]/dtFixed, dtFixed);
 	  printf("rho_new=%"GSYM", rho=%"GSYM", rho_old=%"GSYM", B2_old/rho_old=%"GSYM"\n", D_new, rho, rho_old, B2_old/rho_old);
+      printf("location: %"GSYM", %"GSYM", %"GSYM"\n", CellLeftEdge[0][i],CellLeftEdge[1][j],CellLeftEdge[2][k]);
 	  //return FAIL;
 	}
 

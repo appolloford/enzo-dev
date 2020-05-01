@@ -277,6 +277,7 @@ OBJS_CONFIG_LIB = \
 	GenerateGridArray.o \
 	GetNodeFreeMemory.o \
 	GetUnits.o \
+	GetResistivity.o \
 	gFLDProblem_AnalyticalEqns.o \
 	gFLDProblem_ChemistrySource.o \
 	gFLDProblem_ComputeRHS.o \
@@ -405,6 +406,7 @@ OBJS_CONFIG_LIB = \
 	Grid_ComputeAccelerationField.o \
 	Grid_ComputeAccelerations.o \
 	Grid_ComputeAccelerationsFromExternalPotential.o \
+	Grid_ComputeADTimeStep.o \
 	Grid_ComputeCellCenteredField.o \
 	Grid_ComputeConductionTimeStep.o \
 	Grid_ComputeCoolingTime.o \
@@ -517,6 +519,7 @@ OBJS_CONFIG_LIB = \
         Grid_GetEnclosedMassInShell.o \
         Grid_GetProjectedBoundaryFluxes.o \
         Grid_GrackleWrapper.o \
+        Grid_GrackleTemperatureWrapper.o \
         Grid_GravityEquilibriumTestInitializeGrid.o \
         Grid_Group_WriteGridInterpolate.o \
         Grid_Group_WriteGrid.o \
@@ -708,6 +711,7 @@ OBJS_CONFIG_LIB = \
         InitializeRadiationFieldData.o \
         InitializeRadiativeTransferSpectrumTable.o \
         InitializeRateData.o \
+	InitializeResistivity.o \
 	InitialLoadBalanceRootGrids.o \
     init_random_seed.o \
 	interp1d.o \
@@ -844,6 +848,7 @@ OBJS_CONFIG_LIB = \
 	Reduce_Times.o \
         remap.o \
         ReportMemoryUsage.o \
+        ResistivityTableLookup.o \
         ReturnWallTime.o \
 	RHIonizationClumpInitialize.o \
 	RHIonizationSteepInitialize.o \

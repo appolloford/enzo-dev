@@ -17,6 +17,7 @@
 #include "RateData.h"
 #include "RadiationFieldData.h"
 #include "TestProblemData.h"
+#include "ResistivityTable.h"
 
 /* These are the different types of baryon fields. */
 

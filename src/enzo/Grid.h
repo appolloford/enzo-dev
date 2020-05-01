@@ -582,6 +582,7 @@ gradient force to gravitational force for one-zone collapse test. */
 /* Baryons: compute the temperature. */
 
    int ComputeTemperatureField(float *temperature,int IncludeCRs=0);
+   int GrackleTemperatureWrapper(float *temperature);
 
 /* Baryons: compute the temperature at the requested time using
    Gadget equilibrium cooling. */
@@ -2988,10 +2989,17 @@ int zEulerSweep(int j, int NumberOfSubgrids, fluxes *SubgridFluxes[],
   int Hydro3D(float **Prim, float **dU, float dt,
 	      fluxes *SubgridFluxes[], int NumberOfSubgrids,
 	      float fluxcoef, float min_coeff, int fallback);
-  int TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FLOAT CloudRadius, 
-			       float CloudMachNumber, float CloudAngularVelocity, float InitialBField,
-			       int SetTurbulence, int CloudType, int TurbulenceSeed, int PutSink, 
-			       int level, int SetBaryonFields);
+  //int TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FLOAT CloudRadius, 
+  //                             float CloudMachNumber, float CloudAngularVelocity, float InitialBField,
+  //                             int SetTurbulence, int CloudType, int TurbulenceSeed, int PutSink, 
+  //                             int level, int SetBaryonFields);
+
+  // Modified Version for Cloud Collision Simulation
+  int TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FLOAT CloudRadius,
+                               float CloudMachNumber, float CloudAngularVelocity, float InitialBField,
+                               int SetTurbulence, int CloudType, int TurbulenceSeed, int PutSink,
+                               int level, int SetBaryonFields,
+                               float RelativeVelocity, float Btheta, float ImpactParameter);
   int Collapse3DInitializeGrid(int n_sphere,
 			       FLOAT r_sphere[MAX_SPHERES],
 			       FLOAT rc_sphere[MAX_SPHERES],
@@ -3170,6 +3178,7 @@ int zEulerSweep(int j, int NumberOfSubgrids, fluxes *SubgridFluxes[],
   int ComputeViscosity(float *viscosity, int DensNum);
 
   int AddAmbipolarDiffusion();
+  int ComputeADTimeStep(float &dt);
 
   int AddResistivity();
   int ComputeResistivity(float *resistivity, int DensNum);
