@@ -203,6 +203,9 @@ int DrivenFlowInitialize(FILE *fptr, FILE *Outfptr,
                          HierarchyEntry &TopGrid, TopGridData &MetaData,
                          int SetBaryonFields);
 
+int CollidingCloudInitialize(FILE *fptr, FILE *Outfptr, 
+			 HierarchyEntry &TopGrid, TopGridData &MetaData, int SetBaryonFields);
+
 int Collapse3DInitialize(FILE *fptr, FILE *Outfptr,
 			 HierarchyEntry &TopGrid, TopGridData &MetaData);
 int Collapse1DInitialize(FILE *fptr, FILE *Outfptr,
@@ -621,8 +624,13 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
   // 108) Cluster cooling flow
   if (ProblemType == 108) {
     ret = ClusterInitialize(fptr, Outfptr, TopGrid, MetaData, Exterior);
- }
+  }
 
+  /* 150) Colliding Clouds problems*/
+  if (ProblemType == 150) {
+    ret = CollidingCloudInitialize(fptr, Outfptr, TopGrid, MetaData, 0);
+  }
+ 
   // 190) FDM: Fuzzy dark matter
   if ( ProblemType == 190 ){
     ret = LightBosonInitialize(fptr, Outfptr, TopGrid, MetaData);
@@ -884,7 +892,8 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
       ProblemType != 31 &&  // BWO (isolated galaxies)
       ProblemType != 60 &&
       ProblemType != 106 && //AK
-      ProblemType != 108)   //Yuan (Cluster)
+      ProblemType != 108 && //Yuan (Cluster)
+      ProblemType != 150)
     ConvertTotalEnergyToGasEnergy(&TopGrid);
   
   // If using StarParticles, set the number to zero 
@@ -1002,6 +1011,14 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
     if (TurbulenceInitialize(fptr, Outfptr, TopGrid, MetaData, 1)
 	== FAIL) {
       ENZO_FAIL("Error in TurbulenceReInitialize.\n");
+    }
+    //  if (HydroMethod == Zeus_Hydro) ConvertTotalEnergyToGasEnergy(&TopGrid);
+  }
+
+  if (ProblemType == 150){
+    if (CollidingCloudInitialize(fptr, Outfptr, TopGrid, MetaData, 1)
+	== FAIL) {
+      ENZO_FAIL("Error in CollidingCloudReInitialize.\n");
     }
     //  if (HydroMethod == Zeus_Hydro) ConvertTotalEnergyToGasEnergy(&TopGrid);
   }

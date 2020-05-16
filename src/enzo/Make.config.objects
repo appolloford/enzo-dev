@@ -1247,3 +1247,8 @@ POBJS_UUID = \
         uuid/unpack.o \
         uuid/unparse.o \
         uuid/uuid_time.o
+
+OBJS_MY_PROBLEM = \
+    myProblem/CollidingCloudInitialize.o \
+    myProblem/Grid_CollidingCloudInitializeGrid.o \
+
