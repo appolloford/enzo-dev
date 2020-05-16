@@ -1243,4 +1243,7 @@ OBJS_ECUDA_ALL = \
 	CUDAUtil.o \
 	SaveSubgridFluxCUDA.o 
 
+OBJS_MY_PROBLEM = \
+    myProblem/CollidingCloudInitialize.o \
+    myProblem/Grid_CollidingCloudInitializeGrid.o \
 
