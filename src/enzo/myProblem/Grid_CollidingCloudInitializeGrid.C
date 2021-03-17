@@ -933,14 +933,14 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
               BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
             }
               /* velocity scale: 1=2km/s */
-              //if (x < 0.5) {
-              if (level > 0 && x < 0.5) {
+              if (x < 0.5) {
+              // if (level > 0 && x < 0.5) {
                 velfact = 0.5*vcol; 
-              //} else if (x >= 0.5) {
-              } else if (level > 0 && x >= 0.5) {
+              } else if (x >= 0.5) {
+              // } else if (level > 0 && x >= 0.5) {
                 velfact = -0.5*vcol;
-              //} else {
-                //velfact = 0;
+              } else {
+                velfact = 0;
               }
               BaryonField[ivx][igrid] += velfact; // (adds bulk flow; also changes in Grid_NormalizeVelocity.C)
 
