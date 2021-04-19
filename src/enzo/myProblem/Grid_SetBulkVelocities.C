@@ -70,9 +70,9 @@ int grid::SetBulkVelocities(float RelativeVelocity)
                                           pow(BaryonField[Vel3Num][index], 2) );
         /* add bulk velocity */
         if (x < 0.5) {
-          BaryonField[Vel1Num][index] += 0.5 * RelativeVelocity / VelocityUnits;
+          BaryonField[Vel1Num][index] += 0.5 * RelativeVelocity;
         } else {
-          BaryonField[Vel1Num][index] -= 0.5 * RelativeVelocity / VelocityUnits;
+          BaryonField[Vel1Num][index] -= 0.5 * RelativeVelocity;
         }
 
         BaryonField[TENum][index] += 0.5*(pow(BaryonField[Vel1Num][index], 2) +

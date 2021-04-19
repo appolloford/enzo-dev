@@ -932,22 +932,20 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
               BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
               BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
             }
-              /* velocity scale: 1=2km/s */
-              if (x < 0.5) {
-              // if (level > 0 && x < 0.5) {
-                velfact = 0.5*vcol; 
-              } else if (x >= 0.5) {
-              // } else if (level > 0 && x >= 0.5) {
-                velfact = -0.5*vcol;
-              } else {
-                velfact = 0;
-              }
-              BaryonField[ivx][igrid] += velfact; // (adds bulk flow; also changes in Grid_NormalizeVelocity.C)
-
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
+            /* velocity scale: 1=2km/s */
+            if (level > 0 && x < 0.5)
+            {
+              velfact = 0.5 * vcol;
+            }
+            else if (level > 0 && x >= 0.5)
+            {
+              velfact = -0.5 * vcol;
+            }
+            BaryonField[ivx][igrid] += velfact; // (adds bulk flow; also changes in Grid_SetBulkVelocity.C)
+            BaryonField[ietot][igrid] +=
+                0.5 * (pow(BaryonField[ivx][igrid], 2) +
+                       pow(BaryonField[ivy][igrid], 2) +
+                       pow(BaryonField[ivz][igrid], 2));
           }
 
           if (CloudType >= 221 && CloudType <= 229) {     // large colliding identical clouds, vel in cloud only
