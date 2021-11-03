@@ -58,7 +58,8 @@ contains
     Hnuclei = get_Hnuclei(n(:))
     mantle = get_mantle(n(:))
     mantleabund = mantle/Hnuclei
-    sputter = sputterrate(n(:))
+    ! sputter = sputterrate(n(:))
+    sputter = get_sputtering()
     Av = get_Av(Hnuclei)
     n_surface_sites = 1.5d15
     vdiff_factor = 2.0*boltzmann_erg*n_surface_sites/pi/pi/p_mass

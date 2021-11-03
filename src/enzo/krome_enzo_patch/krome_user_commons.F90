@@ -19,7 +19,7 @@ module krome_user_commons
   ! *************************************************************
 
   ! mock parameters, only for single grid model, change it!!
-  real*8 :: gridsize, gasvel
+  real*8 :: gridsize, sputteringrate
   logical :: startr = .true.
   real*8 :: ebmaxh2=1.21d3,epsilon=0.01,ebmaxcrf=1.21d3,uvcreff=1.0d-3, &
       &  ebmaxcr=1.21d3,phi=1.0d5,ebmaxuvcr=1.0d4,uvy=0.1,h2form=0.0
@@ -101,16 +101,16 @@ contains
     get_gridsize = gridsize
   end function get_gridsize
 
-  subroutine set_gasvel(vel)
+  subroutine set_sputtering(sputtering)
     implicit none
-    real*8, intent(in) :: vel
-    gasvel = vel
+    real*8, intent(in) :: sputtering
+    sputteringrate = sputtering
   end subroutine
 
-  function get_gasvel()
+  function get_sputtering()
     implicit none
-    real*8 :: get_gasvel
-    get_gasvel = gasvel
+    real*8 :: get_sputtering
+    get_sputtering = sputteringrate
   end function
 
   !**********************
@@ -577,43 +577,71 @@ contains
   !
   ! Modified from UCLCEHM
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  function sputterrate(n)
+  ! function sputterrate(n)
 
+  !   use krome_commons
+  !   use krome_constants
+  !   use krome_getphys
+  !   implicit none
+  !   real*8 :: sputterrate, n(:), mass(nspec), nh, s, coeff, mass_p, n_p, mantles, grainNumberDensity
+  !   real*8, parameter :: GAS_DUST_NUMBER_RATIO=1.14d-12
+  !   real*8, parameter :: grainRadius = 1.0d-5
+  !   integer :: ispec
+  !   integer :: projectiles(6)=(/idx_H2, idx_HE, idx_C, idx_O, idx_SI, idx_CO/)
+
+  !   mass = get_mass()
+  !   mantles = get_mantle(n(:))
+  !   nh = get_Hnuclei(n(:))
+
+  !   ! loop over projectile species and get rates of change of mantle for each, summing them
+  !   sputterrate = 0.0
+  !   do ispec = 1, size(projectiles) !!!! Make projectiles array in initialize
+  !     ! projectile mass and number density
+  !     mass_p = mass(projectiles(ispec))
+  !     n_p = n(projectiles(ispec)) !* n_h
+  !     ! leading coefficient
+  !     coeff = dsqrt(8.0 * pi * boltzmann_erg * n(idx_Tgas) / mass_p) * grainRadius**2
+  !     ! Variable relating mass and speed of projectile to energy, used in integration
+  !     s = dsqrt(mass_p * gasvel**2 / (2.0*n(idx_Tgas)*boltzmann_erg))
+  !     sputterrate = sputterrate + coeff * n_p * iceYieldRate(mass_p, n(idx_Tgas), s)
+  !   end do
+
+  !   grainNumberDensity = nh * GAS_DUST_NUMBER_RATIO
+  !   ! Total rate/cm3 (ie released particles /cm3/s) is sputterRate (per grain) multiplied by grain number density
+  !   sputterrate = sputterrate * grainNumberDensity
+  !   sputterrate = min(sputterrate, mantles)
+
+
+  ! end function
+
+  function iceYield(specidx, vel)
     use krome_commons
-    use krome_constants
     use krome_getphys
     implicit none
-    real*8 :: sputterrate, n(:), mass(nspec), nh, s, coeff, mass_p, n_p, mantles, grainNumberDensity
-    real*8, parameter :: GAS_DUST_NUMBER_RATIO=1.14d-12
-    real*8, parameter :: grainRadius = 1.0d-5
-    integer :: ispec
-    integer :: projectiles(6)=(/idx_H2, idx_HE, idx_C, idx_O, idx_SI, idx_CO/)
 
-    mass = get_mass()
-    mantles = get_mantle(n(:))
-    nh = get_Hnuclei(n(:))
+    real*8, parameter :: tarmass = 18.0 * 1.67353251819d-24 ! water ice
+    real*8, parameter :: icebind = 0.53 * 1.6d-12
+    real*8, parameter :: effic = 0.8
+    real*8, parameter :: yieldconst = 8.3d-4
 
-    ! loop over projectile species and get rates of change of mantle for each, summing them
-    sputterrate = 0.0
-    do ispec = 1, size(projectiles) !!!! Make projectiles array in initialize
-      ! projectile mass and number density
-      mass_p = mass(projectiles(ispec))
-      n_p = n(projectiles(ispec)) !* n_h
-      ! leading coefficient
-      coeff = dsqrt(8.0 * pi * boltzmann_erg * n(idx_Tgas) / mass_p) * grainRadius**2
-      ! Variable relating mass and speed of projectile to energy, used in integration
-      s = dsqrt(mass_p * gasvel**2 / (2.0*n(idx_Tgas)*boltzmann_erg))
-      sputterrate = sputterrate + coeff * n_p * iceYieldRate(mass_p, n(idx_Tgas), s)
-    end do
+    integer, intent(in) :: specidx
+    real*8, intent(in) :: vel
+    real*8 :: yield, eta, eps, eps0, projmass, m(nspec)
+    real*8 :: iceYield
 
-    grainNumberDensity = nh * GAS_DUST_NUMBER_RATIO
-    ! Total rate/cm3 (ie released particles /cm3/s) is sputterRate (per grain) multiplied by grain number density
-    sputterrate = sputterrate * grainNumberDensity
-    sputterrate = min(sputterrate, mantles)
+    m(:) = get_mass()
+    projmass = m(specidx)
 
+    eta = 4.0 * effic * projmass * tarmass * (projmass+tarmass)**(-2.0)
+    eps = eta * 0.5 * projmass * vel**2.0 / icebind
+    eps0 = max(1.0, 4.0*eta)
 
-  end function
+    iceYield = 0.0
+    if (eps > eps0) then
+      iceYield = 2.0 * yieldconst * (eps-eps0)**2 / (1.0 + (eps/30.0)**(1.3333))
+    endif
 
+  end function iceYield
 
 
   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
