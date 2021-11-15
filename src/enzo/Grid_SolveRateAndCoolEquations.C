@@ -129,7 +129,7 @@ extern "C" void FORTRAN_NAME(krome_driver)(
     int *is, int *js, int *ks, int *ie, int *je, int *ke,
     float *dt, float *aye,
     float *utem, float *uxyz, float *uaye, float *urho, float *utim,
-    float *gamma, float *fh, float *dtoh, float *gridsize);
+    float *gamma, float *fh, float *dtoh, float *gridsize, int *opt_spu);
 
 int grid::SolveRateAndCoolEquations(int RTCoupledSolverIntermediateStep)
 {
@@ -474,7 +474,8 @@ int grid::SolveRateAndCoolEquations(int RTCoupledSolverIntermediateStep)
         &dtCool, &afloat,
         &TemperatureUnits, &LengthUnits, &aUnits, &DensityUnits, &TimeUnits,
         &Gamma,
-        &CoolData.HydrogenFractionByMass, &CoolData.DeuteriumToHydrogenRatio, CellWidth[0]);
+        &CoolData.HydrogenFractionByMass, &CoolData.DeuteriumToHydrogenRatio, 
+        CellWidth[0], &use_sputtering);
   }
 #endif // USE_KROME
 

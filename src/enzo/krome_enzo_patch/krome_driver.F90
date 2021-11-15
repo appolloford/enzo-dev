@@ -35,7 +35,7 @@ subroutine krome_driver(d, e, ge, u, v, w, &
       is, js, ks, ie, je, ke, &
       dt, aye, &
       utem, uxyz, uaye, urho, utim, &
-      gamma, fh, dtoh, cellsize)
+      gamma, fh, dtoh, cellsize, opt_spu)
 
   !     SOLVE MULTI-SPECIES RATE EQUATIONS AND RADIATIVE COOLING
   !
@@ -98,6 +98,7 @@ subroutine krome_driver(d, e, ge, u, v, w, &
   integer::in,jn,kn,imethod,idual,is,js,ks,ie,je,ke,idim
   integer::i,j,k
   integer::projidx, specidx
+  integer::opt_spu
 
   real*8::De(in,jn,kn)
   real*8::CHI(in,jn,kn)
@@ -605,52 +606,53 @@ subroutine krome_driver(d, e, ge, u, v, w, &
         !store old tgas
         tgasold = tgas
 
-        ! >>>>>>>>>>>>>> calculate the sputtering rate <<<<<<<<<<<<<<<
-        ul = min(u(i, j, k) - u(i-1, j, k), 0.d0)
-        ur = max(u(i, j, k) - u(i+1, j, k), 0.d0)
-        vl = min(v(i, j, k) - v(i, j-1, k), 0.d0)
-        vr = max(v(i, j, k) - v(i, j+1, k), 0.d0)
-        wl = min(w(i, j, k) - w(i, j, k-1), 0.d0)
-        wr = max(w(i, j, k) - w(i, j, k+1), 0.d0)
-        
         sputtering = 0.0
+        ! >>>>>>>>>>>>>> calculate the sputtering rate <<<<<<<<<<<<<<<
+        if (opt_spu > 0) then
+          ul = min(u(i, j, k) - u(i-1, j, k), 0.d0)
+          ur = max(u(i, j, k) - u(i+1, j, k), 0.d0)
+          vl = min(v(i, j, k) - v(i, j-1, k), 0.d0)
+          vr = max(v(i, j, k) - v(i, j+1, k), 0.d0)
+          wl = min(w(i, j, k) - w(i, j, k-1), 0.d0)
+          wr = max(w(i, j, k) - w(i, j, k+1), 0.d0)
 
-        do projidx = 1, 6
-          specidx = projectiles(projidx)
+          do projidx = 1, 6
+            specidx = projectiles(projidx)
 
-          if (projidx == 1) then
-            numdens = H2I
-          else if (projidx == 2) then
-            numdens = HEI
-          else if (projidx == 3) then
-            numdens = CI
-          else if (projidx == 4) then
-            numdens = OI
-          else if (projidx == 5) then
-            numdens = SiI
-          else if (projidx == 6) then
-            numdens = COI
-          end if
+            if (projidx == 1) then
+              numdens = H2I
+            else if (projidx == 2) then
+              numdens = HEI
+            else if (projidx == 3) then
+              numdens = CI
+            else if (projidx == 4) then
+              numdens = OI
+            else if (projidx == 5) then
+              numdens = SiI
+            else if (projidx == 6) then
+              numdens = COI
+            end if
 
-          ulyields = iceYield(specidx, ul)
-          uryields = iceYield(specidx, ur)
-          vlyields = iceYield(specidx, vl)
-          vryields = iceYield(specidx, vr)
-          wlyields = iceYield(specidx, wl)
-          wryields = iceYield(specidx, wr)
-          ulflux = min(numdens(i, j, k) * u(i, j, k) - numdens(i-1, j, k) * u(i-1, j, k), 0.d0)
-          urflux = max(numdens(i, j, k) * u(i, j, k) - numdens(i+1, j, k) * u(i+1, j, k), 0.d0)
-          vlflux = min(numdens(i, j, k) * v(i, j, k) - numdens(i, j-1, k) * v(i, j-1, k), 0.d0)
-          vrflux = max(numdens(i, j, k) * v(i, j, k) - numdens(i, j+1, k) * v(i, j+1, k), 0.d0)
-          wlflux = min(numdens(i, j, k) * w(i, j, k) - numdens(i, j, k-1) * w(i, j, k-1), 0.d0)
-          wrflux = max(numdens(i, j, k) * w(i, j, k) - numdens(i, j, k+1) * w(i, j, k+1), 0.d0)
+            ulyields = iceYield(specidx, ul)
+            uryields = iceYield(specidx, ur)
+            vlyields = iceYield(specidx, vl)
+            vryields = iceYield(specidx, vr)
+            wlyields = iceYield(specidx, wl)
+            wryields = iceYield(specidx, wr)
+            ulflux = min(numdens(i, j, k) * u(i, j, k) - numdens(i-1, j, k) * u(i-1, j, k), 0.d0)
+            urflux = max(numdens(i, j, k) * u(i, j, k) - numdens(i+1, j, k) * u(i+1, j, k), 0.d0)
+            vlflux = min(numdens(i, j, k) * v(i, j, k) - numdens(i, j-1, k) * v(i, j-1, k), 0.d0)
+            vrflux = max(numdens(i, j, k) * v(i, j, k) - numdens(i, j+1, k) * v(i, j+1, k), 0.d0)
+            wlflux = min(numdens(i, j, k) * w(i, j, k) - numdens(i, j, k-1) * w(i, j, k-1), 0.d0)
+            wrflux = max(numdens(i, j, k) * w(i, j, k) - numdens(i, j, k+1) * w(i, j, k+1), 0.d0)
 
-          sputtering = sputtering &
-                   & + abs(ulflux) * ulyields + abs(urflux) * uryields &
-                   & + abs(vlflux) * vlyields + abs(vrflux) * vryields &
-                   & + abs(wlflux) * wlyields + abs(wrflux) * wryields 
-        
-        end do
+            sputtering = sputtering &
+                    & + abs(ulflux) * ulyields + abs(urflux) * uryields &
+                    & + abs(vlflux) * vlyields + abs(vrflux) * vryields &
+                    & + abs(wlflux) * wlyields + abs(wrflux) * wryields 
+          
+          end do
+        end if
         ! >>>>>>>>>>>>>> end of sputtering rate calculation <<<<<<<<<<<<<<<
 
         dt_hydro = utim*dt !dt*time_conversion
