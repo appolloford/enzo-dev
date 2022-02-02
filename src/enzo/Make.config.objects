@@ -520,6 +520,7 @@ OBJS_CONFIG_LIB = \
         Grid_GetProjectedBoundaryFluxes.o \
         Grid_GrackleWrapper.o \
         Grid_GrackleTemperatureWrapper.o \
+        Grid_NaunetWrapper.o \
         Grid_GravityEquilibriumTestInitializeGrid.o \
         Grid_Group_WriteGridInterpolate.o \
         Grid_Group_WriteGrid.o \
@@ -535,6 +536,7 @@ OBJS_CONFIG_LIB = \
         Grid_IdentifyPhysicalQuantities.o \
 	Grid_IdentifyRadiativeTransferFields.o \
         Grid_IdentifySpeciesFields.o \
+        Grid_IdentifyNaunetSpeciesFields.o \
 	Grid_ImplosionInitializeGrid.o \
 	Grid_InheritProperties.o \
 	Grid_InitializeGravitatingMassField.o \

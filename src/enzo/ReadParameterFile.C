@@ -16,7 +16,7 @@
 /  RETURNS: SUCCESS or FAIL
 /
 ************************************************************************/
-
+// clang-format off
 // This routine reads the parameter file in the argument and sets parameters
 //   based on it.
 
@@ -24,6 +24,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <vector>
+#ifdef USE_NAUNET
+#include "naunet_enzo.h"
+#endif
 #include "macros_and_parameters.h"
 #include "typedefs.h"
 #include "global_data.h"
@@ -1384,6 +1387,11 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     ret += sscanf(line,"MagneticSupernovaEnergy = %"FSYM, &MagneticSupernovaEnergy);
     ret += sscanf(line,"MagneticSupernovaDuration = %"FSYM, &MagneticSupernovaDuration);
 
+#ifdef USE_NAUNET
+    // Parameters for naunet
+    ret += sscanf(line, "use_naunet       = %"ISYM, &use_naunet);
+#endif
+
     /* If the dummy char space was used, then make another. */
 
     if (*dummy != 0) {
@@ -1884,6 +1892,9 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
   case 1:  NSpecies = 5;  break;
   case 2:  NSpecies = 8;  break;
   case 3:  NSpecies = 11; break;
+#ifdef USE_NAUNET
+  case NAUNET_SPECIES:  NSpecies = NAUNET_NSPECIES; break;
+#endif
   default: NSpecies = 0;  break;
   }
 

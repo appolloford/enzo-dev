@@ -8,12 +8,15 @@
 /
 /
 ************************************************************************/
-
+// clang-format off
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <math.h>
 
+#ifdef USE_NAUNET
+#include "naunet_enzo.h"
+#endif
 #include "ErrorExceptions.h"
 #include "macros_and_parameters.h"
 #include "typedefs.h"
@@ -84,6 +87,9 @@ int grid::UpdatePrim(float **dU, float c1, float c2)
     case 1:  NSpecies_renorm = 5;  break;
     case 2:  NSpecies_renorm = 8;  break;
     case 3:  NSpecies_renorm = 11; break;
+#ifdef USE_NAUNET
+    case NAUNET_SPECIES:  NSpecies_renorm = NAUNET_NSPECIES; break;
+#endif
     default: NSpecies_renorm = 0;  break;
     }
 
@@ -329,7 +335,12 @@ int grid::UpdatePrim(float **dU, float c1, float c2)
       for (n = 0; n < size; n++) 
 	Prim[field][n] *= Prim[iden][n];
   
+#ifdef USE_NAUNET
+  if (!use_naunet)
+    this->UpdateElectronDensity();
+#else
   this->UpdateElectronDensity();
+#endif
   
   if ( (NSpecies+NColor) > 0) {
     delete [] D;

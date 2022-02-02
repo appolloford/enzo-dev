@@ -12,7 +12,7 @@
 /    SUCCESS or FAIL
 /
 ************************************************************************/
-
+// clang-format off
 #include "preincludes.h"
 #include "performance.h"
 #include "macros_and_parameters.h"
@@ -29,6 +29,15 @@ int grid::MultiSpeciesHandler()
   if (GadgetEquilibriumCooling != 0) return SUCCESS;
 
   LCAPERF_START("grid_MultiSpeciesHandler");
+
+#ifdef USE_NAUNET
+  if (use_naunet == TRUE) {
+    if (this->NaunetWrapper() == FAIL) {
+      ENZO_FAIL("Error in GrackleWrapper.\n");
+    }
+    return SUCCESS;
+  }
+#endif
 
 #ifdef USE_GRACKLE
   if (grackle_data->use_grackle == TRUE) {
