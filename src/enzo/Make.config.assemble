@@ -944,6 +944,39 @@
 	$(error Illegal value '$(CONFIG_GRACKLE)' for $$(CONFIG_GRACKLE))
     endif
 
+#-----------------------------------------------------------------------
+# DETERMINE USE NAUNET
+#-----------------------------------------------------------------------
+
+    ERROR_NAUNET = 1
+
+    # compilers and settings if NAUNET is yes
+
+    ifeq ($(CONFIG_NAUNET),yes)
+        ERROR_NAUNET = 0
+        ASSEMBLE_NAUNET_DEFINES     = -DUSE_NAUNET
+        ASSEMBLE_NAUNET_INCLUDES    = $(MACH_INCLUDES_NAUNET)
+        ASSEMBLE_NAUNET_LIBS        = $(MACH_LIBS_NAUNET)
+        ASSEMBLE_SUNDIALS_INCLUDES  = $(MACH_INCLUDES_SUNDIALS)
+        ASSEMBLE_SUNDIALS_LIBS      = $(MACH_LIBS_SUNDIALS)
+        ASSEMBLE_SUITESPARSE_INCLUDES = $(MACH_INCLUDES_SUITESPARSE)
+        ASSEMBLE_SUITESPARSE_LIBS     = $(MACH_LIBS_SUITESPARSE)
+    endif
+
+    # compilers and settings if GRAVITY_4S is no
+
+    ifeq ($(CONFIG_NAUNET),no)
+        ERROR_NAUNET = 0
+        ASSEMBLE_NAUNET_DEFINES =
+    endif
+
+    # error if CONFIG_NAUNET is incorrect
+
+    ifeq ($(ERROR_NAUNET),1)
+        .PHONY: error_compilers
+        error_compilers:
+        $(error Illegal value '$(CONFIG_NAUNET)' for $$(CONFIG_NAUNET))
+    endif
 
 #-----------------------------------------------------------------------
 # DETERMINE LOG2ALLOC SETTINGS
@@ -971,6 +1004,36 @@
        .PHONY: error_log2alloc
        error_log2alloc:
 	$(error Illegal value '$(CONFIG_LOG2ALLOC)' for $$(CONFIG_LOG2ALLOC))
+    endif
+
+
+#-----------------------------------------------------------------------
+# DETERMINE USE FFTW
+#-----------------------------------------------------------------------
+
+    ERROR_FFTW = 1
+
+    # compilers and settings if FFTW is yes
+
+    ifeq ($(CONFIG_FFTW),yes)
+        ERROR_FFTW = 0
+        ASSEMBLE_FFTW_INCLUDES    = $(MACH_INCLUDES_FFTW)
+        ASSEMBLE_FFTW_LIBS        = $(MACH_LIBS_FFTW)
+    endif
+
+    # compilers and settings if FFTW is no
+
+    ifeq ($(CONFIG_FFTW),no)
+        ERROR_FFTW = 0
+        ASSEMBLE_FFTW_DEFINES =
+    endif
+
+    # error if CONFIG_FFTW is incorrect
+
+    ifeq ($(ERROR_FFTW),1)
+        .PHONY: error_compilers
+        error_compilers:
+        $(error Illegal value '$(CONFIG_FFTW)' for $$(CONFIG_FFTW))
     endif
 
 
@@ -1030,6 +1093,7 @@
               $(ASSEMBLE_GRAVITY_4S_DEFINES) \
               $(ASSEMBLE_ENZO_PERFORMANCE_DEFINES) \
               $(ASSEMBLE_GRACKLE_DEFINES) \
+              $(ASSEMBLE_NAUNET_DEFINES) \
               $(ASSEMBLE_LOG2ALLOC_DEFINES) \
               $(ASSEMBLE_ACCELERATION_BOUNDARY_DEFINES)
 
@@ -1042,11 +1106,16 @@
                $(ASSEMBLE_NEW_PROBLEM_TYPES_INCLUDES) \
                $(ASSEMBLE_PAPI_INCLUDES) \
                $(ASSEMBLE_GRACKLE_INCLUDES) \
+               $(ASSEMBLE_NAUNET_INCLUDES) \
+               $(ASSEMBLE_SUNDIALS_INCLUDES) \
+               $(ASSEMBLE_SUITESPARSE_INCLUDES) \
+               $(ASSEMBLE_FFTW_INCLUDES) \
                $(MAKEFILE_INCLUDES)   -I.
 
     OBJS_LIB = $(OBJS_CONFIG_LIB) \
     	       $(OBJS_PHOTON_LIB) \
     	       $(OBJS_LCAPERF_LIB) \
+               $(OBJS_MY_PROBLEM) \
 	       $(OBJS_HYDRO_RK) \
 	       $(OBJS_ECUDA_LIB) \
 	       $(OBJS_PYTHON) 
@@ -1059,6 +1128,10 @@
            $(ASSEMBLE_PYTHON_LIBS) \
            $(ASSEMBLE_NEW_PROBLEM_TYPES_LIBS) \
            $(ASSEMBLE_CUDA_LIBS) \
-           $(ASSEMBLE_GRACKLE_LIBS)
+           $(ASSEMBLE_GRACKLE_LIBS) \
+           $(ASSEMBLE_NAUNET_LIBS) \
+           $(ASSEMBLE_SUNDIALS_LIBS) \
+           $(ASSEMBLE_SUITESPARSE_LIBS) \
+           $(ASSEMBLE_FFTW_LIBS)
 
 

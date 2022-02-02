@@ -25,23 +25,20 @@
 #
 #=======================================================================
 
-MACH_TEXT  = Generic GNU/Linux machine file. Requires gfortran/gcc/g++, OpenMPI, and a \
-serial HDF5 library. Make sure to set the correct LOCAL_HDF5_INSTALL path in the \
-machine file (e.g., /usr for a system-wide installation or a custom path for local \
-installations).
 MACH_VALID = 1
-MACH_FILE  = Make.mach.linux-gnu
+MACH_FILE  = Make.mach.origins
 
 #-----------------------------------------------------------------------
 # Install paths (local variables)
 #-----------------------------------------------------------------------
 
-LOCAL_HDF5_INSTALL        = /PATH/TO/SERIAL-HDF5/INSTALL # mandatory
-LOCAL_GRACKLE_INSTALL     = /PATH/TO/GRACKLE/INSTALL     # optional
-LOCAL_NAUNET_INSTALL      = /PATH/TO/NAUNET/INSTALL      # optional
-LOCAL_SUNDIALS_INSTALL    = /PATH/TO/SUNDIALS/INSTALL    # optional
-LOCAL_SUITESPARSE_INSTALL = /PATH/TO/SUITESPARSE/INSTALL # optional
-LOCAL_HYPRE_INSTALL       = /PATH/TO/HYPRE/INSTALL       # optional
+LOCAL_MPI_INSTALL         = /scratch/cjhsu/usr/mpich
+LOCAL_HDF5_INSTALL        = /scratch/cjhsu/usr/hdf5
+LOCAL_GRACKLE_INSTALL     = 
+LOCAL_NAUNET_INSTALL      = /scratch/cjhsu/naunet/naunet_klu_cloud_custom
+LOCAL_SUNDIALS_INSTALL    = /scratch/cjhsu/usr/sundials-5.7.0
+LOCAL_SUITESPARSE_INSTALL = /scratch/cjhsu/usr/suitesparse/SuiteSparse-5.9.0
+LOCAL_HYPRE_INSTALL       = 
 
 #-----------------------------------------------------------------------
 # Compiler settings
@@ -96,11 +93,11 @@ MACH_OPT_AGGRESSIVE  = -O3 -g
 # Includes
 #-----------------------------------------------------------------------
 
-LOCAL_INCLUDES_MPI         = # MPI includes
+LOCAL_INCLUDES_MPI         = -I$(LOCAL_MPI_INSTALL)/include 
 LOCAL_INCLUDES_HDF5        = -I$(LOCAL_HDF5_INSTALL)/include # HDF5 includes
 LOCAL_INCLUDES_HYPRE       = -I$(LOCAL_HYPRE_INSTALL)/include
 LOCAL_INCLUDES_PAPI        = # PAPI includes
-LOCAL_INCLUDES_GRACKLE     = -I$(LOCAL_GRACKLE_INSTALL)/include
+LOCAL_INCLUDES_GRACKLE     =
 LOCAL_INCLUDES_NAUNET      = -I$(LOCAL_NAUNET_INSTALL)/include
 LOCAL_INCLUDES_SUNDIALS    = -I$(LOCAL_SUNDIALS_INSTALL)/include
 LOCAL_INCLUDES_SUITESPARSE = -I$(LOCAL_SUITESPARSE_INSTALL)/include
@@ -118,14 +115,13 @@ MACH_INCLUDES_SUITESPARSE = $(LOCAL_INCLUDES_SUITESPARSE)
 # Libraries
 #-----------------------------------------------------------------------
 
-LOCAL_LIBS_MPI        = # MPI libraries
+LOCAL_LIBS_MPI        = -L$(LOCAL_MPI_INSTALL)/lib
 LOCAL_LIBS_HDF5       = -L$(LOCAL_HDF5_INSTALL)/lib -lhdf5 -lz
 LOCAL_LIBS_HYPRE      = -L$(LOCAL_HYPRE_INSTALL)/lib -lHYPRE
 LOCAL_LIBS_PAPI       = # PAPI libraries
 LOCAL_LIBS_MACH       = -lgfortran # Machine-dependent libraries
-LOCAL_LIBS_GRACKLE    = -L$(LOCAL_GRACKLE_INSTALL)/lib -lgrackle
-LOCAL_LIBS_NAUNET     = -L$(LOCAL_NAUNET_INSTALL)/lib -lnaunet -lnaunet_ode \
-                        -L$(LOCAL_SUNDIALS_INSTALL)/lib -lsundials_cvode -lsundials_nvecserial
+LOCAL_LIBS_GRACKLE    =
+LOCAL_LIBS_NAUNET     = -L$(LOCAL_NAUNET_INSTALL)/lib -lnaunet
 
 
 MACH_LIBS             = $(LOCAL_LIBS_HDF5) $(LOCAL_LIBS_MACH)

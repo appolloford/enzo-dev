@@ -9,6 +9,7 @@
 /  PURPOSE:
 /
 ************************************************************************/
+// clang-format off
 #ifndef GRID_DEFINED__
 #define GRID_DEFINED__
 #include <vector>
@@ -739,6 +740,10 @@ gradient force to gravitational force for one-zone collapse test. */
 /* Wrap the grackle chemistry solver. */
 
    int GrackleWrapper();
+
+/* Wrap the naunet chemistry solver. */
+
+   int NaunetWrapper();
 
 /* Handle the selection of shock finding algorithm */
 
@@ -1821,6 +1826,45 @@ int TransferSubgridActiveParticles(grid* Subgrids[], int NumberOfSubgrids,
 			    int &HeINum, int &HeIINum, int &HeIIINum,
 			    int &HMNum, int &H2INum, int &H2IINum,
                             int &DINum, int &DIINum, int &HDINum);
+
+  /* Identify Multi-species fields from KROME. */
+  int IdentifyNaunetSpeciesFields(int &GCH3OHINum, int &GCH4INum, int &GCOINum,
+                                int &GCO2INum, int &GH2CNINum, int &GH2COINum,
+                                int &GH2OINum, int &GH2SiOINum, int &GHCNINum,
+                                int &GHNCINum, int &GHNCOINum, int &GHNOINum,
+                                int &GMgINum, int &GN2INum, int &GNH3INum, int
+                                &GNOINum, int &GNO2INum, int &GO2INum, int
+                                &GO2HINum, int &GSiCINum, int &GSiC2INum, int
+                                &GSiC3INum, int &GSiH4INum, int &GSiOINum, int
+                                &CINum, int &CIINum, int &CHINum, int &CHIINum,
+                                int &CH2INum, int &CH2IINum, int &CH3INum, int
+                                &CH3IINum, int &CH3OHINum, int &CH4INum, int
+                                &CH4IINum, int &CNINum, int &CNIINum, int
+                                &COINum, int &COIINum, int &CO2INum, int &DeNum,
+                                int &HINum, int &HIINum, int &H2INum, int
+                                &H2IINum, int &H2CNINum, int &H2COINum, int
+                                &H2COIINum, int &H2NOIINum, int &H2OINum, int
+                                &H2OIINum, int &H2SiOINum, int &H3IINum, int
+                                &H3COIINum, int &H3OIINum, int &HCNINum, int
+                                &HCNIINum, int &HCNHIINum, int &HCOINum, int
+                                &HCOIINum, int &HCO2IINum, int &HeINum, int
+                                &HeIINum, int &HeHIINum, int &HNCINum, int
+                                &HNCOINum, int &HNOINum, int &HNOIINum, int
+                                &HOCIINum, int &MgINum, int &MgIINum, int
+                                &NINum, int &NIINum, int &N2INum, int &N2IINum,
+                                int &N2HIINum, int &NHINum, int &NHIINum, int
+                                &NH2INum, int &NH2IINum, int &NH3INum, int
+                                &NH3IINum, int &NOINum, int &NOIINum, int
+                                &NO2INum, int &OINum, int &OIINum, int &O2INum,
+                                int &O2IINum, int &O2HINum, int &O2HIINum, int
+                                &OCNINum, int &OHINum, int &OHIINum, int
+                                &SiINum, int &SiIINum, int &SiCINum, int
+                                &SiCIINum, int &SiC2INum, int &SiC2IINum, int
+                                &SiC3INum, int &SiC3IINum, int &SiHINum, int
+                                &SiHIINum, int &SiH2INum, int &SiH2IINum, int
+                                &SiH3INum, int &SiH3IINum, int &SiH4INum, int
+                                &SiH4IINum, int &SiH5IINum, int &SiOINum, int
+                                &SiOIINum, int &SiOHIINum);
 
   /* Identify shock fields. */
   int IdentifyShockSpeciesFields(int &MachNum,int &PSTempNum, int &PSDenNum);

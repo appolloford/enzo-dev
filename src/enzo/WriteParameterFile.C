@@ -12,7 +12,7 @@
 /  RETURNS: SUCCESS or FAIL
 /
 ************************************************************************/
- 
+// clang-format off
 // This routine writes the parameter file in the argument and sets parameters
 //   based on it.
 
@@ -1185,6 +1185,10 @@ int WriteParameterFile(FILE *fptr, TopGridData &MetaData, char *name = NULL)
   fprintf(fptr, "VelocityGradient             = %"FSYM"\n",VelocityGradient);
   fprintf(fptr, "ShearingVelocityDirection    = %"ISYM"\n",ShearingVelocityDirection);
   fprintf(fptr, "ShearingBoxProblemType    = %"ISYM"\n\n", ShearingBoxProblemType);
+
+#ifdef USE_NAUNET
+  fprintf(fptr, "use_naunet       = %"ISYM"\n", use_naunet);
+#endif
 
   /* write data which defines the boundary conditions */
  
