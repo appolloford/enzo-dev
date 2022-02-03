@@ -6,8 +6,8 @@
 
 #define NAUNET_SPECIES 4
 // number of equations to be solved
-#define NAUNET_NSPECIES 114
-#define NAUNET_NEQNS 115
+#define NAUNET_NSPECIES 118
+#define NAUNET_NEQUATIONNS 114
 
 #define IDX_GCH3OHI 0
 #define IDX_GCH4I 1

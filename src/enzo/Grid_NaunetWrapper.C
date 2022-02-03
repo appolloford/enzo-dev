@@ -260,7 +260,7 @@ int grid::NaunetWrapper()
   // Set your parameters here
   NaunetData data;
 
-  float y[NAUNET_NEQNS];
+  float y[NAUNET_NEQUATIONNS];
 
   for (i=0; i<size; i++) {
     data.nH       = BaryonField[iden][i] / (Mu * mh);
