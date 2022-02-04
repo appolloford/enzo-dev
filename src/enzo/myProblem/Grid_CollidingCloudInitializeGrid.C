@@ -282,11 +282,11 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
   if (UsePhysicalUnit)
     GetUnits(&DensityUnits, &LengthUnits, &TemperatureUnits, &TimeUnits, &VelocityUnits, Time);
   double MassUnits = DensityUnits*pow(LengthUnits,3);
-  if (MyProcessorNumber == ROOT_PROCESSOR) {
-    printf("Mass Units = %"GSYM" \n",MassUnits);
-    printf("Time Units = %"GSYM" \n",TimeUnits);
-    printf("Density Units = %"GSYM" \n",DensityUnits);
-  }
+  // if (MyProcessorNumber == ROOT_PROCESSOR) {
+  //   printf("Mass Units = %"GSYM" \n",MassUnits);
+  //   printf("Time Units = %"GSYM" \n",TimeUnits);
+  //   printf("Density Units = %"GSYM" \n",DensityUnits);
+  // }
 
   GravitationalConstant = 4.0*pi*GravConst*MassUnits*pow(TimeUnits,2)/pow(LengthUnits,3);
 

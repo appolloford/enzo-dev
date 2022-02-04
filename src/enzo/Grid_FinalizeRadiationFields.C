@@ -39,6 +39,7 @@ int grid::FinalizeRadiationFields(void)
     return SUCCESS;
 
 #ifdef TRANSFER
+  if (!RadiativeTransfer && !RadiativeTransferFLD) return SUCCESS;
 
   int i, j, k, index, dim;
   float CellVolume = 1;

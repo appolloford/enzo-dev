@@ -47,6 +47,8 @@ int GetUnits(float *DensityUnits, float *LengthUnits,
  
 int grid::ComputeTemperatureField(float *temperature,int IncludeCRs)
 {
+  DebugCheck("ComputeTemperatureField start\n");
+
   /* Return if this doesn't concern us. */
  
   if (ProcessorNumber != MyProcessorNumber)
@@ -136,7 +138,7 @@ int grid::ComputeTemperatureField(float *temperature,int IncludeCRs)
   }
 
 #ifdef USE_NAUNET
-  if (MultiSpecies == FALSE || (use_naunet && grackle_primordial == 0)) {
+  if (grackle_primordial == FALSE) {
 #else
   if (MultiSpecies == FALSE) {
 #endif
@@ -158,7 +160,7 @@ int grid::ComputeTemperatureField(float *temperature,int IncludeCRs)
     /* Compute temperature with mu calculated directly. */
  
     for (i = 0; i < size; i++) {
- 
+
       number_density =
 	0.25*(BaryonField[HeINum][i]  + BaryonField[HeIINum][i] +
 	      BaryonField[HeIIINum][i]                        ) +
@@ -181,5 +183,6 @@ int grid::ComputeTemperatureField(float *temperature,int IncludeCRs)
     }
   }
  
+  DebugCheck("ComputeTemperatureField start\n");
   return SUCCESS;
 }

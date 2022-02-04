@@ -32,6 +32,7 @@ int grid::InitializeRadiativeTransferFields()
   if (MyProcessorNumber != ProcessorNumber)
     return SUCCESS;
 
+  if (!RadiativeTransfer && !RadiativeTransferFLD) return SUCCESS;
 //  if (HasRadiation == FALSE)
 //    return SUCCESS;
 

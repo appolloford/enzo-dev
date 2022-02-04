@@ -38,6 +38,8 @@ int FindField(int field, int farray[], int numfields);
 int grid::GrackleTemperatureWrapper(float *temperature)
 {
 
+  if (debug) printf("call GrackleTemperatureWrapper\n");
+
 #ifdef USE_GRACKLE
   if (grackle_data->use_grackle == FALSE)
     return SUCCESS;
@@ -62,9 +64,12 @@ int grid::GrackleTemperatureWrapper(float *temperature)
   g_grid_start = new Eint32[GridRank];
   g_grid_end = new Eint32[GridRank];
   for (i = 0; i < GridRank; i++) {
+    // printf("Grid dim: %d, startIdx: %d, endIdx: %d\n",GridDimension[i], GridStartIndex[i], GridEndIndex[i]);
     g_grid_dimension[i] = (Eint32) GridDimension[i];
     g_grid_start[i] = (Eint32) 0;  // Grackle assumes the arrays start at 0
     g_grid_end[i] = (Eint32) GridDimension[i]-1;
+    // g_grid_start[i] = (Eint32) GridStartIndex[i];
+    // g_grid_end[i] = (Eint32) GridEndIndex[i];
   }
  
   /* Find fields: density, total energy, velocity1-3. */
@@ -79,7 +84,11 @@ int grid::GrackleTemperatureWrapper(float *temperature)
   DeNum = HINum = HIINum = HeINum = HeIINum = HeIIINum = HMNum = H2INum = 
     H2IINum = DINum = DIINum = HDINum = 0;
  
+#ifdef USE_NAUNET
+  if (grackle_primordial)
+#else
   if (MultiSpecies)
+#endif
     if (IdentifySpeciesFields(DeNum, HINum, HIINum, HeINum, HeIINum, HeIIINum,
 		      HMNum, H2INum, H2IINum, DINum, DIINum, HDINum) == FAIL) {
       ENZO_FAIL("Error in grid->IdentifySpeciesFields.\n");
@@ -129,6 +138,7 @@ int grid::GrackleTemperatureWrapper(float *temperature)
   grackle_units.time_units           = (double) TimeUnits;
   grackle_units.velocity_units       = (double) VelocityUnits;
   grackle_units.a_units              = (double) aUnits;
+  grackle_units.a_value              = (double) a;
 
   /* Metal cooling codes. */
  
@@ -251,7 +261,11 @@ int grid::GrackleTemperatureWrapper(float *temperature)
       my_fields.RT_HeII_ionization_rate = BaryonField[kphHeIINum];
     }
 
+#ifdef USE_NAUNET
+    if (grackle_primordial > 1)
+#else
     if (MultiSpecies > 1)
+#endif
       my_fields.RT_H2_dissociation_rate = BaryonField[kdissH2INum];
 
     /* need to convert to CGS units */
@@ -282,6 +296,9 @@ int grid::GrackleTemperatureWrapper(float *temperature)
   /* Check temperatures for NaNs */
   for (i = 0; i < size; i++) {
 
+    // if (density[i] == 0.0)
+    //   printf("Warning: zero density\n");
+    // printf("grackle temp: %10.3e\n", temperature[i]);
     if (temperature[i] != temperature[i]) {
       temperature[i] = huge_number;
     }

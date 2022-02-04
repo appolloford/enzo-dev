@@ -84,6 +84,11 @@ int RadiativeTransferReadParameters(FILE *fptr)
   if (MultiSpecies == 0)
     RadiativeTransferOpticallyThinH2 = FALSE;
 
+#ifdef USE_NAUNET
+  if (grackle_primordial == 0)
+    RadiativeTransferOpticallyThinH2 = FALSE;
+#endif
+
   /* read input from file */
 
   while (fgets(line, MAX_LINE_LENGTH, fptr) != NULL) {

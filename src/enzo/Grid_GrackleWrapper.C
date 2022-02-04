@@ -82,7 +82,11 @@ int grid::GrackleWrapper()
   DeNum = HINum = HIINum = HeINum = HeIINum = HeIIINum = HMNum = H2INum = 
     H2IINum = DINum = DIINum = HDINum = 0;
  
+#ifdef USE_NAUNET
+  if (grackle_primordial)
+#else
   if (MultiSpecies)
+#endif
     if (IdentifySpeciesFields(DeNum, HINum, HIINum, HeINum, HeIINum, HeIIINum,
 		      HMNum, H2INum, H2IINum, DINum, DIINum, HDINum) == FAIL) {
       ENZO_FAIL("Error in grid->IdentifySpeciesFields.\n");
@@ -257,7 +261,7 @@ int grid::GrackleWrapper()
       my_fields.RT_HeII_ionization_rate = BaryonField[kphHeIINum];
     }
 
-    if (MultiSpecies > 1)
+    if (grackle_data->primordial_chemistry > 1)
       my_fields.RT_H2_dissociation_rate = BaryonField[kdissH2INum];
 
     /* need to convert to CGS units */
