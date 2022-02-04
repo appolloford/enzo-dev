@@ -1405,7 +1405,8 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
 
 #ifdef USE_NAUNET
     // Parameters for naunet
-    ret += sscanf(line, "use_naunet       = %"ISYM, &use_naunet);
+    ret += sscanf(line, "use_naunet            = %"ISYM, &use_naunet);
+    ret += sscanf(line, "grackle_primordial    = %"ISYM, &grackle_primordial);
 #endif
 
     /* If the dummy char space was used, then make another. */
@@ -1791,7 +1792,11 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     // grackle_data->LWbackground_sawtooth_suppression already set
     grackle_data->use_grackle                    = (Eint32) use_grackle;
     grackle_data->Gamma                          = (double) Gamma;
+#ifdef USE_NAUNET
+    grackle_data->primordial_chemistry           = (Eint32) grackle_primordial;
+#else
     grackle_data->primordial_chemistry           = (Eint32) MultiSpecies;
+#endif
     grackle_data->metal_cooling                  = (Eint32) MetalCooling;
     grackle_data->h2_on_dust                     = (Eint32) H2FormationOnDust;
     grackle_data->cmb_temperature_floor          = (Eint32) CloudyCoolingData.CMBTemperatureFloor;

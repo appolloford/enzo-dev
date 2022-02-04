@@ -1187,7 +1187,8 @@ int WriteParameterFile(FILE *fptr, TopGridData &MetaData, char *name = NULL)
   fprintf(fptr, "ShearingBoxProblemType    = %"ISYM"\n\n", ShearingBoxProblemType);
 
 #ifdef USE_NAUNET
-  fprintf(fptr, "use_naunet       = %"ISYM"\n", use_naunet);
+  fprintf(fptr, "use_naunet           = %"ISYM"\n", use_naunet);
+  fprintf(fptr, "grackle_primordial   = %"ISYM"\n", grackle_primordial);
 #endif
 
   /* write data which defines the boundary conditions */
