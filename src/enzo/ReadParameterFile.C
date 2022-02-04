@@ -1389,7 +1389,8 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
 
 #ifdef USE_NAUNET
     // Parameters for naunet
-    ret += sscanf(line, "use_naunet       = %"ISYM, &use_naunet);
+    ret += sscanf(line, "use_naunet            = %"ISYM, &use_naunet);
+    ret += sscanf(line, "grackle_primordial    = %"ISYM, &grackle_primordial);
 #endif
 
     /* If the dummy char space was used, then make another. */

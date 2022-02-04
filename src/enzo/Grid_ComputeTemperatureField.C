@@ -135,8 +135,11 @@ int grid::ComputeTemperatureField(float *temperature,int IncludeCRs)
     min_temperature = tiny_number;
   }
 
-  if (MultiSpecies == FALSE)
- 
+#ifdef USE_NAUNET
+  if (MultiSpecies == FALSE || (use_naunet && grackle_primordial == 0)) {
+#else
+  if (MultiSpecies == FALSE) {
+#endif
     /* If the multi-species flag is not set,
        Compute temperature T = p/d and assume mu = Mu (global data). */
  
@@ -144,6 +147,7 @@ int grid::ComputeTemperatureField(float *temperature,int IncludeCRs)
       temperature[i] = max((TemperatureUnits*temperature[i]*mol_weight
 		         /max(BaryonField[DensNum][i], tiny_number)),
 			 min_temperature);
+  }
   else {
  
     /* Find Multi-species fields. */
