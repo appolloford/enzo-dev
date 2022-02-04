@@ -263,6 +263,7 @@ int CollidingCloudInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
       DensityUnits, VelocityUnits, LengthUnits, TimeUnits, TimeUnits/3.1558e7, PressureUnits);
     printf("CloudDensity=%"GSYM", CloudSoundSpeed=%"GSYM", CloudRadius=%"GSYM", CloudAngularVelocity=%"GSYM"\n", 
       CloudDensity, CloudSoundSpeed, CloudRadius, CloudAngularVelocity);
+    printf("Temperature Unit: %10.3e\n", TemperatureUnits);
   }
 
   /* Begin grid initialization */
@@ -374,7 +375,7 @@ int CollidingCloudInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
     for (level = MaximumRefinementLevel; level > 0; level--) {
       LevelHierarchyEntry *Temp = LevelArray[level];
       while (Temp != NULL) {
-        printf("Project solution back to parent:\n");
+        // printf("Project solution back to parent:\n");
         if (Temp->GridData->ProjectSolutionToParentGrid(
             *LevelArray[level-1]->GridData) == FAIL) {
           fprintf(stderr, "Error in grid->ProjectSolutionToParentGrid.\n");

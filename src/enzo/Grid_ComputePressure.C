@@ -244,8 +244,12 @@ int grid::ComputePressure(FLOAT time, float *pressure,
     } /* end of loop over cells */
  
   /* Correct for Gamma from H2. */
- 
+
+#ifdef USE_NAUNET
+  if (grackle_primordial > 1) {
+#else
   if (MultiSpecies > 1) {
+#endif
  
     float TemperatureUnits=1, number_density, nH2, GammaH2Inverse,
       GammaInverse = 1.0/(Gamma-1.0), x, Gamma1, temp;

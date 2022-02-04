@@ -94,6 +94,7 @@ extern "C" void FORTRAN_NAME(cool_time)(
 int grid::ComputeCoolingTime(float *cooling_time, int CoolingTimeOnly)
 {
  
+  DebugCheck("ComputeCoolingTime start\n");
   /* Return if this doesn't concern us. */
 
   if (RadiativeCooling == 0) return SUCCESS;
@@ -122,8 +123,12 @@ int grid::ComputeCoolingTime(float *cooling_time, int CoolingTimeOnly)
 
   DeNum = HINum = HIINum = HeINum = HeIINum = HeIIINum = HMNum = H2INum = 
     H2IINum = DINum = DIINum = HDINum = 0;
- 
+
+#ifdef USE_NAUNET
+  if (grackle_primordial)
+#else
   if (MultiSpecies)
+#endif
     if (IdentifySpeciesFields(DeNum, HINum, HIINum, HeINum, HeIINum, HeIIINum,
 		      HMNum, H2INum, H2IINum, DINum, DIINum, HDINum) == FAIL) {
       ENZO_FAIL("Error in grid->IdentifySpeciesFields.\n");
@@ -311,7 +316,7 @@ int grid::ComputeCoolingTime(float *cooling_time, int CoolingTimeOnly)
         my_fields.RT_HeII_ionization_rate = BaryonField[kphHeIINum];
       }
 
-      if (MultiSpecies > 1)
+      if (grackle_primordial > 1)
         my_fields.RT_H2_dissociation_rate = BaryonField[kdissH2INum];
 
       /* need to convert to CGS units */
@@ -524,6 +529,6 @@ int grid::ComputeCoolingTime(float *cooling_time, int CoolingTimeOnly)
   }
 
   delete [] TotalMetals;
- 
+
   return SUCCESS;
 }
