@@ -38,6 +38,33 @@ int FindField(int field, int farray[], int numfields);
 
 #ifdef USE_NAUNET
 
+
+double GetHNuclei(double *y) {
+    return 4.0e+00*y[IDX_GCH3OHI] + 4.0e+00*y[IDX_GCH4I] + 2.0e+00*y[IDX_GH2CNI] +
+        2.0e+00*y[IDX_GH2COI] + 2.0e+00*y[IDX_GH2OI] + 2.0e+00*y[IDX_GH2SiOI] +
+        1.0e+00*y[IDX_GHCNI] + 1.0e+00*y[IDX_GHNCI] + 1.0e+00*y[IDX_GHNCOI] +
+        1.0e+00*y[IDX_GHNOI] + 3.0e+00*y[IDX_GNH3I] + 1.0e+00*y[IDX_GO2HI] +
+        4.0e+00*y[IDX_GSiH4I] + 1.0e+00*y[IDX_CHI] + 1.0e+00*y[IDX_CHII] +
+        2.0e+00*y[IDX_CH2I] + 2.0e+00*y[IDX_CH2II] + 3.0e+00*y[IDX_CH3I] +
+        3.0e+00*y[IDX_CH3II] + 4.0e+00*y[IDX_CH3OHI] + 4.0e+00*y[IDX_CH4I] +
+        4.0e+00*y[IDX_CH4II] + 1.0e+00*y[IDX_HI] + 1.0e+00*y[IDX_HII] +
+        2.0e+00*y[IDX_H2I] + 2.0e+00*y[IDX_H2II] + 2.0e+00*y[IDX_H2CNI] +
+        2.0e+00*y[IDX_H2COI] + 2.0e+00*y[IDX_H2COII] + 2.0e+00*y[IDX_H2NOII] +
+        2.0e+00*y[IDX_H2OI] + 2.0e+00*y[IDX_H2OII] + 2.0e+00*y[IDX_H2SiOI] +
+        3.0e+00*y[IDX_H3II] + 3.0e+00*y[IDX_H3COII] + 3.0e+00*y[IDX_H3OII] +
+        1.0e+00*y[IDX_HCNI] + 1.0e+00*y[IDX_HCNII] + 2.0e+00*y[IDX_HCNHII] +
+        1.0e+00*y[IDX_HCOI] + 1.0e+00*y[IDX_HCOII] + 1.0e+00*y[IDX_HCO2II] +
+        1.0e+00*y[IDX_HeHII] + 1.0e+00*y[IDX_HNCI] + 1.0e+00*y[IDX_HNCOI] +
+        1.0e+00*y[IDX_HNOI] + 1.0e+00*y[IDX_HNOII] + 1.0e+00*y[IDX_HOCII] +
+        1.0e+00*y[IDX_N2HII] + 1.0e+00*y[IDX_NHI] + 1.0e+00*y[IDX_NHII] +
+        2.0e+00*y[IDX_NH2I] + 2.0e+00*y[IDX_NH2II] + 3.0e+00*y[IDX_NH3I] +
+        3.0e+00*y[IDX_NH3II] + 1.0e+00*y[IDX_O2HI] + 1.0e+00*y[IDX_O2HII] +
+        1.0e+00*y[IDX_OHI] + 1.0e+00*y[IDX_OHII] + 1.0e+00*y[IDX_SiHI] +
+        1.0e+00*y[IDX_SiHII] + 2.0e+00*y[IDX_SiH2I] + 2.0e+00*y[IDX_SiH2II] +
+        3.0e+00*y[IDX_SiH3I] + 3.0e+00*y[IDX_SiH3II] + 4.0e+00*y[IDX_SiH4I] +
+        4.0e+00*y[IDX_SiH4II] + 5.0e+00*y[IDX_SiH5II] + 1.0e+00*y[IDX_SiOHII];
+}
+
 int grid::NaunetWrapper()
 {
 
@@ -253,7 +280,7 @@ int grid::NaunetWrapper()
   float NumberDensityUnits = DensityUnits / mh;
 
   Naunet naunet;
-  naunet.Init();
+  naunet.Init(1, 1e-20, 1e-5, 1000);
 
   // TODO: comoving, heating/cooling
   
@@ -262,11 +289,15 @@ int grid::NaunetWrapper()
 
   float y[NAUNET_NEQUATIONNS];
 
+  int failedcount = 0;
+
   for (i=0; i<size; i++) {
-    data.nH       = BaryonField[iden][i] / (Mu * mh);
+    data.nH       = BaryonField[iden][i] * DensityUnits / (1.4 * mh);
     data.Tgas     = temperature[i];
+    // printf("nH %13.7e, temperature: %13.7e, time: %13.7e\n", data.nH, temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0);
+    // data.Tgas     = 15.0;
     data.zeta     = 1.3e-17;
-    data.Av       = 10.0;
+    data.Av       = 100.0;
     data.omega    = 0.5;
     data.G0       = 4.0;
     data.rG       = 1.0e-5;
@@ -395,7 +426,41 @@ int grid::NaunetWrapper()
     y[IDX_SiOI] =  BaryonField[SiOINum][i] / 44.0 * NumberDensityUnits;
     y[IDX_SiOII] =  BaryonField[SiOIINum][i] / 44.0 * NumberDensityUnits;
     y[IDX_SiOHII] =  BaryonField[SiOHIINum][i] / 45.0 * NumberDensityUnits;
-    naunet.Solve(y, dt_chem * TimeUnits, &data);
+
+    // double nHfromnaunet = GetHNuclei(y);
+    // printf("nH from naunet: %13.7e\n", nHfromnaunet);
+
+    // for (int idx = IDX_GCH3OHI; idx <= IDX_SiOHII; idx++) {
+    //   printf("Species idx: %d, abundance: %13.7e\n", idx, y[idx]);
+    // }
+
+    int flag = naunet.Solve(y, dt_chem * TimeUnits, &data);
+    if (flag == -1) {
+      // CV_TOO_MUCH_WORK
+      printf("Temperature: %13.7e K, Timestep: %13.7e yr\n", 
+             temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0);
+      failedcount += 1;
+    }
+    else if (flag != 0) {
+      // CV_SUCCESS
+      printf("nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr\n", 
+             data.nH, temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0);
+
+      for (int sidx=IDX_GCH3OHI; sidx<=IDX_SiOHII; sidx++) {
+        printf("idx: %d, abundance: %13.7e\n", sidx, y[sidx]);
+      }
+ 
+      ENZO_FAIL("Naunet failed in NaunetWrapper.C !");
+    }
+
+
+    // if (flag != 0) {
+    //   // CV_SUCCESS
+    //   for (int idx = IDX_GCH3OHI; idx <= IDX_SiOHII; idx++) {
+    //     printf("Species idx: %d, abundance: %13.7e\n", idx, y[idx]);
+    //   }
+    //   ENZO_FAIL("Naunet failed in NaunetWrapper.C !");
+    // }
 
     BaryonField[GCH3OHINum][i] = y[IDX_GCH3OHI] * 32.0 / NumberDensityUnits;
     BaryonField[GCH4INum][i] = y[IDX_GCH4I] * 16.0 / NumberDensityUnits;
@@ -532,6 +597,8 @@ int grid::NaunetWrapper()
 
     } // for (int i = 0; i < size; i++)
   } // if (HydroMethod != Zeus_Hydro)
+
+  printf("Total number of failed cells: %d / size: %d\n", failedcount, size);
 
   if (temp_thermal == TRUE) {
     delete [] thermal_energy;
