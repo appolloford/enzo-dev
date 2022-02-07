@@ -30,19 +30,19 @@ int grid::MultiSpeciesHandler()
 
   LCAPERF_START("grid_MultiSpeciesHandler");
 
-#ifdef USE_NAUNET
-  if (use_naunet == TRUE) {
-    if (this->NaunetWrapper() == FAIL) {
+#ifdef USE_GRACKLE
+  if (grackle_data->use_grackle == TRUE) {
+    grackle_data->radiative_transfer_intermediate_step = FALSE;
+    if (this->GrackleWrapper() == FAIL) {
       ENZO_FAIL("Error in GrackleWrapper.\n");
     }
     return SUCCESS;
   }
 #endif
 
-#ifdef USE_GRACKLE
-  if (grackle_data->use_grackle == TRUE) {
-    grackle_data->radiative_transfer_intermediate_step = FALSE;
-    if (this->GrackleWrapper() == FAIL) {
+#ifdef USE_NAUNET
+  if (use_naunet == TRUE) {
+    if (this->NaunetWrapper() == FAIL) {
       ENZO_FAIL("Error in GrackleWrapper.\n");
     }
     return SUCCESS;

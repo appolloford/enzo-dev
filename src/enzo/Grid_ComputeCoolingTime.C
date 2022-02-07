@@ -316,7 +316,11 @@ int grid::ComputeCoolingTime(float *cooling_time, int CoolingTimeOnly)
         my_fields.RT_HeII_ionization_rate = BaryonField[kphHeIINum];
       }
 
+#ifdef USE_NAUNET
       if (grackle_primordial > 1)
+#else
+      if (MultiSpecies > 1)
+#endif
         my_fields.RT_H2_dissociation_rate = BaryonField[kdissH2INum];
 
       /* need to convert to CGS units */
