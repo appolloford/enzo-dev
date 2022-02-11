@@ -128,6 +128,9 @@ int CoolingTestInitialize(FILE *fptr, FILE *Outfptr,
 			  HierarchyEntry &TopGrid, TopGridData &MetaData); 
 int OneZoneFreefallTestInitialize(FILE *fptr, FILE *Outfptr, 
 				  HierarchyEntry &TopGrid, TopGridData &MetaData);
+int PrestellarCoreInitialize(FILE *fptr, FILE *Outfptr, 
+                             HierarchyEntry &TopGrid, TopGridData &MetaData,
+                             bool SetBaryonField);
 int CosmologySimulationInitialize(FILE *fptr, FILE *Outfptr,
                                   HierarchyEntry &TopGrid,
                                   TopGridData &MetaData);
@@ -571,6 +574,10 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
   // 63) 1-zone free-fall test problem
   if (ProblemType == 63)
     ret = OneZoneFreefallTestInitialize(fptr, Outfptr, TopGrid, MetaData);
+
+  // 64) Prestellar core collapse
+  if (ProblemType == 64)
+    ret = PrestellarCoreInitialize(fptr, Outfptr, TopGrid, MetaData, (ParallelRootGridIO != TRUE));
 
   // 70) Conduction test problem with hydro disabled
   // 71) Conduction test problem with hydro turned on

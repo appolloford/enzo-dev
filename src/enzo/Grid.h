@@ -1940,6 +1940,28 @@ int zEulerSweep(int j, int NumberOfSubgrids, fluxes *SubgridFluxes[],
 					 float CoreRadius,
 					 float AngularVelocity);
 
+/* Prestellar core collapse problem: initialize grid (returns SUCCESS or FAIL) */
+  int PrestellarCoreInitializeGrid(float CoreRadius,
+                     float CoreDensity,
+                     float CoreSurfaceDensity,
+                     float CoreDensityJump,
+                     float CoreInternalEnergy,
+                     float CoreAngularVelocity,
+                     float CoreBzField,
+                     float CoreAmbientBzField,
+                     float CoreVelocityDispersion,
+                     float CoreTurbulenceKStart,
+                     float CoreTurbulenceKEnd,
+                     float CoreOPR,
+                     float CoreCODeplete,
+                     int RandomSeed,
+                     int level,
+                     int* baseDims,
+                     float* CoreInitAb,
+                     float* CoreMoleMass,
+                     float* CoreTurbulence,
+                     bool SetBaryonField);
+
 /* HydroShockTubes problems: initialize grid (returns SUCCESS or FAIL) */
 
   int HydroShockTubesInitializeGrid(float InitialDiscontinuity,

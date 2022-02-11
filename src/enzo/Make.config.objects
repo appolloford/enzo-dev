@@ -1253,4 +1253,6 @@ POBJS_UUID = \
 OBJS_MY_PROBLEM = \
     myProblem/CollidingCloudInitialize.o \
     myProblem/Grid_CollidingCloudInitializeGrid.o \
-
+    myProblem/PrestellarCoreInitialize.o \
+    myProblem/Grid_PrestellarCoreInitialize.o \
+    myProblem/TurbulenceGenerator.o
