@@ -55,7 +55,7 @@ int grid::UpdateMHDPrim(float **dU, float c1, float c2)
   }
 
   float *D, *sum;
-  float SmallX = 1e-20;
+  float SmallX = 1e-40;
 
   // ORIGINAL
   if ( (NSpecies+NColor) > 0) {
@@ -90,7 +90,8 @@ int grid::UpdateMHDPrim(float **dU, float c1, float c2)
 #endif
     default: NSpecies_renorm = 0;  break;
     }
-  
+  // printf("ActiveSize: %d, NSpecies: %d, NSpecies_renorm: %d\n", activesize, NSpecies, NSpecies_renorm);
+
   // update species
   for (field = NEQ_MHD; field < NEQ_MHD+NSpecies_renorm; field++) {  
     n = 0;
@@ -105,6 +106,7 @@ int grid::UpdateMHDPrim(float **dU, float c1, float c2)
         }
       }
     }
+    // printf("Update --- Prim[%d][%d] = %13.7e\n", field, igrid, Prim[field][igrid]);
   }
 
   // renormalize species 
@@ -131,6 +133,7 @@ int grid::UpdateMHDPrim(float **dU, float c1, float c2)
             Prim[field][igrid] /= sum[n];
         }
       }
+      // printf("Renorm --- Prim[%d][%d] = %13.7e, sum[%d] = %13.7e\n", field, igrid, Prim[field][igrid], n, sum[n]);
     }
   } //close if (NoMultiSpeciesButColors == 1)
   /* Update conserved variables */

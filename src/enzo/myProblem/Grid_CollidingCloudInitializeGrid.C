@@ -640,7 +640,8 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
 #ifdef USE_NAUNET
         if (MultiSpecies == NAUNET_SPECIES) {
           for (int speciesNum = DeNum; speciesNum <= SiOHIINum; speciesNum ++) {
-            BaryonField[speciesNum][n] = 1e-20*BaryonField[0][n] / 1.4;
+            BaryonField[speciesNum][n] = 1e-40*BaryonField[0][n] / 1.4;
+            // printf("speciesNum: %d\n", speciesNum);
           }
           if (1){
             /* set your preferable initial abundances */

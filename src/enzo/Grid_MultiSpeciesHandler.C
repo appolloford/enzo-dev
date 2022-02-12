@@ -36,7 +36,11 @@ int grid::MultiSpeciesHandler()
     if (this->GrackleWrapper() == FAIL) {
       ENZO_FAIL("Error in GrackleWrapper.\n");
     }
+#ifdef USE_NAUNET
+    if (!use_naunet) return SUCCESS;
+#else
     return SUCCESS;
+#endif
   }
 #endif
 

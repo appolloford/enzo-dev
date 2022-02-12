@@ -39,31 +39,31 @@ int FindField(int field, int farray[], int numfields);
 #ifdef USE_NAUNET
 
 
-double GetHNuclei(double *y) {
-    return 4.0e+00*y[IDX_GCH3OHI] + 4.0e+00*y[IDX_GCH4I] + 2.0e+00*y[IDX_GH2CNI] +
-        2.0e+00*y[IDX_GH2COI] + 2.0e+00*y[IDX_GH2OI] + 2.0e+00*y[IDX_GH2SiOI] +
-        1.0e+00*y[IDX_GHCNI] + 1.0e+00*y[IDX_GHNCI] + 1.0e+00*y[IDX_GHNCOI] +
-        1.0e+00*y[IDX_GHNOI] + 3.0e+00*y[IDX_GNH3I] + 1.0e+00*y[IDX_GO2HI] +
-        4.0e+00*y[IDX_GSiH4I] + 1.0e+00*y[IDX_CHI] + 1.0e+00*y[IDX_CHII] +
-        2.0e+00*y[IDX_CH2I] + 2.0e+00*y[IDX_CH2II] + 3.0e+00*y[IDX_CH3I] +
-        3.0e+00*y[IDX_CH3II] + 4.0e+00*y[IDX_CH3OHI] + 4.0e+00*y[IDX_CH4I] +
-        4.0e+00*y[IDX_CH4II] + 1.0e+00*y[IDX_HI] + 1.0e+00*y[IDX_HII] +
-        2.0e+00*y[IDX_H2I] + 2.0e+00*y[IDX_H2II] + 2.0e+00*y[IDX_H2CNI] +
-        2.0e+00*y[IDX_H2COI] + 2.0e+00*y[IDX_H2COII] + 2.0e+00*y[IDX_H2NOII] +
-        2.0e+00*y[IDX_H2OI] + 2.0e+00*y[IDX_H2OII] + 2.0e+00*y[IDX_H2SiOI] +
-        3.0e+00*y[IDX_H3II] + 3.0e+00*y[IDX_H3COII] + 3.0e+00*y[IDX_H3OII] +
-        1.0e+00*y[IDX_HCNI] + 1.0e+00*y[IDX_HCNII] + 2.0e+00*y[IDX_HCNHII] +
-        1.0e+00*y[IDX_HCOI] + 1.0e+00*y[IDX_HCOII] + 1.0e+00*y[IDX_HCO2II] +
-        1.0e+00*y[IDX_HeHII] + 1.0e+00*y[IDX_HNCI] + 1.0e+00*y[IDX_HNCOI] +
-        1.0e+00*y[IDX_HNOI] + 1.0e+00*y[IDX_HNOII] + 1.0e+00*y[IDX_HOCII] +
-        1.0e+00*y[IDX_N2HII] + 1.0e+00*y[IDX_NHI] + 1.0e+00*y[IDX_NHII] +
-        2.0e+00*y[IDX_NH2I] + 2.0e+00*y[IDX_NH2II] + 3.0e+00*y[IDX_NH3I] +
-        3.0e+00*y[IDX_NH3II] + 1.0e+00*y[IDX_O2HI] + 1.0e+00*y[IDX_O2HII] +
-        1.0e+00*y[IDX_OHI] + 1.0e+00*y[IDX_OHII] + 1.0e+00*y[IDX_SiHI] +
-        1.0e+00*y[IDX_SiHII] + 2.0e+00*y[IDX_SiH2I] + 2.0e+00*y[IDX_SiH2II] +
-        3.0e+00*y[IDX_SiH3I] + 3.0e+00*y[IDX_SiH3II] + 4.0e+00*y[IDX_SiH4I] +
-        4.0e+00*y[IDX_SiH4II] + 5.0e+00*y[IDX_SiH5II] + 1.0e+00*y[IDX_SiOHII];
-}
+// double GetHNuclei(double *y) {
+//     return 4.0e+00*y[IDX_GCH3OHI] + 4.0e+00*y[IDX_GCH4I] + 2.0e+00*y[IDX_GH2CNI] +
+//         2.0e+00*y[IDX_GH2COI] + 2.0e+00*y[IDX_GH2OI] + 2.0e+00*y[IDX_GH2SiOI] +
+//         1.0e+00*y[IDX_GHCNI] + 1.0e+00*y[IDX_GHNCI] + 1.0e+00*y[IDX_GHNCOI] +
+//         1.0e+00*y[IDX_GHNOI] + 3.0e+00*y[IDX_GNH3I] + 1.0e+00*y[IDX_GO2HI] +
+//         4.0e+00*y[IDX_GSiH4I] + 1.0e+00*y[IDX_CHI] + 1.0e+00*y[IDX_CHII] +
+//         2.0e+00*y[IDX_CH2I] + 2.0e+00*y[IDX_CH2II] + 3.0e+00*y[IDX_CH3I] +
+//         3.0e+00*y[IDX_CH3II] + 4.0e+00*y[IDX_CH3OHI] + 4.0e+00*y[IDX_CH4I] +
+//         4.0e+00*y[IDX_CH4II] + 1.0e+00*y[IDX_HI] + 1.0e+00*y[IDX_HII] +
+//         2.0e+00*y[IDX_H2I] + 2.0e+00*y[IDX_H2II] + 2.0e+00*y[IDX_H2CNI] +
+//         2.0e+00*y[IDX_H2COI] + 2.0e+00*y[IDX_H2COII] + 2.0e+00*y[IDX_H2NOII] +
+//         2.0e+00*y[IDX_H2OI] + 2.0e+00*y[IDX_H2OII] + 2.0e+00*y[IDX_H2SiOI] +
+//         3.0e+00*y[IDX_H3II] + 3.0e+00*y[IDX_H3COII] + 3.0e+00*y[IDX_H3OII] +
+//         1.0e+00*y[IDX_HCNI] + 1.0e+00*y[IDX_HCNII] + 2.0e+00*y[IDX_HCNHII] +
+//         1.0e+00*y[IDX_HCOI] + 1.0e+00*y[IDX_HCOII] + 1.0e+00*y[IDX_HCO2II] +
+//         1.0e+00*y[IDX_HeHII] + 1.0e+00*y[IDX_HNCI] + 1.0e+00*y[IDX_HNCOI] +
+//         1.0e+00*y[IDX_HNOI] + 1.0e+00*y[IDX_HNOII] + 1.0e+00*y[IDX_HOCII] +
+//         1.0e+00*y[IDX_N2HII] + 1.0e+00*y[IDX_NHI] + 1.0e+00*y[IDX_NHII] +
+//         2.0e+00*y[IDX_NH2I] + 2.0e+00*y[IDX_NH2II] + 3.0e+00*y[IDX_NH3I] +
+//         3.0e+00*y[IDX_NH3II] + 1.0e+00*y[IDX_O2HI] + 1.0e+00*y[IDX_O2HII] +
+//         1.0e+00*y[IDX_OHI] + 1.0e+00*y[IDX_OHII] + 1.0e+00*y[IDX_SiHI] +
+//         1.0e+00*y[IDX_SiHII] + 2.0e+00*y[IDX_SiH2I] + 2.0e+00*y[IDX_SiH2II] +
+//         3.0e+00*y[IDX_SiH3I] + 3.0e+00*y[IDX_SiH3II] + 4.0e+00*y[IDX_SiH4I] +
+//         4.0e+00*y[IDX_SiH4II] + 5.0e+00*y[IDX_SiH5II] + 1.0e+00*y[IDX_SiOHII];
+// }
 
 int grid::NaunetWrapper()
 {
@@ -280,22 +280,23 @@ int grid::NaunetWrapper()
   float NumberDensityUnits = DensityUnits / mh;
 
   Naunet naunet;
-  naunet.Init(1, 1e-20, 1e-5, 1000);
+  naunet.Init(1, 1e-30, 1e-5, 10000);
 
   // TODO: comoving, heating/cooling
   
   // Set your parameters here
   NaunetData data;
 
-  float y[NAUNET_NEQUATIONNS];
+  realtype y[NAUNET_NEQUATIONNS], y_init[NAUNET_NEQUATIONNS];
 
   int failedcount = 0;
 
   for (i=0; i<size; i++) {
-    data.nH       = BaryonField[iden][i] * DensityUnits / (1.4 * mh);
-    data.Tgas     = temperature[i];
+    double nH       = BaryonField[iden][i] * DensityUnits / (1.4 * mh);
     // printf("nH %13.7e, temperature: %13.7e, time: %13.7e\n", data.nH, temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0);
     // data.Tgas     = 15.0;
+    data.nH       = nH;
+    data.Tgas     = temperature[i];
     data.zeta     = 1.3e-17;
     data.Av       = 100.0;
     data.omega    = 0.5;
@@ -308,124 +309,147 @@ int grid::NaunetWrapper()
     data.opt_crd  = 1.0;
     data.opt_uvd  = 1.0;
     data.opt_h2d  = 1.0;
+    data.eb_crd   = 1.21e3;
+    data.eb_h2d   = 1.21e3;
+    data.eb_uvd   = 1.00e4;
     data.crdeseff = 1.0e5;
     data.h2deseff = 1.0e-2;
     data.uvcreff  = 1.0e-3;
 
-    y[IDX_GCH3OHI] =  BaryonField[GCH3OHINum][i] / 32.0 * NumberDensityUnits;
-    y[IDX_GCH4I] =  BaryonField[GCH4INum][i] / 16.0 * NumberDensityUnits;
-    y[IDX_GCOI] =  BaryonField[GCOINum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_GCO2I] =  BaryonField[GCO2INum][i] / 44.0 * NumberDensityUnits;
-    y[IDX_GH2CNI] =  BaryonField[GH2CNINum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_GH2COI] =  BaryonField[GH2COINum][i] / 30.0 * NumberDensityUnits;
-    y[IDX_GH2OI] =  BaryonField[GH2OINum][i] / 18.0 * NumberDensityUnits;
-    y[IDX_GH2SiOI] =  BaryonField[GH2SiOINum][i] / 46.0 * NumberDensityUnits;
-    y[IDX_GHCNI] =  BaryonField[GHCNINum][i] / 27.0 * NumberDensityUnits;
-    y[IDX_GHNCI] =  BaryonField[GHNCINum][i] / 27.0 * NumberDensityUnits;
-    y[IDX_GHNCOI] =  BaryonField[GHNCOINum][i] / 43.0 * NumberDensityUnits;
-    y[IDX_GHNOI] =  BaryonField[GHNOINum][i] / 31.0 * NumberDensityUnits;
-    y[IDX_GMgI] =  BaryonField[GMgINum][i] / 24.0 * NumberDensityUnits;
-    y[IDX_GN2I] =  BaryonField[GN2INum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_GNH3I] =  BaryonField[GNH3INum][i] / 17.0 * NumberDensityUnits;
-    y[IDX_GNOI] =  BaryonField[GNOINum][i] / 30.0 * NumberDensityUnits;
-    y[IDX_GNO2I] =  BaryonField[GNO2INum][i] / 46.0 * NumberDensityUnits;
-    y[IDX_GO2I] =  BaryonField[GO2INum][i] / 32.0 * NumberDensityUnits;
-    y[IDX_GO2HI] =  BaryonField[GO2HINum][i] / 33.0 * NumberDensityUnits;
-    y[IDX_GSiCI] =  BaryonField[GSiCINum][i] / 40.0 * NumberDensityUnits;
-    y[IDX_GSiC2I] =  BaryonField[GSiC2INum][i] / 52.0 * NumberDensityUnits;
-    y[IDX_GSiC3I] =  BaryonField[GSiC3INum][i] / 64.0 * NumberDensityUnits;
-    y[IDX_GSiH4I] =  BaryonField[GSiH4INum][i] / 32.0 * NumberDensityUnits;
-    y[IDX_GSiOI] =  BaryonField[GSiOINum][i] / 44.0 * NumberDensityUnits;
-    y[IDX_CI] =  BaryonField[CINum][i] / 12.0 * NumberDensityUnits;
-    y[IDX_CII] =  BaryonField[CIINum][i] / 12.0 * NumberDensityUnits;
-    y[IDX_CHI] =  BaryonField[CHINum][i] / 13.0 * NumberDensityUnits;
-    y[IDX_CHII] =  BaryonField[CHIINum][i] / 13.0 * NumberDensityUnits;
-    y[IDX_CH2I] =  BaryonField[CH2INum][i] / 14.0 * NumberDensityUnits;
-    y[IDX_CH2II] =  BaryonField[CH2IINum][i] / 14.0 * NumberDensityUnits;
-    y[IDX_CH3I] =  BaryonField[CH3INum][i] / 15.0 * NumberDensityUnits;
-    y[IDX_CH3II] =  BaryonField[CH3IINum][i] / 15.0 * NumberDensityUnits;
-    y[IDX_CH3OHI] =  BaryonField[CH3OHINum][i] / 32.0 * NumberDensityUnits;
-    y[IDX_CH4I] =  BaryonField[CH4INum][i] / 16.0 * NumberDensityUnits;
-    y[IDX_CH4II] =  BaryonField[CH4IINum][i] / 16.0 * NumberDensityUnits;
-    y[IDX_CNI] =  BaryonField[CNINum][i] / 26.0 * NumberDensityUnits;
-    y[IDX_CNII] =  BaryonField[CNIINum][i] / 26.0 * NumberDensityUnits;
-    y[IDX_COI] =  BaryonField[COINum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_COII] =  BaryonField[COIINum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_CO2I] =  BaryonField[CO2INum][i] / 44.0 * NumberDensityUnits;
-    y[IDX_EM] =  BaryonField[DeNum][i] / 1.0 * NumberDensityUnits;
-    y[IDX_HI] =  BaryonField[HINum][i] / 1.0 * NumberDensityUnits;
-    y[IDX_HII] =  BaryonField[HIINum][i] / 1.0 * NumberDensityUnits;
-    y[IDX_H2I] =  BaryonField[H2INum][i] / 2.0 * NumberDensityUnits;
-    y[IDX_H2II] =  BaryonField[H2IINum][i] / 2.0 * NumberDensityUnits;
-    y[IDX_H2CNI] =  BaryonField[H2CNINum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_H2COI] =  BaryonField[H2COINum][i] / 30.0 * NumberDensityUnits;
-    y[IDX_H2COII] =  BaryonField[H2COIINum][i] / 30.0 * NumberDensityUnits;
-    y[IDX_H2NOII] =  BaryonField[H2NOIINum][i] / 32.0 * NumberDensityUnits;
-    y[IDX_H2OI] =  BaryonField[H2OINum][i] / 18.0 * NumberDensityUnits;
-    y[IDX_H2OII] =  BaryonField[H2OIINum][i] / 18.0 * NumberDensityUnits;
-    y[IDX_H2SiOI] =  BaryonField[H2SiOINum][i] / 46.0 * NumberDensityUnits;
-    y[IDX_H3II] =  BaryonField[H3IINum][i] / 3.0 * NumberDensityUnits;
-    y[IDX_H3COII] =  BaryonField[H3COIINum][i] / 31.0 * NumberDensityUnits;
-    y[IDX_H3OII] =  BaryonField[H3OIINum][i] / 19.0 * NumberDensityUnits;
-    y[IDX_HCNI] =  BaryonField[HCNINum][i] / 27.0 * NumberDensityUnits;
-    y[IDX_HCNII] =  BaryonField[HCNIINum][i] / 27.0 * NumberDensityUnits;
-    y[IDX_HCNHII] =  BaryonField[HCNHIINum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_HCOI] =  BaryonField[HCOINum][i] / 29.0 * NumberDensityUnits;
-    y[IDX_HCOII] =  BaryonField[HCOIINum][i] / 29.0 * NumberDensityUnits;
-    y[IDX_HCO2II] =  BaryonField[HCO2IINum][i] / 45.0 * NumberDensityUnits;
-    y[IDX_HeI] =  BaryonField[HeINum][i] / 4.0 * NumberDensityUnits;
-    y[IDX_HeII] =  BaryonField[HeIINum][i] / 4.0 * NumberDensityUnits;
-    y[IDX_HeHII] =  BaryonField[HeHIINum][i] / 5.0 * NumberDensityUnits;
-    y[IDX_HNCI] =  BaryonField[HNCINum][i] / 27.0 * NumberDensityUnits;
-    y[IDX_HNCOI] =  BaryonField[HNCOINum][i] / 43.0 * NumberDensityUnits;
-    y[IDX_HNOI] =  BaryonField[HNOINum][i] / 31.0 * NumberDensityUnits;
-    y[IDX_HNOII] =  BaryonField[HNOIINum][i] / 31.0 * NumberDensityUnits;
-    y[IDX_HOCII] =  BaryonField[HOCIINum][i] / 29.0 * NumberDensityUnits;
-    y[IDX_MgI] =  BaryonField[MgINum][i] / 24.0 * NumberDensityUnits;
-    y[IDX_MgII] =  BaryonField[MgIINum][i] / 24.0 * NumberDensityUnits;
-    y[IDX_NI] =  BaryonField[NINum][i] / 14.0 * NumberDensityUnits;
-    y[IDX_NII] =  BaryonField[NIINum][i] / 14.0 * NumberDensityUnits;
-    y[IDX_N2I] =  BaryonField[N2INum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_N2II] =  BaryonField[N2IINum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_N2HII] =  BaryonField[N2HIINum][i] / 29.0 * NumberDensityUnits;
-    y[IDX_NHI] =  BaryonField[NHINum][i] / 15.0 * NumberDensityUnits;
-    y[IDX_NHII] =  BaryonField[NHIINum][i] / 15.0 * NumberDensityUnits;
-    y[IDX_NH2I] =  BaryonField[NH2INum][i] / 16.0 * NumberDensityUnits;
-    y[IDX_NH2II] =  BaryonField[NH2IINum][i] / 16.0 * NumberDensityUnits;
-    y[IDX_NH3I] =  BaryonField[NH3INum][i] / 17.0 * NumberDensityUnits;
-    y[IDX_NH3II] =  BaryonField[NH3IINum][i] / 17.0 * NumberDensityUnits;
-    y[IDX_NOI] =  BaryonField[NOINum][i] / 30.0 * NumberDensityUnits;
-    y[IDX_NOII] =  BaryonField[NOIINum][i] / 30.0 * NumberDensityUnits;
-    y[IDX_NO2I] =  BaryonField[NO2INum][i] / 46.0 * NumberDensityUnits;
-    y[IDX_OI] =  BaryonField[OINum][i] / 16.0 * NumberDensityUnits;
-    y[IDX_OII] =  BaryonField[OIINum][i] / 16.0 * NumberDensityUnits;
-    y[IDX_O2I] =  BaryonField[O2INum][i] / 32.0 * NumberDensityUnits;
-    y[IDX_O2II] =  BaryonField[O2IINum][i] / 32.0 * NumberDensityUnits;
-    y[IDX_O2HI] =  BaryonField[O2HINum][i] / 33.0 * NumberDensityUnits;
-    y[IDX_O2HII] =  BaryonField[O2HIINum][i] / 33.0 * NumberDensityUnits;
-    y[IDX_OCNI] =  BaryonField[OCNINum][i] / 42.0 * NumberDensityUnits;
-    y[IDX_OHI] =  BaryonField[OHINum][i] / 17.0 * NumberDensityUnits;
-    y[IDX_OHII] =  BaryonField[OHIINum][i] / 17.0 * NumberDensityUnits;
-    y[IDX_SiI] =  BaryonField[SiINum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_SiII] =  BaryonField[SiIINum][i] / 28.0 * NumberDensityUnits;
-    y[IDX_SiCI] =  BaryonField[SiCINum][i] / 40.0 * NumberDensityUnits;
-    y[IDX_SiCII] =  BaryonField[SiCIINum][i] / 40.0 * NumberDensityUnits;
-    y[IDX_SiC2I] =  BaryonField[SiC2INum][i] / 52.0 * NumberDensityUnits;
-    y[IDX_SiC2II] =  BaryonField[SiC2IINum][i] / 52.0 * NumberDensityUnits;
-    y[IDX_SiC3I] =  BaryonField[SiC3INum][i] / 64.0 * NumberDensityUnits;
-    y[IDX_SiC3II] =  BaryonField[SiC3IINum][i] / 64.0 * NumberDensityUnits;
-    y[IDX_SiHI] =  BaryonField[SiHINum][i] / 29.0 * NumberDensityUnits;
-    y[IDX_SiHII] =  BaryonField[SiHIINum][i] / 29.0 * NumberDensityUnits;
-    y[IDX_SiH2I] =  BaryonField[SiH2INum][i] / 30.0 * NumberDensityUnits;
-    y[IDX_SiH2II] =  BaryonField[SiH2IINum][i] / 30.0 * NumberDensityUnits;
-    y[IDX_SiH3I] =  BaryonField[SiH3INum][i] / 31.0 * NumberDensityUnits;
-    y[IDX_SiH3II] =  BaryonField[SiH3IINum][i] / 31.0 * NumberDensityUnits;
-    y[IDX_SiH4I] =  BaryonField[SiH4INum][i] / 32.0 * NumberDensityUnits;
-    y[IDX_SiH4II] =  BaryonField[SiH4IINum][i] / 32.0 * NumberDensityUnits;
-    y[IDX_SiH5II] =  BaryonField[SiH5IINum][i] / 33.0 * NumberDensityUnits;
-    y[IDX_SiOI] =  BaryonField[SiOINum][i] / 44.0 * NumberDensityUnits;
-    y[IDX_SiOII] =  BaryonField[SiOIINum][i] / 44.0 * NumberDensityUnits;
-    y[IDX_SiOHII] =  BaryonField[SiOHIINum][i] / 45.0 * NumberDensityUnits;
+    y[IDX_GCH3OHI] = max(BaryonField[GCH3OHINum][i], 1e-40) * NumberDensityUnits / 32.0;
+    y[IDX_GCH4I] = max(BaryonField[GCH4INum][i], 1e-40) * NumberDensityUnits / 16.0;
+    y[IDX_GCOI] = max(BaryonField[GCOINum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_GCO2I] = max(BaryonField[GCO2INum][i], 1e-40) * NumberDensityUnits / 44.0;
+    y[IDX_GH2CNI] = max(BaryonField[GH2CNINum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_GH2COI] = max(BaryonField[GH2COINum][i], 1e-40) * NumberDensityUnits / 30.0;
+    y[IDX_GH2OI] = max(BaryonField[GH2OINum][i], 1e-40) * NumberDensityUnits / 18.0;
+    y[IDX_GH2SiOI] = max(BaryonField[GH2SiOINum][i], 1e-40) * NumberDensityUnits / 46.0;
+    y[IDX_GHCNI] = max(BaryonField[GHCNINum][i], 1e-40) * NumberDensityUnits / 27.0;
+    y[IDX_GHNCI] = max(BaryonField[GHNCINum][i], 1e-40) * NumberDensityUnits / 27.0;
+    y[IDX_GHNCOI] = max(BaryonField[GHNCOINum][i], 1e-40) * NumberDensityUnits / 43.0;
+    y[IDX_GHNOI] = max(BaryonField[GHNOINum][i], 1e-40) * NumberDensityUnits / 31.0;
+    y[IDX_GMgI] = max(BaryonField[GMgINum][i], 1e-40) * NumberDensityUnits / 24.0;
+    y[IDX_GN2I] = max(BaryonField[GN2INum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_GNH3I] = max(BaryonField[GNH3INum][i], 1e-40) * NumberDensityUnits / 17.0;
+    y[IDX_GNOI] = max(BaryonField[GNOINum][i], 1e-40) * NumberDensityUnits / 30.0;
+    y[IDX_GNO2I] = max(BaryonField[GNO2INum][i], 1e-40) * NumberDensityUnits / 46.0;
+    y[IDX_GO2I] = max(BaryonField[GO2INum][i], 1e-40) * NumberDensityUnits / 32.0;
+    y[IDX_GO2HI] = max(BaryonField[GO2HINum][i], 1e-40) * NumberDensityUnits / 33.0;
+    y[IDX_GSiCI] = max(BaryonField[GSiCINum][i], 1e-40) * NumberDensityUnits / 40.0;
+    y[IDX_GSiC2I] = max(BaryonField[GSiC2INum][i], 1e-40) * NumberDensityUnits / 52.0;
+    y[IDX_GSiC3I] = max(BaryonField[GSiC3INum][i], 1e-40) * NumberDensityUnits / 64.0;
+    y[IDX_GSiH4I] = max(BaryonField[GSiH4INum][i], 1e-40) * NumberDensityUnits / 32.0;
+    y[IDX_GSiOI] = max(BaryonField[GSiOINum][i], 1e-40) * NumberDensityUnits / 44.0;
+    y[IDX_CI] = max(BaryonField[CINum][i], 1e-40) * NumberDensityUnits / 12.0;
+    y[IDX_CII] = max(BaryonField[CIINum][i], 1e-40) * NumberDensityUnits / 12.0;
+    y[IDX_CHI] = max(BaryonField[CHINum][i], 1e-40) * NumberDensityUnits / 13.0;
+    y[IDX_CHII] = max(BaryonField[CHIINum][i], 1e-40) * NumberDensityUnits / 13.0;
+    y[IDX_CH2I] = max(BaryonField[CH2INum][i], 1e-40) * NumberDensityUnits / 14.0;
+    y[IDX_CH2II] = max(BaryonField[CH2IINum][i], 1e-40) * NumberDensityUnits / 14.0;
+    y[IDX_CH3I] = max(BaryonField[CH3INum][i], 1e-40) * NumberDensityUnits / 15.0;
+    y[IDX_CH3II] = max(BaryonField[CH3IINum][i], 1e-40) * NumberDensityUnits / 15.0;
+    y[IDX_CH3OHI] = max(BaryonField[CH3OHINum][i], 1e-40) * NumberDensityUnits / 32.0;
+    y[IDX_CH4I] = max(BaryonField[CH4INum][i], 1e-40) * NumberDensityUnits / 16.0;
+    y[IDX_CH4II] = max(BaryonField[CH4IINum][i], 1e-40) * NumberDensityUnits / 16.0;
+    y[IDX_CNI] = max(BaryonField[CNINum][i], 1e-40) * NumberDensityUnits / 26.0;
+    y[IDX_CNII] = max(BaryonField[CNIINum][i], 1e-40) * NumberDensityUnits / 26.0;
+    y[IDX_COI] = max(BaryonField[COINum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_COII] = max(BaryonField[COIINum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_CO2I] = max(BaryonField[CO2INum][i], 1e-40) * NumberDensityUnits / 44.0;
+    y[IDX_EM] = max(BaryonField[DeNum][i], 1e-40) * NumberDensityUnits / 1.0;
+    y[IDX_HI] = max(BaryonField[HINum][i], 1e-40) * NumberDensityUnits / 1.0;
+    y[IDX_HII] = max(BaryonField[HIINum][i], 1e-40) * NumberDensityUnits / 1.0;
+    y[IDX_H2I] = max(BaryonField[H2INum][i], 1e-40) * NumberDensityUnits / 2.0;
+    y[IDX_H2II] = max(BaryonField[H2IINum][i], 1e-40) * NumberDensityUnits / 2.0;
+    y[IDX_H2CNI] = max(BaryonField[H2CNINum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_H2COI] = max(BaryonField[H2COINum][i], 1e-40) * NumberDensityUnits / 30.0;
+    y[IDX_H2COII] = max(BaryonField[H2COIINum][i], 1e-40) * NumberDensityUnits / 30.0;
+    y[IDX_H2NOII] = max(BaryonField[H2NOIINum][i], 1e-40) * NumberDensityUnits / 32.0;
+    y[IDX_H2OI] = max(BaryonField[H2OINum][i], 1e-40) * NumberDensityUnits / 18.0;
+    y[IDX_H2OII] = max(BaryonField[H2OIINum][i], 1e-40) * NumberDensityUnits / 18.0;
+    y[IDX_H2SiOI] = max(BaryonField[H2SiOINum][i], 1e-40) * NumberDensityUnits / 46.0;
+    y[IDX_H3II] = max(BaryonField[H3IINum][i], 1e-40) * NumberDensityUnits / 3.0;
+    y[IDX_H3COII] = max(BaryonField[H3COIINum][i], 1e-40) * NumberDensityUnits / 31.0;
+    y[IDX_H3OII] = max(BaryonField[H3OIINum][i], 1e-40) * NumberDensityUnits / 19.0;
+    y[IDX_HCNI] = max(BaryonField[HCNINum][i], 1e-40) * NumberDensityUnits / 27.0;
+    y[IDX_HCNII] = max(BaryonField[HCNIINum][i], 1e-40) * NumberDensityUnits / 27.0;
+    y[IDX_HCNHII] = max(BaryonField[HCNHIINum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_HCOI] = max(BaryonField[HCOINum][i], 1e-40) * NumberDensityUnits / 29.0;
+    y[IDX_HCOII] = max(BaryonField[HCOIINum][i], 1e-40) * NumberDensityUnits / 29.0;
+    y[IDX_HCO2II] = max(BaryonField[HCO2IINum][i], 1e-40) * NumberDensityUnits / 45.0;
+    y[IDX_HeI] = max(BaryonField[HeINum][i], 1e-40) * NumberDensityUnits / 4.0;
+    y[IDX_HeII] = max(BaryonField[HeIINum][i], 1e-40) * NumberDensityUnits / 4.0;
+    y[IDX_HeHII] = max(BaryonField[HeHIINum][i], 1e-40) * NumberDensityUnits / 5.0;
+    y[IDX_HNCI] = max(BaryonField[HNCINum][i], 1e-40) * NumberDensityUnits / 27.0;
+    y[IDX_HNCOI] = max(BaryonField[HNCOINum][i], 1e-40) * NumberDensityUnits / 43.0;
+    y[IDX_HNOI] = max(BaryonField[HNOINum][i], 1e-40) * NumberDensityUnits / 31.0;
+    y[IDX_HNOII] = max(BaryonField[HNOIINum][i], 1e-40) * NumberDensityUnits / 31.0;
+    y[IDX_HOCII] = max(BaryonField[HOCIINum][i], 1e-40) * NumberDensityUnits / 29.0;
+    y[IDX_MgI] = max(BaryonField[MgINum][i], 1e-40) * NumberDensityUnits / 24.0;
+    y[IDX_MgII] = max(BaryonField[MgIINum][i], 1e-40) * NumberDensityUnits / 24.0;
+    y[IDX_NI] = max(BaryonField[NINum][i], 1e-40) * NumberDensityUnits / 14.0;
+    y[IDX_NII] = max(BaryonField[NIINum][i], 1e-40) * NumberDensityUnits / 14.0;
+    y[IDX_N2I] = max(BaryonField[N2INum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_N2II] = max(BaryonField[N2IINum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_N2HII] = max(BaryonField[N2HIINum][i], 1e-40) * NumberDensityUnits / 29.0;
+    y[IDX_NHI] = max(BaryonField[NHINum][i], 1e-40) * NumberDensityUnits / 15.0;
+    y[IDX_NHII] = max(BaryonField[NHIINum][i], 1e-40) * NumberDensityUnits / 15.0;
+    y[IDX_NH2I] = max(BaryonField[NH2INum][i], 1e-40) * NumberDensityUnits / 16.0;
+    y[IDX_NH2II] = max(BaryonField[NH2IINum][i], 1e-40) * NumberDensityUnits / 16.0;
+    y[IDX_NH3I] = max(BaryonField[NH3INum][i], 1e-40) * NumberDensityUnits / 17.0;
+    y[IDX_NH3II] = max(BaryonField[NH3IINum][i], 1e-40) * NumberDensityUnits / 17.0;
+    y[IDX_NOI] = max(BaryonField[NOINum][i], 1e-40) * NumberDensityUnits / 30.0;
+    y[IDX_NOII] = max(BaryonField[NOIINum][i], 1e-40) * NumberDensityUnits / 30.0;
+    y[IDX_NO2I] = max(BaryonField[NO2INum][i], 1e-40) * NumberDensityUnits / 46.0;
+    y[IDX_OI] = max(BaryonField[OINum][i], 1e-40) * NumberDensityUnits / 16.0;
+    y[IDX_OII] = max(BaryonField[OIINum][i], 1e-40) * NumberDensityUnits / 16.0;
+    y[IDX_O2I] = max(BaryonField[O2INum][i], 1e-40) * NumberDensityUnits / 32.0;
+    y[IDX_O2II] = max(BaryonField[O2IINum][i], 1e-40) * NumberDensityUnits / 32.0;
+    y[IDX_O2HI] = max(BaryonField[O2HINum][i], 1e-40) * NumberDensityUnits / 33.0;
+    y[IDX_O2HII] = max(BaryonField[O2HIINum][i], 1e-40) * NumberDensityUnits / 33.0;
+    y[IDX_OCNI] = max(BaryonField[OCNINum][i], 1e-40) * NumberDensityUnits / 42.0;
+    y[IDX_OHI] = max(BaryonField[OHINum][i], 1e-40) * NumberDensityUnits / 17.0;
+    y[IDX_OHII] = max(BaryonField[OHIINum][i], 1e-40) * NumberDensityUnits / 17.0;
+    y[IDX_SiI] = max(BaryonField[SiINum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_SiII] = max(BaryonField[SiIINum][i], 1e-40) * NumberDensityUnits / 28.0;
+    y[IDX_SiCI] = max(BaryonField[SiCINum][i], 1e-40) * NumberDensityUnits / 40.0;
+    y[IDX_SiCII] = max(BaryonField[SiCIINum][i], 1e-40) * NumberDensityUnits / 40.0;
+    y[IDX_SiC2I] = max(BaryonField[SiC2INum][i], 1e-40) * NumberDensityUnits / 52.0;
+    y[IDX_SiC2II] = max(BaryonField[SiC2IINum][i], 1e-40) * NumberDensityUnits / 52.0;
+    y[IDX_SiC3I] = max(BaryonField[SiC3INum][i], 1e-40) * NumberDensityUnits / 64.0;
+    y[IDX_SiC3II] = max(BaryonField[SiC3IINum][i], 1e-40) * NumberDensityUnits / 64.0;
+    y[IDX_SiHI] = max(BaryonField[SiHINum][i], 1e-40) * NumberDensityUnits / 29.0;
+    y[IDX_SiHII] = max(BaryonField[SiHIINum][i], 1e-40) * NumberDensityUnits / 29.0;
+    y[IDX_SiH2I] = max(BaryonField[SiH2INum][i], 1e-40) * NumberDensityUnits / 30.0;
+    y[IDX_SiH2II] = max(BaryonField[SiH2IINum][i], 1e-40) * NumberDensityUnits / 30.0;
+    y[IDX_SiH3I] = max(BaryonField[SiH3INum][i], 1e-40) * NumberDensityUnits / 31.0;
+    y[IDX_SiH3II] = max(BaryonField[SiH3IINum][i], 1e-40) * NumberDensityUnits / 31.0;
+    y[IDX_SiH4I] = max(BaryonField[SiH4INum][i], 1e-40) * NumberDensityUnits / 32.0;
+    y[IDX_SiH4II] = max(BaryonField[SiH4IINum][i], 1e-40) * NumberDensityUnits / 32.0;
+    y[IDX_SiH5II] = max(BaryonField[SiH5IINum][i], 1e-40) * NumberDensityUnits / 33.0;
+    y[IDX_SiOI] = max(BaryonField[SiOINum][i], 1e-40) * NumberDensityUnits / 44.0;
+    y[IDX_SiOII] = max(BaryonField[SiOIINum][i], 1e-40) * NumberDensityUnits / 44.0;
+    y[IDX_SiOHII] = max(BaryonField[SiOHIINum][i], 1e-40) * NumberDensityUnits / 45.0;
+
+    // for (int idx = IDX_GCH3OHI; idx <= IDX_SiOHII; idx++)
+    // {
+    //     y[idx] = 1.e-40;
+    // }
+    // y[IDX_H2I]           = 0.5 * nH;
+    // y[IDX_HI]            = 5.0e-5 * nH;
+    // y[IDX_HeI]           = 9.75e-2 * nH;
+    // y[IDX_NI]            = 7.5e-5 * nH;
+    // y[IDX_OI]            = 1.8e-4 * nH;
+    // y[IDX_COI]           = 1.4e-4 * nH;
+    // // y[IDX_SI]            = 8.0e-8 * nH;
+    // y[IDX_SiI]           = 8.0e-9 * nH;
+    // y[IDX_MgI]           = 7.0e-9 * nH;
+
+    for (int idx = IDX_GCH3OHI; idx <= IDX_SiOHII; idx++) {
+        y_init[idx] = y[idx];
+    }
+
+
 
     // double nHfromnaunet = GetHNuclei(y);
     // printf("nH from naunet: %13.7e\n", nHfromnaunet);
@@ -435,19 +459,29 @@ int grid::NaunetWrapper()
     // }
 
     int flag = naunet.Solve(y, dt_chem * TimeUnits, &data);
-    if (flag == -1) {
-      // CV_TOO_MUCH_WORK
-      printf("Temperature: %13.7e K, Timestep: %13.7e yr\n", 
-             temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0);
+
+    if (flag == -1 || flag == -3) {
+      // CV_TOO_MUCH_WORK / CV_ERR_FAILURE
+      printf("nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr\n", 
+             data.nH, data.Tgas, dt_chem * TimeUnits / 86400.0 / 365.0);
       failedcount += 1;
     }
     else if (flag != 0) {
+    // if (flag != 0) {
       // CV_SUCCESS
-      printf("nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr\n", 
-             data.nH, temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0);
+      printf("nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr, gdens: %13.7e\n", 
+             data.nH, temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0, data.gdens);
 
       for (int sidx=IDX_GCH3OHI; sidx<=IDX_SiOHII; sidx++) {
-        printf("idx: %d, abundance: %13.7e\n", sidx, y[sidx]);
+        printf("y_init[%d] = %13.7e;\n", sidx, y_init[sidx]);
+      }
+
+      for (int sidx=IDX_GCH3OHI; sidx<=IDX_SiOHII; sidx++) {
+        printf("y[%d] = %13.7e;\n", sidx, y[sidx]);
+      }
+
+      for (int sidx=DeNum; sidx <= SiOHIINum; sidx ++) {
+        printf("BaryonField[%d][i]: %13.7e\n", sidx, BaryonField[sidx][i]);
       }
  
       ENZO_FAIL("Naunet failed in NaunetWrapper.C !");
@@ -462,122 +496,123 @@ int grid::NaunetWrapper()
     //   ENZO_FAIL("Naunet failed in NaunetWrapper.C !");
     // }
 
-    BaryonField[GCH3OHINum][i] = y[IDX_GCH3OHI] * 32.0 / NumberDensityUnits;
-    BaryonField[GCH4INum][i] = y[IDX_GCH4I] * 16.0 / NumberDensityUnits;
-    BaryonField[GCOINum][i] = y[IDX_GCOI] * 28.0 / NumberDensityUnits;
-    BaryonField[GCO2INum][i] = y[IDX_GCO2I] * 44.0 / NumberDensityUnits;
-    BaryonField[GH2CNINum][i] = y[IDX_GH2CNI] * 28.0 / NumberDensityUnits;
-    BaryonField[GH2COINum][i] = y[IDX_GH2COI] * 30.0 / NumberDensityUnits;
-    BaryonField[GH2OINum][i] = y[IDX_GH2OI] * 18.0 / NumberDensityUnits;
-    BaryonField[GH2SiOINum][i] = y[IDX_GH2SiOI] * 46.0 / NumberDensityUnits;
-    BaryonField[GHCNINum][i] = y[IDX_GHCNI] * 27.0 / NumberDensityUnits;
-    BaryonField[GHNCINum][i] = y[IDX_GHNCI] * 27.0 / NumberDensityUnits;
-    BaryonField[GHNCOINum][i] = y[IDX_GHNCOI] * 43.0 / NumberDensityUnits;
-    BaryonField[GHNOINum][i] = y[IDX_GHNOI] * 31.0 / NumberDensityUnits;
-    BaryonField[GMgINum][i] = y[IDX_GMgI] * 24.0 / NumberDensityUnits;
-    BaryonField[GN2INum][i] = y[IDX_GN2I] * 28.0 / NumberDensityUnits;
-    BaryonField[GNH3INum][i] = y[IDX_GNH3I] * 17.0 / NumberDensityUnits;
-    BaryonField[GNOINum][i] = y[IDX_GNOI] * 30.0 / NumberDensityUnits;
-    BaryonField[GNO2INum][i] = y[IDX_GNO2I] * 46.0 / NumberDensityUnits;
-    BaryonField[GO2INum][i] = y[IDX_GO2I] * 32.0 / NumberDensityUnits;
-    BaryonField[GO2HINum][i] = y[IDX_GO2HI] * 33.0 / NumberDensityUnits;
-    BaryonField[GSiCINum][i] = y[IDX_GSiCI] * 40.0 / NumberDensityUnits;
-    BaryonField[GSiC2INum][i] = y[IDX_GSiC2I] * 52.0 / NumberDensityUnits;
-    BaryonField[GSiC3INum][i] = y[IDX_GSiC3I] * 64.0 / NumberDensityUnits;
-    BaryonField[GSiH4INum][i] = y[IDX_GSiH4I] * 32.0 / NumberDensityUnits;
-    BaryonField[GSiOINum][i] = y[IDX_GSiOI] * 44.0 / NumberDensityUnits;
-    BaryonField[CINum][i] = y[IDX_CI] * 12.0 / NumberDensityUnits;
-    BaryonField[CIINum][i] = y[IDX_CII] * 12.0 / NumberDensityUnits;
-    BaryonField[CHINum][i] = y[IDX_CHI] * 13.0 / NumberDensityUnits;
-    BaryonField[CHIINum][i] = y[IDX_CHII] * 13.0 / NumberDensityUnits;
-    BaryonField[CH2INum][i] = y[IDX_CH2I] * 14.0 / NumberDensityUnits;
-    BaryonField[CH2IINum][i] = y[IDX_CH2II] * 14.0 / NumberDensityUnits;
-    BaryonField[CH3INum][i] = y[IDX_CH3I] * 15.0 / NumberDensityUnits;
-    BaryonField[CH3IINum][i] = y[IDX_CH3II] * 15.0 / NumberDensityUnits;
-    BaryonField[CH3OHINum][i] = y[IDX_CH3OHI] * 32.0 / NumberDensityUnits;
-    BaryonField[CH4INum][i] = y[IDX_CH4I] * 16.0 / NumberDensityUnits;
-    BaryonField[CH4IINum][i] = y[IDX_CH4II] * 16.0 / NumberDensityUnits;
-    BaryonField[CNINum][i] = y[IDX_CNI] * 26.0 / NumberDensityUnits;
-    BaryonField[CNIINum][i] = y[IDX_CNII] * 26.0 / NumberDensityUnits;
-    BaryonField[COINum][i] = y[IDX_COI] * 28.0 / NumberDensityUnits;
-    BaryonField[COIINum][i] = y[IDX_COII] * 28.0 / NumberDensityUnits;
-    BaryonField[CO2INum][i] = y[IDX_CO2I] * 44.0 / NumberDensityUnits;
-    BaryonField[DeNum][i] = y[IDX_EM] * 1.0 / NumberDensityUnits;
-    BaryonField[HINum][i] = y[IDX_HI] * 1.0 / NumberDensityUnits;
-    BaryonField[HIINum][i] = y[IDX_HII] * 1.0 / NumberDensityUnits;
-    BaryonField[H2INum][i] = y[IDX_H2I] * 2.0 / NumberDensityUnits;
-    BaryonField[H2IINum][i] = y[IDX_H2II] * 2.0 / NumberDensityUnits;
-    BaryonField[H2CNINum][i] = y[IDX_H2CNI] * 28.0 / NumberDensityUnits;
-    BaryonField[H2COINum][i] = y[IDX_H2COI] * 30.0 / NumberDensityUnits;
-    BaryonField[H2COIINum][i] = y[IDX_H2COII] * 30.0 / NumberDensityUnits;
-    BaryonField[H2NOIINum][i] = y[IDX_H2NOII] * 32.0 / NumberDensityUnits;
-    BaryonField[H2OINum][i] = y[IDX_H2OI] * 18.0 / NumberDensityUnits;
-    BaryonField[H2OIINum][i] = y[IDX_H2OII] * 18.0 / NumberDensityUnits;
-    BaryonField[H2SiOINum][i] = y[IDX_H2SiOI] * 46.0 / NumberDensityUnits;
-    BaryonField[H3IINum][i] = y[IDX_H3II] * 3.0 / NumberDensityUnits;
-    BaryonField[H3COIINum][i] = y[IDX_H3COII] * 31.0 / NumberDensityUnits;
-    BaryonField[H3OIINum][i] = y[IDX_H3OII] * 19.0 / NumberDensityUnits;
-    BaryonField[HCNINum][i] = y[IDX_HCNI] * 27.0 / NumberDensityUnits;
-    BaryonField[HCNIINum][i] = y[IDX_HCNII] * 27.0 / NumberDensityUnits;
-    BaryonField[HCNHIINum][i] = y[IDX_HCNHII] * 28.0 / NumberDensityUnits;
-    BaryonField[HCOINum][i] = y[IDX_HCOI] * 29.0 / NumberDensityUnits;
-    BaryonField[HCOIINum][i] = y[IDX_HCOII] * 29.0 / NumberDensityUnits;
-    BaryonField[HCO2IINum][i] = y[IDX_HCO2II] * 45.0 / NumberDensityUnits;
-    BaryonField[HeINum][i] = y[IDX_HeI] * 4.0 / NumberDensityUnits;
-    BaryonField[HeIINum][i] = y[IDX_HeII] * 4.0 / NumberDensityUnits;
-    BaryonField[HeHIINum][i] = y[IDX_HeHII] * 5.0 / NumberDensityUnits;
-    BaryonField[HNCINum][i] = y[IDX_HNCI] * 27.0 / NumberDensityUnits;
-    BaryonField[HNCOINum][i] = y[IDX_HNCOI] * 43.0 / NumberDensityUnits;
-    BaryonField[HNOINum][i] = y[IDX_HNOI] * 31.0 / NumberDensityUnits;
-    BaryonField[HNOIINum][i] = y[IDX_HNOII] * 31.0 / NumberDensityUnits;
-    BaryonField[HOCIINum][i] = y[IDX_HOCII] * 29.0 / NumberDensityUnits;
-    BaryonField[MgINum][i] = y[IDX_MgI] * 24.0 / NumberDensityUnits;
-    BaryonField[MgIINum][i] = y[IDX_MgII] * 24.0 / NumberDensityUnits;
-    BaryonField[NINum][i] = y[IDX_NI] * 14.0 / NumberDensityUnits;
-    BaryonField[NIINum][i] = y[IDX_NII] * 14.0 / NumberDensityUnits;
-    BaryonField[N2INum][i] = y[IDX_N2I] * 28.0 / NumberDensityUnits;
-    BaryonField[N2IINum][i] = y[IDX_N2II] * 28.0 / NumberDensityUnits;
-    BaryonField[N2HIINum][i] = y[IDX_N2HII] * 29.0 / NumberDensityUnits;
-    BaryonField[NHINum][i] = y[IDX_NHI] * 15.0 / NumberDensityUnits;
-    BaryonField[NHIINum][i] = y[IDX_NHII] * 15.0 / NumberDensityUnits;
-    BaryonField[NH2INum][i] = y[IDX_NH2I] * 16.0 / NumberDensityUnits;
-    BaryonField[NH2IINum][i] = y[IDX_NH2II] * 16.0 / NumberDensityUnits;
-    BaryonField[NH3INum][i] = y[IDX_NH3I] * 17.0 / NumberDensityUnits;
-    BaryonField[NH3IINum][i] = y[IDX_NH3II] * 17.0 / NumberDensityUnits;
-    BaryonField[NOINum][i] = y[IDX_NOI] * 30.0 / NumberDensityUnits;
-    BaryonField[NOIINum][i] = y[IDX_NOII] * 30.0 / NumberDensityUnits;
-    BaryonField[NO2INum][i] = y[IDX_NO2I] * 46.0 / NumberDensityUnits;
-    BaryonField[OINum][i] = y[IDX_OI] * 16.0 / NumberDensityUnits;
-    BaryonField[OIINum][i] = y[IDX_OII] * 16.0 / NumberDensityUnits;
-    BaryonField[O2INum][i] = y[IDX_O2I] * 32.0 / NumberDensityUnits;
-    BaryonField[O2IINum][i] = y[IDX_O2II] * 32.0 / NumberDensityUnits;
-    BaryonField[O2HINum][i] = y[IDX_O2HI] * 33.0 / NumberDensityUnits;
-    BaryonField[O2HIINum][i] = y[IDX_O2HII] * 33.0 / NumberDensityUnits;
-    BaryonField[OCNINum][i] = y[IDX_OCNI] * 42.0 / NumberDensityUnits;
-    BaryonField[OHINum][i] = y[IDX_OHI] * 17.0 / NumberDensityUnits;
-    BaryonField[OHIINum][i] = y[IDX_OHII] * 17.0 / NumberDensityUnits;
-    BaryonField[SiINum][i] = y[IDX_SiI] * 28.0 / NumberDensityUnits;
-    BaryonField[SiIINum][i] = y[IDX_SiII] * 28.0 / NumberDensityUnits;
-    BaryonField[SiCINum][i] = y[IDX_SiCI] * 40.0 / NumberDensityUnits;
-    BaryonField[SiCIINum][i] = y[IDX_SiCII] * 40.0 / NumberDensityUnits;
-    BaryonField[SiC2INum][i] = y[IDX_SiC2I] * 52.0 / NumberDensityUnits;
-    BaryonField[SiC2IINum][i] = y[IDX_SiC2II] * 52.0 / NumberDensityUnits;
-    BaryonField[SiC3INum][i] = y[IDX_SiC3I] * 64.0 / NumberDensityUnits;
-    BaryonField[SiC3IINum][i] = y[IDX_SiC3II] * 64.0 / NumberDensityUnits;
-    BaryonField[SiHINum][i] = y[IDX_SiHI] * 29.0 / NumberDensityUnits;
-    BaryonField[SiHIINum][i] = y[IDX_SiHII] * 29.0 / NumberDensityUnits;
-    BaryonField[SiH2INum][i] = y[IDX_SiH2I] * 30.0 / NumberDensityUnits;
-    BaryonField[SiH2IINum][i] = y[IDX_SiH2II] * 30.0 / NumberDensityUnits;
-    BaryonField[SiH3INum][i] = y[IDX_SiH3I] * 31.0 / NumberDensityUnits;
-    BaryonField[SiH3IINum][i] = y[IDX_SiH3II] * 31.0 / NumberDensityUnits;
-    BaryonField[SiH4INum][i] = y[IDX_SiH4I] * 32.0 / NumberDensityUnits;
-    BaryonField[SiH4IINum][i] = y[IDX_SiH4II] * 32.0 / NumberDensityUnits;
-    BaryonField[SiH5IINum][i] = y[IDX_SiH5II] * 33.0 / NumberDensityUnits;
-    BaryonField[SiOINum][i] = y[IDX_SiOI] * 44.0 / NumberDensityUnits;
-    BaryonField[SiOIINum][i] = y[IDX_SiOII] * 44.0 / NumberDensityUnits;
-    BaryonField[SiOHIINum][i] = y[IDX_SiOHII] * 45.0 / NumberDensityUnits;
+    BaryonField[GCH3OHINum][i] = max(y[IDX_GCH3OHI] * 32.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GCH4INum][i] = max(y[IDX_GCH4I] * 16.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GCOINum][i] = max(y[IDX_GCOI] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GCO2INum][i] = max(y[IDX_GCO2I] * 44.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GH2CNINum][i] = max(y[IDX_GH2CNI] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GH2COINum][i] = max(y[IDX_GH2COI] * 30.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GH2OINum][i] = max(y[IDX_GH2OI] * 18.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GH2SiOINum][i] = max(y[IDX_GH2SiOI] * 46.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GHCNINum][i] = max(y[IDX_GHCNI] * 27.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GHNCINum][i] = max(y[IDX_GHNCI] * 27.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GHNCOINum][i] = max(y[IDX_GHNCOI] * 43.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GHNOINum][i] = max(y[IDX_GHNOI] * 31.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GMgINum][i] = max(y[IDX_GMgI] * 24.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GN2INum][i] = max(y[IDX_GN2I] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GNH3INum][i] = max(y[IDX_GNH3I] * 17.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GNOINum][i] = max(y[IDX_GNOI] * 30.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GNO2INum][i] = max(y[IDX_GNO2I] * 46.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GO2INum][i] = max(y[IDX_GO2I] * 32.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GO2HINum][i] = max(y[IDX_GO2HI] * 33.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GSiCINum][i] = max(y[IDX_GSiCI] * 40.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GSiC2INum][i] = max(y[IDX_GSiC2I] * 52.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GSiC3INum][i] = max(y[IDX_GSiC3I] * 64.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GSiH4INum][i] = max(y[IDX_GSiH4I] * 32.0 / NumberDensityUnits, 1e-40);
+    BaryonField[GSiOINum][i] = max(y[IDX_GSiOI] * 44.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CINum][i] = max(y[IDX_CI] * 12.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CIINum][i] = max(y[IDX_CII] * 12.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CHINum][i] = max(y[IDX_CHI] * 13.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CHIINum][i] = max(y[IDX_CHII] * 13.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CH2INum][i] = max(y[IDX_CH2I] * 14.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CH2IINum][i] = max(y[IDX_CH2II] * 14.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CH3INum][i] = max(y[IDX_CH3I] * 15.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CH3IINum][i] = max(y[IDX_CH3II] * 15.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CH3OHINum][i] = max(y[IDX_CH3OHI] * 32.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CH4INum][i] = max(y[IDX_CH4I] * 16.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CH4IINum][i] = max(y[IDX_CH4II] * 16.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CNINum][i] = max(y[IDX_CNI] * 26.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CNIINum][i] = max(y[IDX_CNII] * 26.0 / NumberDensityUnits, 1e-40);
+    BaryonField[COINum][i] = max(y[IDX_COI] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[COIINum][i] = max(y[IDX_COII] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[CO2INum][i] = max(y[IDX_CO2I] * 44.0 / NumberDensityUnits, 1e-40);
+    BaryonField[DeNum][i] = max(y[IDX_EM] * 1.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HINum][i] = max(y[IDX_HI] * 1.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HIINum][i] = max(y[IDX_HII] * 1.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H2INum][i] = max(y[IDX_H2I] * 2.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H2IINum][i] = max(y[IDX_H2II] * 2.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H2CNINum][i] = max(y[IDX_H2CNI] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H2COINum][i] = max(y[IDX_H2COI] * 30.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H2COIINum][i] = max(y[IDX_H2COII] * 30.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H2NOIINum][i] = max(y[IDX_H2NOII] * 32.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H2OINum][i] = max(y[IDX_H2OI] * 18.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H2OIINum][i] = max(y[IDX_H2OII] * 18.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H2SiOINum][i] = max(y[IDX_H2SiOI] * 46.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H3IINum][i] = max(y[IDX_H3II] * 3.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H3COIINum][i] = max(y[IDX_H3COII] * 31.0 / NumberDensityUnits, 1e-40);
+    BaryonField[H3OIINum][i] = max(y[IDX_H3OII] * 19.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HCNINum][i] = max(y[IDX_HCNI] * 27.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HCNIINum][i] = max(y[IDX_HCNII] * 27.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HCNHIINum][i] = max(y[IDX_HCNHII] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HCOINum][i] = max(y[IDX_HCOI] * 29.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HCOIINum][i] = max(y[IDX_HCOII] * 29.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HCO2IINum][i] = max(y[IDX_HCO2II] * 45.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HeINum][i] = max(y[IDX_HeI] * 4.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HeIINum][i] = max(y[IDX_HeII] * 4.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HeHIINum][i] = max(y[IDX_HeHII] * 5.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HNCINum][i] = max(y[IDX_HNCI] * 27.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HNCOINum][i] = max(y[IDX_HNCOI] * 43.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HNOINum][i] = max(y[IDX_HNOI] * 31.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HNOIINum][i] = max(y[IDX_HNOII] * 31.0 / NumberDensityUnits, 1e-40);
+    BaryonField[HOCIINum][i] = max(y[IDX_HOCII] * 29.0 / NumberDensityUnits, 1e-40);
+    BaryonField[MgINum][i] = max(y[IDX_MgI] * 24.0 / NumberDensityUnits, 1e-40);
+    BaryonField[MgIINum][i] = max(y[IDX_MgII] * 24.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NINum][i] = max(y[IDX_NI] * 14.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NIINum][i] = max(y[IDX_NII] * 14.0 / NumberDensityUnits, 1e-40);
+    BaryonField[N2INum][i] = max(y[IDX_N2I] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[N2IINum][i] = max(y[IDX_N2II] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[N2HIINum][i] = max(y[IDX_N2HII] * 29.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NHINum][i] = max(y[IDX_NHI] * 15.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NHIINum][i] = max(y[IDX_NHII] * 15.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NH2INum][i] = max(y[IDX_NH2I] * 16.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NH2IINum][i] = max(y[IDX_NH2II] * 16.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NH3INum][i] = max(y[IDX_NH3I] * 17.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NH3IINum][i] = max(y[IDX_NH3II] * 17.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NOINum][i] = max(y[IDX_NOI] * 30.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NOIINum][i] = max(y[IDX_NOII] * 30.0 / NumberDensityUnits, 1e-40);
+    BaryonField[NO2INum][i] = max(y[IDX_NO2I] * 46.0 / NumberDensityUnits, 1e-40);
+    BaryonField[OINum][i] = max(y[IDX_OI] * 16.0 / NumberDensityUnits, 1e-40);
+    BaryonField[OIINum][i] = max(y[IDX_OII] * 16.0 / NumberDensityUnits, 1e-40);
+    BaryonField[O2INum][i] = max(y[IDX_O2I] * 32.0 / NumberDensityUnits, 1e-40);
+    BaryonField[O2IINum][i] = max(y[IDX_O2II] * 32.0 / NumberDensityUnits, 1e-40);
+    BaryonField[O2HINum][i] = max(y[IDX_O2HI] * 33.0 / NumberDensityUnits, 1e-40);
+    BaryonField[O2HIINum][i] = max(y[IDX_O2HII] * 33.0 / NumberDensityUnits, 1e-40);
+    BaryonField[OCNINum][i] = max(y[IDX_OCNI] * 42.0 / NumberDensityUnits, 1e-40);
+    BaryonField[OHINum][i] = max(y[IDX_OHI] * 17.0 / NumberDensityUnits, 1e-40);
+    BaryonField[OHIINum][i] = max(y[IDX_OHII] * 17.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiINum][i] = max(y[IDX_SiI] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiIINum][i] = max(y[IDX_SiII] * 28.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiCINum][i] = max(y[IDX_SiCI] * 40.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiCIINum][i] = max(y[IDX_SiCII] * 40.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiC2INum][i] = max(y[IDX_SiC2I] * 52.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiC2IINum][i] = max(y[IDX_SiC2II] * 52.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiC3INum][i] = max(y[IDX_SiC3I] * 64.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiC3IINum][i] = max(y[IDX_SiC3II] * 64.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiHINum][i] = max(y[IDX_SiHI] * 29.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiHIINum][i] = max(y[IDX_SiHII] * 29.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiH2INum][i] = max(y[IDX_SiH2I] * 30.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiH2IINum][i] = max(y[IDX_SiH2II] * 30.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiH3INum][i] = max(y[IDX_SiH3I] * 31.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiH3IINum][i] = max(y[IDX_SiH3II] * 31.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiH4INum][i] = max(y[IDX_SiH4I] * 32.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiH4IINum][i] = max(y[IDX_SiH4II] * 32.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiH5IINum][i] = max(y[IDX_SiH5II] * 33.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiOINum][i] = max(y[IDX_SiOI] * 44.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiOIINum][i] = max(y[IDX_SiOII] * 44.0 / NumberDensityUnits, 1e-40);
+    BaryonField[SiOHIINum][i] = max(y[IDX_SiOHII] * 45.0 / NumberDensityUnits, 1e-40);
     }
   
+  naunet.Finalize();
   
   if (HydroMethod != Zeus_Hydro) {
     for (i = 0; i < size; i++) {
