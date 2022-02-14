@@ -1065,6 +1065,11 @@ int SetDefaultGlobalValues(TopGridData &MetaData)
 #ifdef USE_NAUNET
   use_naunet = 0;
   grackle_primordial = 0;
+  opt_freeze = 1.0;
+  opt_thd = 1;
+  opt_uvd = 1;
+  opt_crd = 1;
+  opt_h2d = 1;
 #endif
 
   return SUCCESS;

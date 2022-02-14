@@ -1177,6 +1177,11 @@ int WriteParameterFile(FILE *fptr, TopGridData &MetaData, char *name = NULL)
 #ifdef USE_NAUNET
   fprintf(fptr, "use_naunet           = %"ISYM"\n", use_naunet);
   fprintf(fptr, "grackle_primordial   = %"ISYM"\n", grackle_primordial);
+  fprintf(fptr, "opt_freeze           = %"FSYM"\n", opt_freeze);
+  fprintf(fptr, "opt_thd              = %"ISYM"\n", opt_thd);
+  fprintf(fptr, "opt_uvd              = %"ISYM"\n", opt_uvd);
+  fprintf(fptr, "opt_crd              = %"ISYM"\n", opt_crd);
+  fprintf(fptr, "opt_h2d              = %"ISYM"\n", opt_h2d);
 #endif
 
   /* write data which defines the boundary conditions */
