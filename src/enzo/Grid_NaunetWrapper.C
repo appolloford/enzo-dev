@@ -347,7 +347,7 @@ int grid::NaunetWrapper()
     // printf("nH %13.7e, temperature: %13.7e, time: %13.7e\n", data.nH, temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0);
     // data.Tgas     = 15.0;
     data.nH       = nH;
-    data.Tgas     = temperature[i];
+    data.Tgas     = min(temperature[i], 300.0);
     data.zeta     = 1.3e-17;
     data.Av       = GetAv(nH);
     data.omega    = 0.5;
@@ -519,7 +519,7 @@ int grid::NaunetWrapper()
     }
     else if (flag != 0) {
     // if (flag != 0) {
-      // CV_SUCCESS
+      // Not CV_SUCCESS
       printf("nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr, gdens: %13.7e\n", 
              data.nH, temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0, data.gdens);
 
