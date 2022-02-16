@@ -529,6 +529,13 @@ int EvolveHierarchy(HierarchyEntry &TopGrid, TopGridData &MetaData,
     CommunicationBarrier();
     tlev1 = MPI_Wtime();
 #endif
+
+#ifdef USE_NAUNET
+    if (use_naunetstep == 1) {
+      if (MetaData.CycleNumber == MetaData.NaunetCycle)
+        MetaData.NaunetCycle += MetaData.NaunetCycleSkip;
+    }
+#endif
   
     /* Add time and check stopping criteria (steps #21 & #22)
        (note the topgrid is also keeping its own time but this statement will

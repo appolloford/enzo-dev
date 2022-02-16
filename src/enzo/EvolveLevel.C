@@ -662,10 +662,23 @@ int EvolveLevel(TopGridData *MetaData, LevelHierarchyEntry *LevelArray[],
         }//grid
     }//RK hydro
     
-      /* Solve the cooling and species rate equations. */
- 
     for (grid1 = 0; grid1 < NumberOfGrids; grid1++) {
+
+      /* Solve the cooling and species rate equations. */
+#ifdef USE_NAUNET
+      if (use_naunetstep == 1) {
+        Grids[grid1]->GridData->SyncTopGridCycle(MetaData->CycleNumber);
+        Grids[grid1]->GridData->SetNaunetCycle(MetaData->NaunetCycle);
+      }
+#endif
+
       Grids[grid1]->GridData->MultiSpeciesHandler();
+
+#ifdef USE_NAUNET
+      if (use_naunetstep == 1) {
+        Grids[grid1]->GridData->SyncNaunetTime();
+      }
+#endif
 
       /* Update particle positions (if present). */
  

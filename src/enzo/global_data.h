@@ -1225,6 +1225,7 @@ EXTERN float MagneticSupernovaEnergy;
 
 #ifdef USE_NAUNET
 EXTERN int use_naunet;
+EXTERN int use_naunetstep;
 EXTERN int grackle_primordial;
 EXTERN float opt_freeze;
 EXTERN int opt_thd;

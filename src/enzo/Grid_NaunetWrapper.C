@@ -36,8 +36,6 @@ int GetUnits(float *DensityUnits, float *LengthUnits,
              float *VelocityUnits, FLOAT Time);
 int FindField(int field, int farray[], int numfields);
 
-#ifdef USE_NAUNET
-
 double AvTableX[91] = {
   -3.0, -2.9, -2.8, -2.7, -2.6, -2.5, -2.4,
   -2.3, -2.2, -2.1, -2.0, -1.9, -1.8, -1.7,
@@ -119,11 +117,29 @@ double GetAv(double nh) {
 int grid::NaunetWrapper()
 {
 
+#ifdef USE_NAUNET
+
   if (use_naunet == FALSE)
     return SUCCESS;
 
   if (ProcessorNumber != MyProcessorNumber)
     return SUCCESS;
+
+  if (use_naunetstep == 1 && (TopGridCycle != NaunetCycle || TopGridCycle == 0))
+    return SUCCESS;
+
+  if (MultiSpecies != NAUNET_SPECIES) {
+    printf("NaunetWrapper Warning: MultiSpecies = %d isn't valid for naunet. \
+            Skip solving chemistry.\n", MultiSpecies);
+    return SUCCESS;
+  }
+
+  if (debug && MyProcessorNumber == ROOT_PROCESSOR) {
+    if (use_naunetstep == 1 && TopGridCycle == NaunetCycle) {
+      printf("NaunetWrapper: TopGridCycle=%d, NaunetCycle=%d, NaunetCycleSkip:%d\n",
+              TopGridCycle, NaunetCycle, NaunetCycleSkip);
+    }
+  }
 
   LCAPERF_START("grid_NaunetWrapper");
 
@@ -147,6 +163,8 @@ int grid::NaunetWrapper()
   int DensNum, GENum, Vel1Num, Vel2Num, Vel3Num, TENum;
 
   double dt_chem = dtFixed;
+
+  if (use_naunetstep == 1) dt_chem = Time - NaunetTime;
   
   // Compute the size of the fields.
  
@@ -513,15 +531,15 @@ int grid::NaunetWrapper()
 
     if (flag == -1 || flag == -3) {
       // CV_TOO_MUCH_WORK / CV_ERR_FAILURE
-      printf("nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr\n", 
-             data.nH, data.Tgas, dt_chem * TimeUnits / 86400.0 / 365.0);
+      printf("nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr, Av: %13.7e\n", 
+             data.nH, data.Tgas, dt_chem * TimeUnits / 86400.0 / 365.0, data.Av);
       failedcount += 1;
     }
     else if (flag != 0) {
     // if (flag != 0) {
       // Not CV_SUCCESS
-      printf("nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr, gdens: %13.7e\n", 
-             data.nH, temperature[i], dt_chem * TimeUnits / 86400.0 / 365.0, data.gdens);
+      printf("nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr, Av: %13.7e\n", 
+             data.nH, data.Tgas, dt_chem * TimeUnits / 86400.0 / 365.0, data.Av);
 
       for (int sidx=IDX_GCH3OHI; sidx<=IDX_SiOHII; sidx++) {
         printf("y_init[%d] = %13.7e;\n", sidx, y_init[sidx]);
@@ -696,9 +714,10 @@ int grid::NaunetWrapper()
   delete [] g_grid_start;
   delete [] g_grid_end;
 
-  LCAPERF_STOP("grid_GrackleWrapper");
+  LCAPERF_STOP("grid_NaunetWrapper");
+
+#endif
 
   return SUCCESS;
 }
 
-#endif

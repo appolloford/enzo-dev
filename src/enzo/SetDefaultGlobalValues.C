@@ -59,10 +59,16 @@ int SetDefaultGlobalValues(TopGridData &MetaData)
   /* set the default MetaData values. */
  
   MetaData.CycleNumber     = 0;
-  MetaData.SubcycleNumber     = 0;
+  MetaData.SubcycleNumber  = 0;
   MetaData.Time            = 0.0;
   MetaData.CPUTime         = 0.0;
- 
+
+#ifdef USE_NAUNET
+  MetaData.NaunetTime      = 0.0;
+  MetaData.NaunetCycleSkip = 0;
+  MetaData.NaunetCycle     = MetaData.CycleNumber;
+#endif
+
   MetaData.StopTime        = FLOAT_UNDEFINED;  // This must be set be the user
   MetaData.StopCycle       = 100000;            // 10000 timesteps
   MetaData.StopSteps       = 10000;            // 10000 timesteps
@@ -1064,6 +1070,7 @@ int SetDefaultGlobalValues(TopGridData &MetaData)
 
 #ifdef USE_NAUNET
   use_naunet = 0;
+  use_naunetstep = 0;
   grackle_primordial = 0;
   opt_freeze = 1.0;
   opt_thd = 1;

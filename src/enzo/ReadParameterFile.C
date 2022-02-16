@@ -1390,12 +1390,17 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
 #ifdef USE_NAUNET
     // Parameters for naunet
     ret += sscanf(line, "use_naunet            = %"ISYM, &use_naunet);
+    ret += sscanf(line, "use_naunetstep        = %"ISYM, &use_naunetstep);
     ret += sscanf(line, "grackle_primordial    = %"ISYM, &grackle_primordial);
     ret += sscanf(line, "opt_freeze            = %"FSYM, &opt_freeze);
     ret += sscanf(line, "opt_thd               = %"ISYM, &opt_thd);
     ret += sscanf(line, "opt_uvd               = %"ISYM, &opt_uvd);
     ret += sscanf(line, "opt_crd               = %"ISYM, &opt_crd);
     ret += sscanf(line, "opt_h2d               = %"ISYM, &opt_h2d);
+
+    ret += sscanf(line, "NaunetTime            = %"PSYM, &MetaData.NaunetTime);
+    ret += sscanf(line, "NaunetCycle           = %"ISYM, &MetaData.NaunetCycle);
+    ret += sscanf(line, "NaunetCycleSkip       = %"ISYM, &MetaData.NaunetCycleSkip);
 #endif
 
     /* If the dummy char space was used, then make another. */

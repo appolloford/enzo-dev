@@ -215,6 +215,14 @@ class grid
   float **freefall_density;
   float **freefall_pressure;
 
+#ifdef USE_NAUNET
+  int TopGridCycle;
+
+  FLOAT NaunetTime;
+  int NaunetCycle;
+  int NaunetCycleSkip;
+#endif
+
 //
 // Friends
 //
@@ -405,6 +413,24 @@ public:
    FLOAT ReturnTime() {return Time;};
    FLOAT ReturnOldTime() {return OldTime;};
    float ReturnTimeStep() {return dtFixed;};
+
+#ifdef USE_NAUNET
+   /* Get, set naunet time, cycle, cycleskip */
+
+   FLOAT GetNaunetTime() { return NaunetTime; };
+   int GetNaunetCycle() { return NaunetCycle; };
+   int GetNaunetCycleSkip() { return NaunetCycleSkip; };
+
+   void SyncTopGridCycle(int NewCycle) { TopGridCycle = NewCycle; };
+
+   void SyncNaunetTime() {
+     if (TopGridCycle == NaunetCycle) {
+       NaunetTime = Time;
+     }
+   };
+   void SetNaunetCycle(int NewCycle) { NaunetCycle = NewCycle; };
+   void SetNaunetCycleSkip(int NewCycleSkip) { NaunetCycleSkip = NewCycleSkip; };
+#endif
 
   /* Return, set grid ID */
 
@@ -1828,7 +1854,7 @@ int TransferSubgridActiveParticles(grid* Subgrids[], int NumberOfSubgrids,
 			    int &HMNum, int &H2INum, int &H2IINum,
                             int &DINum, int &DIINum, int &HDINum);
 
-  /* Identify Multi-species fields from KROME. */
+  /* Identify Multi-species fields from Naunet. */
   int IdentifyNaunetSpeciesFields(int &GCH3OHINum, int &GCH4INum, int &GCOINum,
                                 int &GCO2INum, int &GH2CNINum, int &GH2COINum,
                                 int &GH2OINum, int &GH2SiOINum, int &GHCNINum,

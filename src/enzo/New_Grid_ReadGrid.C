@@ -160,6 +160,24 @@ int grid::Group_ReadGrid(FILE *fptr, int GridID, HDF5_hid_t file_id,
             ENZO_FAIL("Error reading OldTime.");
     }
  
+#ifdef USE_NAUNET
+    if (fscanf(fptr, "TopGridCycle      = %"ISYM"\n", &TopGridCycle) != 1) {
+      ENZO_FAIL("Error reading TopGridCycle.");
+    }
+
+    if (fscanf(fptr, "NaunetTime        = %"PSYM"\n", &NaunetTime) != 1) {
+      ENZO_FAIL("Error reading NaunetTime.");
+    }
+
+    if (fscanf(fptr, "NaunetCycle        = %"ISYM"\n", &NaunetCycle) != 1) {
+      ENZO_FAIL("Error reading NaunetCycle.");
+    }
+
+    if (fscanf(fptr, "NaunetCycleSkip    = %"ISYM"\n", &NaunetCycleSkip) != 1) {
+      ENZO_FAIL("Error reading NaunetCycleSkip.");
+    }
+#endif
+
     if (fscanf(fptr, "SubgridsAreStatic = %"ISYM"\n", &SubgridsAreStatic) != 1) {
             ENZO_FAIL("Error reading SubgridsAreStatic.");
     }

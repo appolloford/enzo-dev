@@ -26,6 +26,13 @@ struct TopGridData
   double LastCycleCPUTime;    // CPU time used in the last cycle
   int ResubmitOn;             // Resubmit job after StopCPUTime
 
+#ifdef USE_NAUNET
+  // current chemical time and timestep of naunet
+  FLOAT NaunetTime;
+  int NaunetCycle;
+  int NaunetCycleSkip;
+#endif
+
   /* Script names for resubmission to queues and restarting to reduce
      memory fragmentation. */
 

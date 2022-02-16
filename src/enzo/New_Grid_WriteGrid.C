@@ -188,7 +188,15 @@ int grid::Group_WriteGrid(FILE *fptr, char *base_name, int grid_id, HDF5_hid_t f
 
     if(WriteEverything == TRUE)
     fprintf(fptr, "OldTime           = %"GOUTSYM"\n", OldTime);
- 
+
+    fprintf(fptr, "TopGridCycle      = %"ISYM"\n", TopGridCycle);
+
+    fprintf(fptr, "NaunetTime        = %"GOUTSYM"\n", NaunetTime);
+
+    fprintf(fptr, "NaunetCycle       = %"ISYM"\n", NaunetCycle);
+
+    fprintf(fptr, "NaunetCycleSkip   = %"ISYM"\n", NaunetCycleSkip);
+
     fprintf(fptr, "SubgridsAreStatic = %"ISYM"\n", SubgridsAreStatic);
  
     fprintf(fptr, "NumberOfBaryonFields = %"ISYM"\n", NumberOfBaryonFields);

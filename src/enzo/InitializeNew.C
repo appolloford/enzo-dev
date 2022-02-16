@@ -360,6 +360,13 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
 				  DomainLeftEdge, DomainRightEdge,
 				  MetaData.NumberOfParticles);
     TopGrid.GridData->SetTime(MetaData.Time);
+#ifdef USE_NAUNET
+    TopGrid.GridData->SyncTopGridCycle(MetaData.CycleNumber);
+    TopGrid.GridData->SetNaunetCycle(MetaData.CycleNumber);
+    TopGrid.GridData->SetNaunetCycleSkip(MetaData.NaunetCycleSkip);
+
+    TopGrid.GridData->SyncNaunetTime();
+#endif
     TopGrid.GridData->SetHydroParameters(MetaData.CourantSafetyNumber,
 					 MetaData.PPMFlatteningParameter,
 					 MetaData.PPMDiffusionParameter,
