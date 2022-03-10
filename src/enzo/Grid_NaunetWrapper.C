@@ -175,6 +175,10 @@ int grid::NaunetWrapper()
   for (int dim = 0; dim < GridRank; dim++)
     size *= GridDimension[dim];
 
+  int activesize = 1;
+  for (int dim = 0; dim < GridRank; dim++)
+    activesize *= (GridDimension[dim] - 2*NumberOfGhostZones);
+
   Eint32 *g_grid_dimension, *g_grid_start, *g_grid_end;
   g_grid_dimension = new Eint32[GridRank];
   g_grid_start = new Eint32[GridRank];
@@ -271,78 +275,6 @@ int grid::NaunetWrapper()
   }
   float afloat = float(a);
 
-  /* Metal cooling codes. */
- 
-  int MetalNum = 0, SNColourNum = 0;
-  int MetalFieldPresent = FALSE;
-
-  // First see if there's a metal field (so we can conserve species in
-  // the solver)
-  MetalNum = FindField(Metallicity, FieldType, NumberOfBaryonFields);
-  SNColourNum = FindField(SNColour, FieldType, NumberOfBaryonFields);
-  MetalFieldPresent = (MetalNum != -1 || SNColourNum != -1);
-
-  // Double check if there's a metal field when we have metal cooling
-  if (MetalCooling && MetalFieldPresent == FALSE) {
-    if (debug)
-      fprintf(stderr, "Warning: No metal field found.  Turning OFF MetalCooling.\n");
-    MetalCooling = FALSE;
-    MetalNum = 0;
-  }
-
-  // If both metal fields (Pop I/II and III) exist, create a field
-  // that contains their sum
-
-  float *MetalPointer = NULL;
-  float *TotalMetals = NULL;
-
-  if (MetalNum != -1 && SNColourNum != -1) {
-    TotalMetals = new float[size];
-    for (i = 0; i < size; i++)
-      TotalMetals[i] = BaryonField[MetalNum][i] + BaryonField[SNColourNum][i];
-    MetalPointer = TotalMetals;
-  } // ENDIF both metal types
-  else {
-    if (MetalNum != -1)
-      MetalPointer = BaryonField[MetalNum];
-    else if (SNColourNum != -1)
-      MetalPointer = BaryonField[SNColourNum];
-  } // ENDELSE both metal types
-
-  int temp_thermal = FALSE;
-  float *thermal_energy;
-  if ( UseMHD ){
-    iBx = FindField(Bfield1, FieldType, NumberOfBaryonFields);
-    iBy = FindField(Bfield2, FieldType, NumberOfBaryonFields);
-    iBz = FindField(Bfield3, FieldType, NumberOfBaryonFields);  
-  }
-
-  if (HydroMethod==Zeus_Hydro) {
-    thermal_energy = BaryonField[TENum];
-  }
-  else if (DualEnergyFormalism) {
-    thermal_energy = BaryonField[GENum];
-  }
-  else {
-    temp_thermal = TRUE;
-    thermal_energy = new float[size];
-    for (i = 0; i < size; i++) {
-      thermal_energy[i] = BaryonField[TENum][i] - 
-        0.5 * POW(BaryonField[Vel1Num][i], 2.0);
-      if(GridRank > 1)
-        thermal_energy[i] -= 0.5 * POW(BaryonField[Vel2Num][i], 2.0);
-      if(GridRank > 2)
-        thermal_energy[i] -= 0.5 * POW(BaryonField[Vel3Num][i], 2.0);
-
-      if( UseMHD ) {
-        thermal_energy[i] -= 0.5 * (POW(BaryonField[iBx][i], 2.0) + 
-                                    POW(BaryonField[iBy][i], 2.0) + 
-                                    POW(BaryonField[iBz][i], 2.0)) / 
-          BaryonField[DensNum][i];
-      }
-    } // for (int i = 0; i < size; i++)
-  }
-
   float *temperature = new float[size]; 
   if (this->ComputeTemperatureField(temperature) == FAIL){
     ENZO_FAIL("Error in grid->ComputeTemperatureField.");
@@ -350,21 +282,21 @@ int grid::NaunetWrapper()
 
   float NumberDensityUnits = DensityUnits / mh;
 
+  Naunet naunet;
+  naunet.Init();
+
   // TODO: comoving, heating/cooling
+  
+  // Set your parameters here
+  NaunetData data;
 
-  realtype y[NAUNET_NEQUATIONNS], y_init[NAUNET_NEQUATIONNS];
-
-  int failedcount = 0;
+  realtype y[NAUNET_NEQUATIONS], y_init[NAUNET_NEQUATIONS];
 
   for (k = GridStartIndex[2]; k <= GridEndIndex[2]; k++) {
     for (j = GridStartIndex[1]; j <= GridEndIndex[1]; j++) {
       igrid = (k * GridDimension[1] + j) * GridDimension[0] + GridStartIndex[0];
       for (i = GridStartIndex[0]; i <= GridEndIndex[0]; i++, igrid++) {
 
-        Naunet naunet;
-        naunet.Init(1, 1e-30, 1e-5, 10000);
-        // Set your parameters here
-        NaunetData data;
         double nH       = BaryonField[iden][igrid] * DensityUnits / (1.4 * mh);
         // printf("nH %13.7e, temperature: %13.7e, time: %13.7e\n", data.nH, temperature[igrid], dt_chem * TimeUnits / 86400.0 / 365.0);
         // data.Tgas     = 15.0;
@@ -511,7 +443,7 @@ int grid::NaunetWrapper()
     
         int flag = naunet.Solve(y, dt_chem * TimeUnits, &data);
     
-        if (flag < 0) {
+        if (flag == NAUNET_FAIL) {
     
           naunet.Finalize();
     
@@ -532,43 +464,6 @@ int grid::NaunetWrapper()
     
           ENZO_FAIL("Naunet failed in NaunetWrapper.C!");
         }
-    
-        // if (flag < 0) {
-        //   printf("Naunet failed! Try to recover the error by adjusting tolerance.\n");
-        //   failedcount += 1;
-    
-        //   for (int idx = IDX_GCH3OHI; idx <= IDX_SiOHII; idx++) {
-        //     y[idx] = y_init[idx];
-        //   }
-    
-        //   // Try a weaker tolerance if it failed
-        //   naunet.Reset(1, naunet_fallback_atol, 1e-5, 10000);
-        //   flag = naunet.Solve(y, dt_chem * TimeUnits, &data);
-    
-        //   if (flag < 0) {
-        //     printf("Flag = %d, nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr, Av: %13.7e\n", 
-        //           flag, data.nH, data.Tgas, dt_chem * TimeUnits / 86400.0 / 365.0, data.Av);
-    
-        //     for (int sidx=IDX_GCH3OHI; sidx<=IDX_SiOHII; sidx++) {
-        //       printf("y_init[%d] = %13.7e;\n", sidx, y_init[sidx]);
-        //     }
-    
-        //     for (int sidx=IDX_GCH3OHI; sidx<=IDX_SiOHII; sidx++) {
-        //       printf("y[%d] = %13.7e;\n", sidx, y[sidx]);
-        //     }
-    
-        //     // for (int sidx=DeNum; sidx <= SiOHIINum; sidx ++) {
-        //     //   printf("BaryonField[%d][igrid]: %13.7e\n", sidx, BaryonField[sidx][igrid]);
-        //     // }
-      
-        //     ENZO_FAIL("Naunet failed in NaunetWrapper.C!");
-        //   }
-    
-        //   printf("Error was fixed. Reset to the original tolerance.\n");
-        //   // Reset to the initial settings
-        //   naunet.Reset(1, 1e-30, 1e-5, 10000);
-        // }
-    
         BaryonField[GCH3OHINum][igrid] = max(y[IDX_GCH3OHI] * 32.0 / NumberDensityUnits, 1e-40);
         BaryonField[GCH4INum][igrid] = max(y[IDX_GCH4I] * 16.0 / NumberDensityUnits, 1e-40);
         BaryonField[GCOINum][igrid] = max(y[IDX_GCOI] * 28.0 / NumberDensityUnits, 1e-40);
@@ -683,47 +578,22 @@ int grid::NaunetWrapper()
         BaryonField[SiOINum][igrid] = max(y[IDX_SiOI] * 44.0 / NumberDensityUnits, 1e-40);
         BaryonField[SiOIINum][igrid] = max(y[IDX_SiOII] * 44.0 / NumberDensityUnits, 1e-40);
         BaryonField[SiOHIINum][igrid] = max(y[IDX_SiOHII] * 45.0 / NumberDensityUnits, 1e-40);
-    
-        naunet.Finalize();
+        
       }
     }
   }
   
-  if (HydroMethod != Zeus_Hydro) {
-    for (i = 0; i < size; i++) {
-      BaryonField[TENum][i] = thermal_energy[i] +
-        0.5 * POW(BaryonField[Vel1Num][i], 2.0);
-      if(GridRank > 1)
-        BaryonField[TENum][i] += 0.5 * POW(BaryonField[Vel2Num][i], 2.0);
-      if(GridRank > 2)
-        BaryonField[TENum][i] += 0.5 * POW(BaryonField[Vel3Num][i], 2.0);
+  
+  naunet.Finalize();
 
-      if( UseMHD ) {
-        BaryonField[TENum][i] += 0.5 * (POW(BaryonField[iBx][i], 2.0) + 
-                                        POW(BaryonField[iBy][i], 2.0) + 
-                                        POW(BaryonField[iBz][i], 2.0)) / 
-          BaryonField[DensNum][i];
-      }
-
-    } // for (int i = 0; i < size; i++)
-  } // if (HydroMethod != Zeus_Hydro)
-
-  printf("Total number of failed cells: %d / size: %d\n", failedcount, size);
-
-  if (temp_thermal == TRUE) {
-    delete [] thermal_energy;
-  }
   delete [] temperature;
 
-  delete [] TotalMetals;
   delete [] g_grid_dimension;
   delete [] g_grid_start;
   delete [] g_grid_end;
 
   LCAPERF_STOP("grid_NaunetWrapper");
-
 #endif
 
   return SUCCESS;
 }
-

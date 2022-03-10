@@ -7,7 +7,7 @@
 #define NAUNET_SPECIES 4
 // number of equations to be solved
 #define NAUNET_NSPECIES 118
-#define NAUNET_NEQUATIONNS 114
+#define NAUNET_NEQUATIONS 114
 
 #define IDX_GCH3OHI 0
 #define IDX_GCH4I 1
@@ -123,6 +123,8 @@
 #define IDX_SiOI 111
 #define IDX_SiOII 112
 #define IDX_SiOHII 113
+
+
 #define A_GCH3OHI 32.0
 #define A_GCH4I 16.0
 #define A_GCOI 28.0
@@ -237,4 +239,123 @@
 #define A_SiOI 44.0
 #define A_SiOII 44.0
 #define A_SiOHII 45.0
+
+
+const float A_Table[114] = {
+    A_GCH3OHI,
+    A_GCH4I,
+    A_GCOI,
+    A_GCO2I,
+    A_GH2CNI,
+    A_GH2COI,
+    A_GH2OI,
+    A_GH2SiOI,
+    A_GHCNI,
+    A_GHNCI,
+    A_GHNCOI,
+    A_GHNOI,
+    A_GMgI,
+    A_GN2I,
+    A_GNH3I,
+    A_GNOI,
+    A_GNO2I,
+    A_GO2I,
+    A_GO2HI,
+    A_GSiCI,
+    A_GSiC2I,
+    A_GSiC3I,
+    A_GSiH4I,
+    A_GSiOI,
+    A_CI,
+    A_CII,
+    A_CHI,
+    A_CHII,
+    A_CH2I,
+    A_CH2II,
+    A_CH3I,
+    A_CH3II,
+    A_CH3OHI,
+    A_CH4I,
+    A_CH4II,
+    A_CNI,
+    A_CNII,
+    A_COI,
+    A_COII,
+    A_CO2I,
+    A_EM,
+    A_HI,
+    A_HII,
+    A_H2I,
+    A_H2II,
+    A_H2CNI,
+    A_H2COI,
+    A_H2COII,
+    A_H2NOII,
+    A_H2OI,
+    A_H2OII,
+    A_H2SiOI,
+    A_H3II,
+    A_H3COII,
+    A_H3OII,
+    A_HCNI,
+    A_HCNII,
+    A_HCNHII,
+    A_HCOI,
+    A_HCOII,
+    A_HCO2II,
+    A_HeI,
+    A_HeII,
+    A_HeHII,
+    A_HNCI,
+    A_HNCOI,
+    A_HNOI,
+    A_HNOII,
+    A_HOCII,
+    A_MgI,
+    A_MgII,
+    A_NI,
+    A_NII,
+    A_N2I,
+    A_N2II,
+    A_N2HII,
+    A_NHI,
+    A_NHII,
+    A_NH2I,
+    A_NH2II,
+    A_NH3I,
+    A_NH3II,
+    A_NOI,
+    A_NOII,
+    A_NO2I,
+    A_OI,
+    A_OII,
+    A_O2I,
+    A_O2II,
+    A_O2HI,
+    A_O2HII,
+    A_OCNI,
+    A_OHI,
+    A_OHII,
+    A_SiI,
+    A_SiII,
+    A_SiCI,
+    A_SiCII,
+    A_SiC2I,
+    A_SiC2II,
+    A_SiC3I,
+    A_SiC3II,
+    A_SiHI,
+    A_SiHII,
+    A_SiH2I,
+    A_SiH2II,
+    A_SiH3I,
+    A_SiH3II,
+    A_SiH4I,
+    A_SiH4II,
+    A_SiH5II,
+    A_SiOI,
+    A_SiOII,
+    A_SiOHII
+};
+
 #endif
