@@ -283,7 +283,7 @@ int grid::NaunetWrapper()
   float NumberDensityUnits = DensityUnits / mh;
 
   Naunet naunet;
-  naunet.Init();
+  naunet.Init(1, 1e-30, 1e-5, 1000);
 
   // TODO: comoving, heating/cooling
   
