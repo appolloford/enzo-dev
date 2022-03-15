@@ -282,8 +282,10 @@ int grid::NaunetWrapper()
 
   float NumberDensityUnits = DensityUnits / mh;
 
+  float atol = 1e-30;
+
   Naunet naunet;
-  naunet.Init(1, 1e-30, 1e-5, 1000);
+  naunet.Init(1, atol, 1e-5, 1000);
 
   // TODO: comoving, heating/cooling
   
@@ -444,26 +446,31 @@ int grid::NaunetWrapper()
         int flag = naunet.Solve(y, dt_chem * TimeUnits, &data);
     
         if (flag == NAUNET_FAIL) {
-    
-          naunet.Finalize();
-    
-          printf("Flag = %d, nH: %13.7e, Temperature: %13.7e K, Timestep: %13.7e yr, Av: %13.7e\n", 
-                flag, data.nH, data.Tgas, dt_chem * TimeUnits / 86400.0 / 365.0, data.Av);
-    
-          for (int sidx=IDX_GCH3OHI; sidx<=IDX_SiOHII; sidx++) {
-            printf("y_init[%d] = %13.7e;\n", sidx, y_init[sidx]);
+
+          // Try varying atol to fix the problem
+          for (int ntrial = 1; ntrial < 6; ntrial ++) {
+            naunet.Reset(1, pow(10.0, ntrial) * atol, 1e-5, 1000);
+
+            for (int idx = IDX_GCH3OHI; idx <= IDX_SiOHII; idx++) {
+              y[idx] = y_init[idx];
+            }
+
+            flag = naunet.Solve(y, dt_chem * TimeUnits, &data);
+
+            if (flag == NAUNET_SUCCESS) {
+              naunet.Reset(1, atol, 1e-5, 1000);
+              break;
+            }
           }
-    
-          for (int sidx=IDX_GCH3OHI; sidx<=IDX_SiOHII; sidx++) {
-            printf("y[%d] = %13.7e;\n", sidx, y[sidx]);
+
+          // Fail to fix up
+          if (flag == NAUNET_FAIL) {
+            naunet.Finalize();
+
+            ENZO_FAIL("Naunet failed in NaunetWrapper.C!");
           }
-    
-          // for (int sidx=DeNum; sidx <= SiOHIINum; sidx ++) {
-          //   printf("BaryonField[%d][igrid]: %13.7e\n", sidx, BaryonField[sidx][igrid]);
-          // }
-    
-          ENZO_FAIL("Naunet failed in NaunetWrapper.C!");
         }
+
         BaryonField[GCH3OHINum][igrid] = max(y[IDX_GCH3OHI] * 32.0 / NumberDensityUnits, 1e-40);
         BaryonField[GCH4INum][igrid] = max(y[IDX_GCH4I] * 16.0 / NumberDensityUnits, 1e-40);
         BaryonField[GCOINum][igrid] = max(y[IDX_GCOI] * 28.0 / NumberDensityUnits, 1e-40);
