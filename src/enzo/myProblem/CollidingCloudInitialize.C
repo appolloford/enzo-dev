@@ -198,6 +198,8 @@ int CollidingCloudInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
   const char *SiOIName               = "SiOI_Density";
   const char *SiOIIName              = "SiOII_Density";
   const char *SiOHIIName             = "SiOHII_Density";
+
+  const char *KspName                = "Sputtering_Rate";
 #endif
 
 
@@ -539,7 +541,9 @@ int CollidingCloudInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
       DataLabel[count++] = (char*) SiOIName;
       DataLabel[count++] = (char*) SiOIIName;
       DataLabel[count++] = (char*) SiOHIIName;
-      }
+
+      DataLabel[count++] = (char*) KspName;
+    }
 #endif
 
   }  // if Multispecies                                                                                                   

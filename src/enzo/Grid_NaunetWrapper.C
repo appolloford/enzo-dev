@@ -280,6 +280,11 @@ int grid::NaunetWrapper()
     ENZO_FAIL("Error in grid->ComputeTemperatureField.");
   }
 
+  float *sputtering = new float[size];
+  if (this->ComputeSputteringRate(sputtering) == FAIL){
+    ENZO_FAIL("Error in grid->ComputeSputteringRate.");
+  }
+
   float NumberDensityUnits = DensityUnits / mh;
 
   float atol = 1e-30;
@@ -323,6 +328,7 @@ int grid::NaunetWrapper()
         data.crdeseff = 1.0e5;
         data.h2deseff = 1.0e-2;
         data.uvcreff  = 1.0e-3;
+        data.ksp      = sputtering[igrid];
     
         y[IDX_GCH3OHI] = max(BaryonField[GCH3OHINum][igrid], 1e-40) * NumberDensityUnits / 32.0;
         y[IDX_GCH4I] = max(BaryonField[GCH4INum][igrid], 1e-40) * NumberDensityUnits / 16.0;
@@ -594,6 +600,7 @@ int grid::NaunetWrapper()
   naunet.Finalize();
 
   delete [] temperature;
+  delete [] sputtering;
 
   delete [] g_grid_dimension;
   delete [] g_grid_start;

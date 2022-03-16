@@ -30,6 +30,19 @@ int grid::MultiSpeciesHandler()
 
   LCAPERF_START("grid_MultiSpeciesHandler");
 
+// #ifdef USE_NAUNET
+//   // Testing sputtering
+//   int size = 1;
+//     for (int dim = 0; dim < GridRank; dim++)
+//       size *= GridDimension[dim];
+// 
+//   float *sputtering = new float[size];
+//   if (this->ComputeSputteringRate(sputtering) == FAIL){
+//     ENZO_FAIL("Error in grid->ComputeSputteringRate.");
+//   }
+//   delete [] sputtering;
+// #endif
+
 #ifdef USE_GRACKLE
   if (grackle_data->use_grackle == TRUE) {
     grackle_data->radiative_transfer_intermediate_step = FALSE;

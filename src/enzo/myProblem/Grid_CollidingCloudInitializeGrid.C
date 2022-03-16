@@ -68,6 +68,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
       SiCINum, SiCIINum, SiC2INum, SiC2IINum, SiC3INum, SiC3IINum, SiHINum,
       SiHIINum, SiH2INum, SiH2IINum, SiH3INum, SiH3IINum, SiH4INum, SiH4IINum,
       SiH5IINum, SiOINum, SiOIINum, SiOHIINum;
+  int KspNum;
 #endif
 
 
@@ -222,6 +223,8 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
       FieldType[SiOINum  = NumberOfBaryonFields++] = SiOIDensity;
       FieldType[SiOIINum  = NumberOfBaryonFields++] = SiOIIDensity;
       FieldType[SiOHIINum  = NumberOfBaryonFields++] = SiOHIIDensity;
+
+      FieldType[KspNum = NumberOfBaryonFields++] = Ksputtering;
     }
 #endif
 

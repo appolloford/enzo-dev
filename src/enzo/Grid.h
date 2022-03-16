@@ -771,6 +771,10 @@ gradient force to gravitational force for one-zone collapse test. */
 
    int NaunetWrapper();
 
+/* Compute the gas-grain sputtering rate */
+
+   int ComputeSputteringRate(float *sputteringrate);
+
 /* Handle the selection of shock finding algorithm */
 
    int ShocksHandler();
