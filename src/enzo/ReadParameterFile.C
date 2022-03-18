@@ -1397,6 +1397,7 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     ret += sscanf(line, "opt_uvd               = %"ISYM, &opt_uvd);
     ret += sscanf(line, "opt_crd               = %"ISYM, &opt_crd);
     ret += sscanf(line, "opt_h2d               = %"ISYM, &opt_h2d);
+    ret += sscanf(line, "opt_sputtering        = %"ISYM, &opt_sputtering);
 
     ret += sscanf(line, "NaunetTime            = %"PSYM, &MetaData.NaunetTime);
     ret += sscanf(line, "NaunetCycle           = %"ISYM, &MetaData.NaunetCycle);

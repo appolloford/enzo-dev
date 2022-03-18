@@ -281,8 +281,15 @@ int grid::NaunetWrapper()
   }
 
   float *sputtering = new float[size];
-  if (this->ComputeSputteringRate(sputtering) == FAIL){
-    ENZO_FAIL("Error in grid->ComputeSputteringRate.");
+  if (opt_sputtering) {
+    if (this->ComputeSputteringRate(sputtering) == FAIL){
+      ENZO_FAIL("Error in grid->ComputeSputteringRate.");
+    }
+  }
+  else {
+    for (i = 0; i < size; i++) {
+      sputtering[i] = 0.0;
+    }
   }
 
   float NumberDensityUnits = DensityUnits / mh;
@@ -322,10 +329,10 @@ int grid::NaunetWrapper()
         data.opt_crd  = opt_crd;
         data.opt_uvd  = opt_uvd;
         data.opt_h2d  = opt_h2d;
-        data.eb_crd   = 1.21e3;
+        data.eb_crd   = 2.00e3;
         data.eb_h2d   = 1.21e3;
         data.eb_uvd   = 1.00e4;
-        data.crdeseff = 1.0e5;
+        data.crdeseff = 1.0e8;
         data.h2deseff = 1.0e-2;
         data.uvcreff  = 1.0e-3;
         data.ksp      = sputtering[igrid];

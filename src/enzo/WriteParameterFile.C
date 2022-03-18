@@ -1183,6 +1183,7 @@ int WriteParameterFile(FILE *fptr, TopGridData &MetaData, char *name = NULL)
   fprintf(fptr, "opt_uvd              = %"ISYM"\n", opt_uvd);
   fprintf(fptr, "opt_crd              = %"ISYM"\n", opt_crd);
   fprintf(fptr, "opt_h2d              = %"ISYM"\n", opt_h2d);
+  fprintf(fptr, "opt_sputtering       = %"ISYM"\n", opt_sputtering);
 
   fprintf(fptr, "NaunetTime            = %"GOUTSYM"\n", MetaData.NaunetTime);
   fprintf(fptr, "NaunetCycle           = %"ISYM"\n", MetaData.NaunetCycle);
