@@ -655,7 +655,8 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
             BaryonField[OINum][n] = 16.0 * 1.8e-4 * BaryonField[0][n] / 1.4;
             BaryonField[COINum][n] = 28.0 * 1.4e-4 * BaryonField[0][n] / 1.4;
             BaryonField[MgINum][n] = 24.0 * 7.0e-9 * BaryonField[0][n] / 1.4;
-            BaryonField[SiINum][n] = 24.0 * 1.0e-7 * BaryonField[0][n] / 1.4;
+            BaryonField[SiINum][n] = 28.0 * 8.0e-9 * BaryonField[0][n] / 1.4;
+            // BaryonField[GSiOINum][n] = 44.0 * 8.0e-9 * BaryonField[0][n] / 1.4;
           }
           else {
             ENZO_FAIL("Error in CollidingCloudInitialize[Sub]Grid: species table is not implemented.");
