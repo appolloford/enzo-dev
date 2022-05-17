@@ -30,6 +30,12 @@ int grid::MultiSpeciesHandler()
 
   LCAPERF_START("grid_MultiSpeciesHandler");
 
+#ifdef USE_NAUNET
+  if (this->NaunetRenormWrapper() == FAIL) {
+    ENZO_FAIL("Error in NaunetRenormWrapper.\n");
+  }
+#endif
+
 // #ifdef USE_NAUNET
 //   // Testing sputtering
 //   int size = 1;

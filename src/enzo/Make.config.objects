@@ -522,6 +522,7 @@ OBJS_CONFIG_LIB = \
         Grid_GrackleWrapper.o \
         Grid_GrackleTemperatureWrapper.o \
         Grid_NaunetWrapper.o \
+        Grid_NaunetRenormWrapper.o \
         Grid_GravityEquilibriumTestInitializeGrid.o \
         Grid_Group_WriteGridInterpolate.o \
         Grid_Group_WriteGrid.o \

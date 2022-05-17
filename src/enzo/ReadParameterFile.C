@@ -1391,6 +1391,7 @@ int ReadParameterFile(FILE *fptr, TopGridData &MetaData, float *Initialdt)
     // Parameters for naunet
     ret += sscanf(line, "use_naunet            = %"ISYM, &use_naunet);
     ret += sscanf(line, "use_naunetstep        = %"ISYM, &use_naunetstep);
+    ret += sscanf(line, "use_naunetrenorm      = %"ISYM, &use_naunetrenorm);
     ret += sscanf(line, "grackle_primordial    = %"ISYM, &grackle_primordial);
     ret += sscanf(line, "opt_freeze            = %"FSYM, &opt_freeze);
     ret += sscanf(line, "opt_thd               = %"ISYM, &opt_thd);

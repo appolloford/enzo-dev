@@ -771,6 +771,10 @@ gradient force to gravitational force for one-zone collapse test. */
 
    int NaunetWrapper();
 
+/* Wrap the naunet renormalization. */
+
+   int NaunetRenormWrapper();
+
 /* Compute the gas-grain sputtering rate */
 
    int ComputeSputteringRate(float *sputteringrate);
@@ -1896,6 +1900,8 @@ int TransferSubgridActiveParticles(grid* Subgrids[], int NumberOfSubgrids,
                                 &SiH3INum, int &SiH3IINum, int &SiH4INum, int
                                 &SiH4IINum, int &SiH5IINum, int &SiOINum, int
                                 &SiOIINum, int &SiOHIINum);
+
+  int IdentifyNaunetSpeciesFields(int *specnum);
 
   /* Identify shock fields. */
   int IdentifyShockSpeciesFields(int &MachNum,int &PSTempNum, int &PSDenNum);

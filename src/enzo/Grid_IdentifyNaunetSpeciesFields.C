@@ -8,6 +8,9 @@
 ************************************************************************/
 // clang-format off
 #include "preincludes.h"
+#ifdef USE_NAUNET
+#include "naunet_enzo.h"
+#endif
 #include "macros_and_parameters.h"
 #include "typedefs.h"
 #include "global_data.h"
@@ -313,6 +316,136 @@ int grid::IdentifyNaunetSpeciesFields(int &GCH3OHINum, int &GCH4INum, int
     if (SiOINum < 0) ENZO_VFAIL("SiOINum=%" ISYM "\n", SiOINum);
     if (SiOIINum < 0) ENZO_VFAIL("SiOIINum=%" ISYM "\n", SiOIINum);
     if (SiOHIINum < 0) ENZO_VFAIL("SiOHIINum=%" ISYM "\n", SiOHIINum);
+    return SUCCESS;
+}
+
+int grid::IdentifyNaunetSpeciesFields(int *specnum)
+{
+
+    const field_type NauentFields[114] = {
+        GCH3OHIDensity,
+        GCH4IDensity,
+        GCOIDensity,
+        GCO2IDensity,
+        GH2CNIDensity,
+        GH2COIDensity,
+        GH2OIDensity,
+        GH2SiOIDensity,
+        GHCNIDensity,
+        GHNCIDensity,
+        GHNCOIDensity,
+        GHNOIDensity,
+        GMgIDensity,
+        GN2IDensity,
+        GNH3IDensity,
+        GNOIDensity,
+        GNO2IDensity,
+        GO2IDensity,
+        GO2HIDensity,
+        GSiCIDensity,
+        GSiC2IDensity,
+        GSiC3IDensity,
+        GSiH4IDensity,
+        GSiOIDensity,
+        CIDensity,
+        CIIDensity,
+        CHIDensity,
+        CHIIDensity,
+        CH2IDensity,
+        CH2IIDensity,
+        CH3IDensity,
+        CH3IIDensity,
+        CH3OHIDensity,
+        CH4IDensity,
+        CH4IIDensity,
+        CNIDensity,
+        CNIIDensity,
+        COIDensity,
+        COIIDensity,
+        CO2IDensity,
+        ElectronDensity,
+        HIDensity,
+        HIIDensity,
+        H2IDensity,
+        H2IIDensity,
+        H2CNIDensity,
+        H2COIDensity,
+        H2COIIDensity,
+        H2NOIIDensity,
+        H2OIDensity,
+        H2OIIDensity,
+        H2SiOIDensity,
+        H3IIDensity,
+        H3COIIDensity,
+        H3OIIDensity,
+        HCNIDensity,
+        HCNIIDensity,
+        HCNHIIDensity,
+        HCOIDensity,
+        HCOIIDensity,
+        HCO2IIDensity,
+        HeIDensity,
+        HeIIDensity,
+        HeHIIDensity,
+        HNCIDensity,
+        HNCOIDensity,
+        HNOIDensity,
+        HNOIIDensity,
+        HOCIIDensity,
+        MgIDensity,
+        MgIIDensity,
+        NIDensity,
+        NIIDensity,
+        N2IDensity,
+        N2IIDensity,
+        N2HIIDensity,
+        NHIDensity,
+        NHIIDensity,
+        NH2IDensity,
+        NH2IIDensity,
+        NH3IDensity,
+        NH3IIDensity,
+        NOIDensity,
+        NOIIDensity,
+        NO2IDensity,
+        OIDensity,
+        OIIDensity,
+        O2IDensity,
+        O2IIDensity,
+        O2HIDensity,
+        O2HIIDensity,
+        OCNIDensity,
+        OHIDensity,
+        OHIIDensity,
+        SiIDensity,
+        SiIIDensity,
+        SiCIDensity,
+        SiCIIDensity,
+        SiC2IDensity,
+        SiC2IIDensity,
+        SiC3IDensity,
+        SiC3IIDensity,
+        SiHIDensity,
+        SiHIIDensity,
+        SiH2IDensity,
+        SiH2IIDensity,
+        SiH3IDensity,
+        SiH3IIDensity,
+        SiH4IDensity,
+        SiH4IIDensity,
+        SiH5IIDensity,
+        SiOIDensity,
+        SiOIIDensity,
+        SiOHIIDensity
+    };
+
+    for (int sidx = 0; sidx < NSPECIES; sidx ++) {
+        specnum[sidx] = FindField(NauentFields[sidx], FieldType, NumberOfBaryonFields);
+        if (specnum[sidx] < 0) {
+            ENZO_VFAIL("specnum[%" ISYM "]=%" ISYM "\n", sidx, specnum[sidx]);
+        }
+    }
+
     return SUCCESS;
 }
 

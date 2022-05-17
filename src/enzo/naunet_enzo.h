@@ -165,7 +165,7 @@
 #define A_COI 28.0
 #define A_COII 28.0
 #define A_CO2I 44.0
-#define A_EM 0.0
+#define A_EM 1.0
 #define A_HI 1.0
 #define A_HII 1.0
 #define A_H2I 2.0
