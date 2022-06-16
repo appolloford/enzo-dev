@@ -1079,6 +1079,7 @@ int SetDefaultGlobalValues(TopGridData &MetaData)
   opt_crd = 1;
   opt_h2d = 1;
   opt_sputtering = 0;
+  var_zeta = 1.0e-16;
 #endif
 
   return SUCCESS;

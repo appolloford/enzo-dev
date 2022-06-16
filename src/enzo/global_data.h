@@ -1234,6 +1234,7 @@ EXTERN int opt_uvd;
 EXTERN int opt_crd;
 EXTERN int opt_h2d;
 EXTERN int opt_sputtering;
+EXTERN float var_zeta;
 #endif
 
 #endif

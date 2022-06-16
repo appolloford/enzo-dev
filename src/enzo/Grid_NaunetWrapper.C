@@ -317,7 +317,7 @@ int grid::NaunetWrapper()
         data.nH       = nH;
         // data.Tgas     = min(temperature[igrid], 300.0);
         data.Tgas     = temperature[igrid];
-        data.zeta     = 1.0e-16;
+        data.zeta     = var_zeta;
         data.Av       = GetAv(nH);
         data.omega    = 0.5;
         data.G0       = 4.0;
