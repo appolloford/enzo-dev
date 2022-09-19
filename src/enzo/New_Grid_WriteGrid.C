@@ -189,6 +189,7 @@ int grid::Group_WriteGrid(FILE *fptr, char *base_name, int grid_id, HDF5_hid_t f
     if(WriteEverything == TRUE)
     fprintf(fptr, "OldTime           = %"GOUTSYM"\n", OldTime);
 
+#ifdef USE_NAUNET
     fprintf(fptr, "TopGridCycle      = %"ISYM"\n", TopGridCycle);
 
     fprintf(fptr, "NaunetTime        = %"GOUTSYM"\n", NaunetTime);
@@ -196,6 +197,7 @@ int grid::Group_WriteGrid(FILE *fptr, char *base_name, int grid_id, HDF5_hid_t f
     fprintf(fptr, "NaunetCycle       = %"ISYM"\n", NaunetCycle);
 
     fprintf(fptr, "NaunetCycleSkip   = %"ISYM"\n", NaunetCycleSkip);
+#endif
 
     fprintf(fptr, "SubgridsAreStatic = %"ISYM"\n", SubgridsAreStatic);
  

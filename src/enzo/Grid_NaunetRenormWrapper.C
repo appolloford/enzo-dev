@@ -16,7 +16,6 @@
 #include "preincludes.h"
 #ifdef USE_NAUNET
 #include "naunet_enzo.h"
-#include "naunet_physics.h"
 #endif
 #include "performance.h"
 #include "macros_and_parameters.h"
@@ -42,9 +41,9 @@ int grid::NaunetRenormWrapper()
   if (ProcessorNumber != MyProcessorNumber)
     return SUCCESS;
 
-  if (!use_naunetrenorm) return SUCCESS;
-
 #ifdef USE_NAUNET
+
+  if (!use_naunetrenorm) return SUCCESS;
 
   int size = 1;
   for (int dim = 0; dim < GridRank; dim++)
@@ -75,25 +74,35 @@ int grid::NaunetRenormWrapper()
   Naunet naunet;
   naunet.SetReferenceAbund(yab, 1);
 
-  for (int igrid = 0; igrid < size; igrid++) {
-    for (int sidx = 0; sidx < NSPECIES; sidx++) {
-      int snum = specnum[sidx];
-      yab[sidx] = BaryonField[snum][igrid] * NumberDensityUnits / A_Table[sidx];
-    }
+  // for (int igrid = 0; igrid < size; igrid++) {
+  for (int k = GridStartIndex[2]; k <= GridEndIndex[2]; k++) {
+    for (int j = GridStartIndex[1]; j <= GridEndIndex[1]; j++) {
+      int igrid = (k * GridDimension[1] + j) * GridDimension[0] + GridStartIndex[0];
+      for (int i = GridStartIndex[0]; i <= GridEndIndex[0]; i++, igrid++) {
 
-    int flag = naunet.Renorm(yab);
 
-    // Fail to Renormalize
-    if (flag == NAUNET_FAIL) {
-      ENZO_FAIL("Naunet renorm failed in Grid_UpdateMHDPrim.C!");
-    }
+        // printf("%d\n", igrid);
+        for (int sidx = 0; sidx < NSPECIES; sidx++) {
+          int snum = specnum[sidx];
+          yab[sidx] = BaryonField[snum][igrid] * NumberDensityUnits / A_Table[sidx];
+        }
 
-    for (int sidx = 0; sidx < NSPECIES; sidx++) {
-      int snum = specnum[sidx];
-      BaryonField[snum][igrid] = yab[sidx] * A_Table[sidx] / NumberDensityUnits;
+        int flag = naunet.Renorm(yab);
+
+        // Fail to Renormalize
+        if (flag == NAUNET_FAIL) {
+          ENZO_FAIL("Naunet renorm failed!");
+        }
+
+        for (int sidx = 0; sidx < NSPECIES; sidx++) {
+          int snum = specnum[sidx];
+          BaryonField[snum][igrid] = yab[sidx] * A_Table[sidx] / NumberDensityUnits;
+        }
+      }
     }
   }
 
+  LCAPERF_STOP("grid_NaunetRenormWrapper");
 #endif
 
   return SUCCESS;
