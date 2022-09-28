@@ -129,6 +129,7 @@ int InterpretCommandLine(int argc, char *argv[], char *myname,
 			 int &SmoothedDarkMatterOnly,
 			 int &WriteCoolingTimeOnly,
 			 int &WriteDustTemperatureOnly,
+       int &NaunetPostProcessOnly,
 			 int MyProcessorNumber);
 void AddLevel(LevelHierarchyEntry *Array[], HierarchyEntry *Grid, int level);
 int SetDefaultGlobalValues(TopGridData &MetaData);
@@ -225,6 +226,16 @@ int OutputDustTemperatureOnly(char *ParameterFile,
 			      , ImplicitProblemABC *ImplicitSolver
 #endif
 			  );
+
+int OutputNaunetPostProcessOnly(char *ParameterFile,
+                          LevelHierarchyEntry *LevelArray[], 
+                          HierarchyEntry *TopGrid,
+                          TopGridData &MetaData,
+                          ExternalBoundary &Exterior
+#ifdef TRANSFER
+                        , ImplicitProblemABC *ImplicitSolver
+#endif
+                          );
 
 
 void CommunicationAbort(int);
@@ -381,6 +392,7 @@ Eint32 MAIN_NAME(Eint32 argc, char *argv[])
     SmoothedDarkMatterOnly   = FALSE,
     WriteCoolingTimeOnly     = FALSE,
     WriteDustTemperatureOnly = FALSE,
+    NaunetPostProcessOnly    = FALSE,
     project                  = FALSE,
     ProjectionDimension      = INT_UNDEFINED,
     ProjectionSmooth         = FALSE,
@@ -477,6 +489,7 @@ Eint32 MAIN_NAME(Eint32 argc, char *argv[])
 			   RegionLevel, HaloFinderOnly,
 			   WritePotentialOnly, SmoothedDarkMatterOnly,
 			   WriteCoolingTimeOnly, WriteDustTemperatureOnly,
+         NaunetPostProcessOnly,
 			   MyProcessorNumber) == FAIL) {
     if(int_argc==1){
       my_exit(EXIT_SUCCESS);
@@ -488,7 +501,7 @@ Eint32 MAIN_NAME(Eint32 argc, char *argv[])
  
   // If we need to read the parameter file as a restart file, do it now
  
-  if (restart || OutputAsParticleDataFlag || extract || InformationOutput || project  ||  velanyl || WritePotentialOnly || WriteCoolingTimeOnly || SmoothedDarkMatterOnly) {
+  if (restart || OutputAsParticleDataFlag || extract || InformationOutput || project  ||  velanyl || WritePotentialOnly || WriteCoolingTimeOnly || SmoothedDarkMatterOnly || NaunetPostProcessOnly) {
  
     SetDefaultGlobalValues(MetaData);
  
@@ -663,6 +676,16 @@ Eint32 MAIN_NAME(Eint32 argc, char *argv[])
 			      , ImplicitSolver
 #endif
 			  );
+    my_exit(EXIT_SUCCESS);
+  }
+
+  if (NaunetPostProcessOnly) {
+    OutputNaunetPostProcessOnly(ParameterFile, LevelArray, &TopGrid,
+                          MetaData, Exterior
+#ifdef TRANSFER
+                        , ImplicitSolver
+#endif
+                          );
     my_exit(EXIT_SUCCESS);
   }
 

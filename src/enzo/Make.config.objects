@@ -523,6 +523,7 @@ OBJS_CONFIG_LIB = \
         Grid_GrackleTemperatureWrapper.o \
         Grid_NaunetWrapper.o \
         Grid_NaunetRenormWrapper.o \
+        Grid_NaunetPostProcess.o \
         Grid_GravityEquilibriumTestInitializeGrid.o \
         Grid_Group_WriteGridInterpolate.o \
         Grid_Group_WriteGrid.o \
@@ -772,6 +773,7 @@ OBJS_CONFIG_LIB = \
 	OutputDustTemperatureOnly.o \
         OutputFromEvolveLevel.o\
         OutputLevelInformation.o \
+        OutputNaunetPostProcessOnly.o \
 	OutputPotentialFieldOnly.o \
 	OutputSmoothedDarkMatterOnly.o \
         P_ColumnFormat.o \

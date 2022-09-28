@@ -39,6 +39,7 @@ int InterpretCommandLine(int argc, char *argv[], char *myname,
 			 int &SmoothedDarkMatterOnly,
 			 int &WriteCoolingTimeOnly,
 			 int &WriteDustTemperatureOnly,
+			 int &NaunetPostProcessOnly,
 			 int MyProcessorNumber)
 {
  
@@ -261,6 +262,10 @@ int InterpretCommandLine(int argc, char *argv[], char *myname,
 	velanyl = TRUE;
 	break;
 
+      case 'N':
+	    NaunetPostProcessOnly = TRUE;
+		break;
+
 	/* Unknown */
  
       default:
@@ -309,5 +314,6 @@ void PrintUsage(char *myname)
 	          "      -e(nd    index region) dim0 [dim1] [dim2]\n"
 	          "      -b(egin  coordinate region) dim0 [dim1] [dim2]\n"
 	          "      -f(inish coordinate region) dim0 [dim1] [dim2]\n"
+                  "      -N(aunet postprocessing)\n"
           ,myname);
 }

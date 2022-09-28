@@ -775,6 +775,10 @@ gradient force to gravitational force for one-zone collapse test. */
 
    int NaunetRenormWrapper();
 
+/* Wrap the naunet chemistry solver for postprocessing. */
+
+   int NaunetPostProcess(FLOAT TargetTime);
+
 /* Compute the gas-grain sputtering rate */
 
    int ComputeSputteringRate(float *sputteringrate);
