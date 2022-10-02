@@ -109,7 +109,7 @@ int grid::NaunetPostProcess(FLOAT TargetTime)
 
   naunet.Init(1, atol, 1e-5, 1000);
 
-  realtype y[NAUNET_NEQUATIONS], y_init[NAUNET_NEQUATIONS];
+  realtype y[NEQUATIONS], y_init[NEQUATIONS];
 
   for (k = GridStartIndex[2]; k <= GridEndIndex[2]; k++) {
     for (j = GridStartIndex[1]; j <= GridEndIndex[1]; j++) {

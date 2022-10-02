@@ -1867,43 +1867,44 @@ int TransferSubgridActiveParticles(grid* Subgrids[], int NumberOfSubgrids,
                             int &DINum, int &DIINum, int &HDINum);
 
   /* Identify Multi-species fields from Naunet. */
-  int IdentifyNaunetSpeciesFields(int &GCH3OHINum, int &GCH4INum, int &GCOINum,
-                                int &GCO2INum, int &GH2CNINum, int &GH2COINum,
-                                int &GH2OINum, int &GH2SiOINum, int &GHCNINum,
-                                int &GHNCINum, int &GHNCOINum, int &GHNOINum,
-                                int &GMgINum, int &GN2INum, int &GNH3INum, int
-                                &GNOINum, int &GNO2INum, int &GO2INum, int
+  int IdentifyNaunetSpeciesFields(int &GH2CNINum, int &GHNCINum, int &GNO2INum,
+                                int &GSiOINum, int &GCOINum, int &GHNCOINum, int
+                                &GMgINum, int &GNOINum, int &GO2INum, int
                                 &GO2HINum, int &GSiCINum, int &GSiC2INum, int
-                                &GSiC3INum, int &GSiH4INum, int &GSiOINum, int
-                                &CINum, int &CIINum, int &CHINum, int &CHIINum,
-                                int &CH2INum, int &CH2IINum, int &CH3INum, int
-                                &CH3IINum, int &CH3OHINum, int &CH4INum, int
-                                &CH4IINum, int &CNINum, int &CNIINum, int
-                                &COINum, int &COIINum, int &CO2INum, int &DeNum,
-                                int &HINum, int &HIINum, int &H2INum, int
-                                &H2IINum, int &H2CNINum, int &H2COINum, int
-                                &H2COIINum, int &H2NOIINum, int &H2OINum, int
-                                &H2OIINum, int &H2SiOINum, int &H3IINum, int
-                                &H3COIINum, int &H3OIINum, int &HCNINum, int
-                                &HCNIINum, int &HCNHIINum, int &HCOINum, int
-                                &HCOIINum, int &HCO2IINum, int &HeINum, int
-                                &HeIINum, int &HeHIINum, int &HNCINum, int
-                                &HNCOINum, int &HNOINum, int &HNOIINum, int
-                                &HOCIINum, int &MgINum, int &MgIINum, int
-                                &NINum, int &NIINum, int &N2INum, int &N2IINum,
-                                int &N2HIINum, int &NHINum, int &NHIINum, int
-                                &NH2INum, int &NH2IINum, int &NH3INum, int
-                                &NH3IINum, int &NOINum, int &NOIINum, int
-                                &NO2INum, int &OINum, int &OIINum, int &O2INum,
-                                int &O2IINum, int &O2HINum, int &O2HIINum, int
-                                &OCNINum, int &OHINum, int &OHIINum, int
-                                &SiINum, int &SiIINum, int &SiCINum, int
-                                &SiCIINum, int &SiC2INum, int &SiC2IINum, int
-                                &SiC3INum, int &SiC3IINum, int &SiHINum, int
-                                &SiHIINum, int &SiH2INum, int &SiH2IINum, int
-                                &SiH3INum, int &SiH3IINum, int &SiH4INum, int
-                                &SiH4IINum, int &SiH5IINum, int &SiOINum, int
-                                &SiOIINum, int &SiOHIINum);
+                                &GSiC3INum, int &GCH3OHINum, int &GCO2INum, int
+                                &GH2SiOINum, int &GHNOINum, int &GN2INum, int
+                                &GH2COINum, int &GHCNINum, int &GH2OINum, int
+                                &GNH3INum, int &SiC3IINum, int &H2CNINum, int
+                                &GCH4INum, int &H2NOIINum, int &H2SiOINum, int
+                                &HeHIINum, int &HNCOINum, int &HOCIINum, int
+                                &SiC2IINum, int &GSiH4INum, int &SiC2INum, int
+                                &SiC3INum, int &SiH5IINum, int &SiH4IINum, int
+                                &SiCIINum, int &O2HINum, int &SiCINum, int
+                                &NO2INum, int &SiH3IINum, int &SiH2IINum, int
+                                &OCNINum, int &SiH2INum, int &SiOHIINum, int
+                                &SiHIINum, int &SiH4INum, int &SiHINum, int
+                                &SiH3INum, int &SiOIINum, int &HCO2IINum, int
+                                &HNOINum, int &CH3OHINum, int &MgINum, int
+                                &MgIINum, int &CH4IINum, int &SiOINum, int
+                                &CNIINum, int &HCNHIINum, int &N2HIINum, int
+                                &O2HIINum, int &SiIINum, int &SiINum, int
+                                &HNCINum, int &HNOIINum, int &N2IINum, int
+                                &H3COIINum, int &CH4INum, int &COIINum, int
+                                &H2IINum, int &NH3INum, int &CH3INum, int
+                                &CO2INum, int &NIINum, int &OIINum, int
+                                &HCNIINum, int &NH2IINum, int &NHIINum, int
+                                &O2IINum, int &CH3IINum, int &NH2INum, int
+                                &CH2IINum, int &H2OIINum, int &NH3IINum, int
+                                &NOIINum, int &H3OIINum, int &N2INum, int
+                                &CIINum, int &HCNINum, int &CHIINum, int
+                                &CH2INum, int &H2COIINum, int &NHINum, int
+                                &OHIINum, int &CNINum, int &H2COINum, int
+                                &HCOINum, int &HeIINum, int &CHINum, int
+                                &H3IINum, int &HeINum, int &NOINum, int &NINum,
+                                int &OHINum, int &O2INum, int &CINum, int
+                                &HIINum, int &HCOIINum, int &H2OINum, int
+                                &OINum, int &DeNum, int &COINum, int &H2INum,
+                                int &HINum);
 
   int IdentifyNaunetSpeciesFields(int *specnum);
 

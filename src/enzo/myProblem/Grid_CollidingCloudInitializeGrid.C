@@ -53,21 +53,21 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
   ////int ColourNum;
   ////ColourNum = 0; //
 #ifdef USE_NAUNET
-  int GCH3OHINum, GCH4INum, GCOINum, GCO2INum, GH2CNINum, GH2COINum, GH2OINum,
-      GH2SiOINum, GHCNINum, GHNCINum, GHNCOINum, GHNOINum, GMgINum, GN2INum,
-      GNH3INum, GNOINum, GNO2INum, GO2INum, GO2HINum, GSiCINum, GSiC2INum,
-      GSiC3INum, GSiH4INum, GSiOINum, CINum, CIINum, CHINum, CHIINum, CH2INum,
-      CH2IINum, CH3INum, CH3IINum, CH3OHINum, CH4INum, CH4IINum, CNINum,
-      CNIINum, COINum, COIINum, CO2INum, H2CNINum, H2COINum, H2COIINum,
-      H2NOIINum, H2OINum, H2OIINum, H2SiOINum, H3IINum, H3COIINum, H3OIINum,
-      HCNINum, HCNIINum, HCNHIINum, HCOINum, HCOIINum, HCO2IINum, HeHIINum,
-      HNCINum, HNCOINum, HNOINum, HNOIINum, HOCIINum, MgINum, MgIINum, NINum,
-      NIINum, N2INum, N2IINum, N2HIINum, NHINum, NHIINum, NH2INum, NH2IINum,
-      NH3INum, NH3IINum, NOINum, NOIINum, NO2INum, OINum, OIINum, O2INum,
-      O2IINum, O2HINum, O2HIINum, OCNINum, OHINum, OHIINum, SiINum, SiIINum,
-      SiCINum, SiCIINum, SiC2INum, SiC2IINum, SiC3INum, SiC3IINum, SiHINum,
-      SiHIINum, SiH2INum, SiH2IINum, SiH3INum, SiH3IINum, SiH4INum, SiH4IINum,
-      SiH5IINum, SiOINum, SiOIINum, SiOHIINum;
+  int GH2CNINum, GHNCINum, GNO2INum, GSiOINum, GCOINum, GHNCOINum, GMgINum,
+      GNOINum, GO2INum, GO2HINum, GSiCINum, GSiC2INum, GSiC3INum, GCH3OHINum,
+      GCO2INum, GH2SiOINum, GHNOINum, GN2INum, GH2COINum, GHCNINum, GH2OINum,
+      GNH3INum, SiC3IINum, H2CNINum, GCH4INum, H2NOIINum, H2SiOINum, HeHIINum,
+      HNCOINum, HOCIINum, SiC2IINum, GSiH4INum, SiC2INum, SiC3INum, SiH5IINum,
+      SiH4IINum, SiCIINum, O2HINum, SiCINum, NO2INum, SiH3IINum, SiH2IINum,
+      OCNINum, SiH2INum, SiOHIINum, SiHIINum, SiH4INum, SiHINum, SiH3INum,
+      SiOIINum, HCO2IINum, HNOINum, CH3OHINum, MgINum, MgIINum, CH4IINum,
+      SiOINum, CNIINum, HCNHIINum, N2HIINum, O2HIINum, SiIINum, SiINum, HNCINum,
+      HNOIINum, N2IINum, H3COIINum, CH4INum, COIINum, NH3INum, CH3INum, CO2INum,
+      NIINum, OIINum, HCNIINum, NH2IINum, NHIINum, O2IINum, CH3IINum, NH2INum,
+      CH2IINum, H2OIINum, NH3IINum, NOIINum, H3OIINum, N2INum, CIINum, HCNINum,
+      CHIINum, CH2INum, H2COIINum, NHINum, OHIINum, CNINum, H2COINum, HCOINum,
+      CHINum, H3IINum, NOINum, NINum, OHINum, O2INum, CINum, HCOIINum, H2OINum,
+      OINum, COINum;
   int KspNum;
 #endif
 
@@ -116,113 +116,113 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
     }
 #ifdef USE_NAUNET
     if (MultiSpecies == NAUNET_SPECIES) {
-      FieldType[GCH3OHINum  = NumberOfBaryonFields++] = GCH3OHIDensity;
-      FieldType[GCH4INum  = NumberOfBaryonFields++] = GCH4IDensity;
-      FieldType[GCOINum  = NumberOfBaryonFields++] = GCOIDensity;
-      FieldType[GCO2INum  = NumberOfBaryonFields++] = GCO2IDensity;
-      FieldType[GH2CNINum  = NumberOfBaryonFields++] = GH2CNIDensity;
-      FieldType[GH2COINum  = NumberOfBaryonFields++] = GH2COIDensity;
-      FieldType[GH2OINum  = NumberOfBaryonFields++] = GH2OIDensity;
-      FieldType[GH2SiOINum  = NumberOfBaryonFields++] = GH2SiOIDensity;
-      FieldType[GHCNINum  = NumberOfBaryonFields++] = GHCNIDensity;
-      FieldType[GHNCINum  = NumberOfBaryonFields++] = GHNCIDensity;
-      FieldType[GHNCOINum  = NumberOfBaryonFields++] = GHNCOIDensity;
-      FieldType[GHNOINum  = NumberOfBaryonFields++] = GHNOIDensity;
-      FieldType[GMgINum  = NumberOfBaryonFields++] = GMgIDensity;
-      FieldType[GN2INum  = NumberOfBaryonFields++] = GN2IDensity;
-      FieldType[GNH3INum  = NumberOfBaryonFields++] = GNH3IDensity;
-      FieldType[GNOINum  = NumberOfBaryonFields++] = GNOIDensity;
-      FieldType[GNO2INum  = NumberOfBaryonFields++] = GNO2IDensity;
-      FieldType[GO2INum  = NumberOfBaryonFields++] = GO2IDensity;
-      FieldType[GO2HINum  = NumberOfBaryonFields++] = GO2HIDensity;
-      FieldType[GSiCINum  = NumberOfBaryonFields++] = GSiCIDensity;
-      FieldType[GSiC2INum  = NumberOfBaryonFields++] = GSiC2IDensity;
-      FieldType[GSiC3INum  = NumberOfBaryonFields++] = GSiC3IDensity;
-      FieldType[GSiH4INum  = NumberOfBaryonFields++] = GSiH4IDensity;
-      FieldType[GSiOINum  = NumberOfBaryonFields++] = GSiOIDensity;
-      FieldType[CINum  = NumberOfBaryonFields++] = CIDensity;
-      FieldType[CIINum  = NumberOfBaryonFields++] = CIIDensity;
-      FieldType[CHINum  = NumberOfBaryonFields++] = CHIDensity;
-      FieldType[CHIINum  = NumberOfBaryonFields++] = CHIIDensity;
-      FieldType[CH2INum  = NumberOfBaryonFields++] = CH2IDensity;
-      FieldType[CH2IINum  = NumberOfBaryonFields++] = CH2IIDensity;
-      FieldType[CH3INum  = NumberOfBaryonFields++] = CH3IDensity;
-      FieldType[CH3IINum  = NumberOfBaryonFields++] = CH3IIDensity;
-      FieldType[CH3OHINum  = NumberOfBaryonFields++] = CH3OHIDensity;
-      FieldType[CH4INum  = NumberOfBaryonFields++] = CH4IDensity;
-      FieldType[CH4IINum  = NumberOfBaryonFields++] = CH4IIDensity;
-      FieldType[CNINum  = NumberOfBaryonFields++] = CNIDensity;
-      FieldType[CNIINum  = NumberOfBaryonFields++] = CNIIDensity;
-      FieldType[COINum  = NumberOfBaryonFields++] = COIDensity;
-      FieldType[COIINum  = NumberOfBaryonFields++] = COIIDensity;
-      FieldType[CO2INum  = NumberOfBaryonFields++] = CO2IDensity;
-      FieldType[H2CNINum  = NumberOfBaryonFields++] = H2CNIDensity;
-      FieldType[H2COINum  = NumberOfBaryonFields++] = H2COIDensity;
-      FieldType[H2COIINum  = NumberOfBaryonFields++] = H2COIIDensity;
-      FieldType[H2NOIINum  = NumberOfBaryonFields++] = H2NOIIDensity;
-      FieldType[H2OINum  = NumberOfBaryonFields++] = H2OIDensity;
-      FieldType[H2OIINum  = NumberOfBaryonFields++] = H2OIIDensity;
-      FieldType[H2SiOINum  = NumberOfBaryonFields++] = H2SiOIDensity;
-      FieldType[H3IINum  = NumberOfBaryonFields++] = H3IIDensity;
-      FieldType[H3COIINum  = NumberOfBaryonFields++] = H3COIIDensity;
-      FieldType[H3OIINum  = NumberOfBaryonFields++] = H3OIIDensity;
-      FieldType[HCNINum  = NumberOfBaryonFields++] = HCNIDensity;
-      FieldType[HCNIINum  = NumberOfBaryonFields++] = HCNIIDensity;
-      FieldType[HCNHIINum  = NumberOfBaryonFields++] = HCNHIIDensity;
-      FieldType[HCOINum  = NumberOfBaryonFields++] = HCOIDensity;
-      FieldType[HCOIINum  = NumberOfBaryonFields++] = HCOIIDensity;
-      FieldType[HCO2IINum  = NumberOfBaryonFields++] = HCO2IIDensity;
-      FieldType[HeHIINum  = NumberOfBaryonFields++] = HeHIIDensity;
-      FieldType[HNCINum  = NumberOfBaryonFields++] = HNCIDensity;
-      FieldType[HNCOINum  = NumberOfBaryonFields++] = HNCOIDensity;
-      FieldType[HNOINum  = NumberOfBaryonFields++] = HNOIDensity;
-      FieldType[HNOIINum  = NumberOfBaryonFields++] = HNOIIDensity;
-      FieldType[HOCIINum  = NumberOfBaryonFields++] = HOCIIDensity;
-      FieldType[MgINum  = NumberOfBaryonFields++] = MgIDensity;
-      FieldType[MgIINum  = NumberOfBaryonFields++] = MgIIDensity;
-      FieldType[NINum  = NumberOfBaryonFields++] = NIDensity;
-      FieldType[NIINum  = NumberOfBaryonFields++] = NIIDensity;
-      FieldType[N2INum  = NumberOfBaryonFields++] = N2IDensity;
-      FieldType[N2IINum  = NumberOfBaryonFields++] = N2IIDensity;
-      FieldType[N2HIINum  = NumberOfBaryonFields++] = N2HIIDensity;
-      FieldType[NHINum  = NumberOfBaryonFields++] = NHIDensity;
-      FieldType[NHIINum  = NumberOfBaryonFields++] = NHIIDensity;
-      FieldType[NH2INum  = NumberOfBaryonFields++] = NH2IDensity;
-      FieldType[NH2IINum  = NumberOfBaryonFields++] = NH2IIDensity;
-      FieldType[NH3INum  = NumberOfBaryonFields++] = NH3IDensity;
-      FieldType[NH3IINum  = NumberOfBaryonFields++] = NH3IIDensity;
-      FieldType[NOINum  = NumberOfBaryonFields++] = NOIDensity;
-      FieldType[NOIINum  = NumberOfBaryonFields++] = NOIIDensity;
-      FieldType[NO2INum  = NumberOfBaryonFields++] = NO2IDensity;
-      FieldType[OINum  = NumberOfBaryonFields++] = OIDensity;
-      FieldType[OIINum  = NumberOfBaryonFields++] = OIIDensity;
-      FieldType[O2INum  = NumberOfBaryonFields++] = O2IDensity;
-      FieldType[O2IINum  = NumberOfBaryonFields++] = O2IIDensity;
-      FieldType[O2HINum  = NumberOfBaryonFields++] = O2HIDensity;
-      FieldType[O2HIINum  = NumberOfBaryonFields++] = O2HIIDensity;
-      FieldType[OCNINum  = NumberOfBaryonFields++] = OCNIDensity;
-      FieldType[OHINum  = NumberOfBaryonFields++] = OHIDensity;
-      FieldType[OHIINum  = NumberOfBaryonFields++] = OHIIDensity;
-      FieldType[SiINum  = NumberOfBaryonFields++] = SiIDensity;
-      FieldType[SiIINum  = NumberOfBaryonFields++] = SiIIDensity;
-      FieldType[SiCINum  = NumberOfBaryonFields++] = SiCIDensity;
-      FieldType[SiCIINum  = NumberOfBaryonFields++] = SiCIIDensity;
-      FieldType[SiC2INum  = NumberOfBaryonFields++] = SiC2IDensity;
-      FieldType[SiC2IINum  = NumberOfBaryonFields++] = SiC2IIDensity;
-      FieldType[SiC3INum  = NumberOfBaryonFields++] = SiC3IDensity;
-      FieldType[SiC3IINum  = NumberOfBaryonFields++] = SiC3IIDensity;
-      FieldType[SiHINum  = NumberOfBaryonFields++] = SiHIDensity;
-      FieldType[SiHIINum  = NumberOfBaryonFields++] = SiHIIDensity;
-      FieldType[SiH2INum  = NumberOfBaryonFields++] = SiH2IDensity;
-      FieldType[SiH2IINum  = NumberOfBaryonFields++] = SiH2IIDensity;
-      FieldType[SiH3INum  = NumberOfBaryonFields++] = SiH3IDensity;
-      FieldType[SiH3IINum  = NumberOfBaryonFields++] = SiH3IIDensity;
-      FieldType[SiH4INum  = NumberOfBaryonFields++] = SiH4IDensity;
-      FieldType[SiH4IINum  = NumberOfBaryonFields++] = SiH4IIDensity;
-      FieldType[SiH5IINum  = NumberOfBaryonFields++] = SiH5IIDensity;
-      FieldType[SiOINum  = NumberOfBaryonFields++] = SiOIDensity;
-      FieldType[SiOIINum  = NumberOfBaryonFields++] = SiOIIDensity;
-      FieldType[SiOHIINum  = NumberOfBaryonFields++] = SiOHIIDensity;
+      FieldType[GH2CNINum    = NumberOfBaryonFields++] = GH2CNIDensity;
+      FieldType[GHNCINum     = NumberOfBaryonFields++] = GHNCIDensity;
+      FieldType[GNO2INum     = NumberOfBaryonFields++] = GNO2IDensity;
+      FieldType[GSiOINum     = NumberOfBaryonFields++] = GSiOIDensity;
+      FieldType[GCOINum      = NumberOfBaryonFields++] = GCOIDensity;
+      FieldType[GHNCOINum    = NumberOfBaryonFields++] = GHNCOIDensity;
+      FieldType[GMgINum      = NumberOfBaryonFields++] = GMgIDensity;
+      FieldType[GNOINum      = NumberOfBaryonFields++] = GNOIDensity;
+      FieldType[GO2INum      = NumberOfBaryonFields++] = GO2IDensity;
+      FieldType[GO2HINum     = NumberOfBaryonFields++] = GO2HIDensity;
+      FieldType[GSiCINum     = NumberOfBaryonFields++] = GSiCIDensity;
+      FieldType[GSiC2INum    = NumberOfBaryonFields++] = GSiC2IDensity;
+      FieldType[GSiC3INum    = NumberOfBaryonFields++] = GSiC3IDensity;
+      FieldType[GCH3OHINum   = NumberOfBaryonFields++] = GCH3OHIDensity;
+      FieldType[GCO2INum     = NumberOfBaryonFields++] = GCO2IDensity;
+      FieldType[GH2SiOINum   = NumberOfBaryonFields++] = GH2SiOIDensity;
+      FieldType[GHNOINum     = NumberOfBaryonFields++] = GHNOIDensity;
+      FieldType[GN2INum      = NumberOfBaryonFields++] = GN2IDensity;
+      FieldType[GH2COINum    = NumberOfBaryonFields++] = GH2COIDensity;
+      FieldType[GHCNINum     = NumberOfBaryonFields++] = GHCNIDensity;
+      FieldType[GH2OINum     = NumberOfBaryonFields++] = GH2OIDensity;
+      FieldType[GNH3INum     = NumberOfBaryonFields++] = GNH3IDensity;
+      FieldType[SiC3IINum    = NumberOfBaryonFields++] = SiC3IIDensity;
+      FieldType[H2CNINum     = NumberOfBaryonFields++] = H2CNIDensity;
+      FieldType[GCH4INum     = NumberOfBaryonFields++] = GCH4IDensity;
+      FieldType[H2NOIINum    = NumberOfBaryonFields++] = H2NOIIDensity;
+      FieldType[H2SiOINum    = NumberOfBaryonFields++] = H2SiOIDensity;
+      FieldType[HeHIINum     = NumberOfBaryonFields++] = HeHIIDensity;
+      FieldType[HNCOINum     = NumberOfBaryonFields++] = HNCOIDensity;
+      FieldType[HOCIINum     = NumberOfBaryonFields++] = HOCIIDensity;
+      FieldType[SiC2IINum    = NumberOfBaryonFields++] = SiC2IIDensity;
+      FieldType[GSiH4INum    = NumberOfBaryonFields++] = GSiH4IDensity;
+      FieldType[SiC2INum     = NumberOfBaryonFields++] = SiC2IDensity;
+      FieldType[SiC3INum     = NumberOfBaryonFields++] = SiC3IDensity;
+      FieldType[SiH5IINum    = NumberOfBaryonFields++] = SiH5IIDensity;
+      FieldType[SiH4IINum    = NumberOfBaryonFields++] = SiH4IIDensity;
+      FieldType[SiCIINum     = NumberOfBaryonFields++] = SiCIIDensity;
+      FieldType[O2HINum      = NumberOfBaryonFields++] = O2HIDensity;
+      FieldType[SiCINum      = NumberOfBaryonFields++] = SiCIDensity;
+      FieldType[NO2INum      = NumberOfBaryonFields++] = NO2IDensity;
+      FieldType[SiH3IINum    = NumberOfBaryonFields++] = SiH3IIDensity;
+      FieldType[SiH2IINum    = NumberOfBaryonFields++] = SiH2IIDensity;
+      FieldType[OCNINum      = NumberOfBaryonFields++] = OCNIDensity;
+      FieldType[SiH2INum     = NumberOfBaryonFields++] = SiH2IDensity;
+      FieldType[SiOHIINum    = NumberOfBaryonFields++] = SiOHIIDensity;
+      FieldType[SiHIINum     = NumberOfBaryonFields++] = SiHIIDensity;
+      FieldType[SiH4INum     = NumberOfBaryonFields++] = SiH4IDensity;
+      FieldType[SiHINum      = NumberOfBaryonFields++] = SiHIDensity;
+      FieldType[SiH3INum     = NumberOfBaryonFields++] = SiH3IDensity;
+      FieldType[SiOIINum     = NumberOfBaryonFields++] = SiOIIDensity;
+      FieldType[HCO2IINum    = NumberOfBaryonFields++] = HCO2IIDensity;
+      FieldType[HNOINum      = NumberOfBaryonFields++] = HNOIDensity;
+      FieldType[CH3OHINum    = NumberOfBaryonFields++] = CH3OHIDensity;
+      FieldType[MgINum       = NumberOfBaryonFields++] = MgIDensity;
+      FieldType[MgIINum      = NumberOfBaryonFields++] = MgIIDensity;
+      FieldType[CH4IINum     = NumberOfBaryonFields++] = CH4IIDensity;
+      FieldType[SiOINum      = NumberOfBaryonFields++] = SiOIDensity;
+      FieldType[CNIINum      = NumberOfBaryonFields++] = CNIIDensity;
+      FieldType[HCNHIINum    = NumberOfBaryonFields++] = HCNHIIDensity;
+      FieldType[N2HIINum     = NumberOfBaryonFields++] = N2HIIDensity;
+      FieldType[O2HIINum     = NumberOfBaryonFields++] = O2HIIDensity;
+      FieldType[SiIINum      = NumberOfBaryonFields++] = SiIIDensity;
+      FieldType[SiINum       = NumberOfBaryonFields++] = SiIDensity;
+      FieldType[HNCINum      = NumberOfBaryonFields++] = HNCIDensity;
+      FieldType[HNOIINum     = NumberOfBaryonFields++] = HNOIIDensity;
+      FieldType[N2IINum      = NumberOfBaryonFields++] = N2IIDensity;
+      FieldType[H3COIINum    = NumberOfBaryonFields++] = H3COIIDensity;
+      FieldType[CH4INum      = NumberOfBaryonFields++] = CH4IDensity;
+      FieldType[COIINum      = NumberOfBaryonFields++] = COIIDensity;
+      FieldType[NH3INum      = NumberOfBaryonFields++] = NH3IDensity;
+      FieldType[CH3INum      = NumberOfBaryonFields++] = CH3IDensity;
+      FieldType[CO2INum      = NumberOfBaryonFields++] = CO2IDensity;
+      FieldType[NIINum       = NumberOfBaryonFields++] = NIIDensity;
+      FieldType[OIINum       = NumberOfBaryonFields++] = OIIDensity;
+      FieldType[HCNIINum     = NumberOfBaryonFields++] = HCNIIDensity;
+      FieldType[NH2IINum     = NumberOfBaryonFields++] = NH2IIDensity;
+      FieldType[NHIINum      = NumberOfBaryonFields++] = NHIIDensity;
+      FieldType[O2IINum      = NumberOfBaryonFields++] = O2IIDensity;
+      FieldType[CH3IINum     = NumberOfBaryonFields++] = CH3IIDensity;
+      FieldType[NH2INum      = NumberOfBaryonFields++] = NH2IDensity;
+      FieldType[CH2IINum     = NumberOfBaryonFields++] = CH2IIDensity;
+      FieldType[H2OIINum     = NumberOfBaryonFields++] = H2OIIDensity;
+      FieldType[NH3IINum     = NumberOfBaryonFields++] = NH3IIDensity;
+      FieldType[NOIINum      = NumberOfBaryonFields++] = NOIIDensity;
+      FieldType[H3OIINum     = NumberOfBaryonFields++] = H3OIIDensity;
+      FieldType[N2INum       = NumberOfBaryonFields++] = N2IDensity;
+      FieldType[CIINum       = NumberOfBaryonFields++] = CIIDensity;
+      FieldType[HCNINum      = NumberOfBaryonFields++] = HCNIDensity;
+      FieldType[CHIINum      = NumberOfBaryonFields++] = CHIIDensity;
+      FieldType[CH2INum      = NumberOfBaryonFields++] = CH2IDensity;
+      FieldType[H2COIINum    = NumberOfBaryonFields++] = H2COIIDensity;
+      FieldType[NHINum       = NumberOfBaryonFields++] = NHIDensity;
+      FieldType[OHIINum      = NumberOfBaryonFields++] = OHIIDensity;
+      FieldType[CNINum       = NumberOfBaryonFields++] = CNIDensity;
+      FieldType[H2COINum     = NumberOfBaryonFields++] = H2COIDensity;
+      FieldType[HCOINum      = NumberOfBaryonFields++] = HCOIDensity;
+      FieldType[CHINum       = NumberOfBaryonFields++] = CHIDensity;
+      FieldType[H3IINum      = NumberOfBaryonFields++] = H3IIDensity;
+      FieldType[NOINum       = NumberOfBaryonFields++] = NOIDensity;
+      FieldType[NINum        = NumberOfBaryonFields++] = NIDensity;
+      FieldType[OHINum       = NumberOfBaryonFields++] = OHIDensity;
+      FieldType[O2INum       = NumberOfBaryonFields++] = O2IDensity;
+      FieldType[CINum        = NumberOfBaryonFields++] = CIDensity;
+      FieldType[HCOIINum     = NumberOfBaryonFields++] = HCOIIDensity;
+      FieldType[H2OINum      = NumberOfBaryonFields++] = H2OIDensity;
+      FieldType[OINum        = NumberOfBaryonFields++] = OIDensity;
+      FieldType[COINum       = NumberOfBaryonFields++] = COIDensity;
 
       FieldType[KspNum = NumberOfBaryonFields++] = Ksputtering;
     }

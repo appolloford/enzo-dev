@@ -61,7 +61,7 @@ int grid::NaunetRenormWrapper()
   }
 
   // Initial abundances
-  float yab[NAUNET_NEQUATIONS] = {0.0};
+  float yab[NSPECIES] = {0.0};
   yab[IDX_H2I] = 0.5;
   yab[IDX_HI]  = 5.0e-5;
   yab[IDX_HeI] = 9.75e-2;
