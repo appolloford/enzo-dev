@@ -19,6 +19,9 @@
 ************************************************************************/
  
 #include <stdio.h>
+#ifdef USE_NAUNET
+#include "naunet_enzo.h"
+#endif
 #include "ErrorExceptions.h"
 #include "macros_and_parameters.h"
 #include "typedefs.h"
@@ -27,9 +30,13 @@
 #include "GridList.h"
 #include "ExternalBoundary.h"
 #include "Grid.h"
+#include "phys_constants.h"
  
 /* function prototypes */
- 
+
+int GetUnits(float *DensityUnits, float *LengthUnits,
+             float *TemperatureUnits, float *TimeUnits,
+             float *VelocityUnits, FLOAT Time);
 int FindField(int f, int farray[], int n);
 extern "C" void FORTRAN_NAME(interpolate)
                              (int *rank, float *pfield, int pdim[],
@@ -421,6 +428,67 @@ int grid::InterpolateFieldValues(grid *ParentGrid
 			   Offset, Offset+1, Offset+2);
  
     } // end loop over fields
+
+
+#ifdef USE_NAUNET
+
+    if (use_naunetrenorm) {
+
+      float TemperatureUnits = 1, DensityUnits = 1, LengthUnits = 1,
+            VelocityUnits = 1, TimeUnits = 1, aUnits = 1;
+      GetUnits(&DensityUnits, &LengthUnits, &TemperatureUnits,
+              &TimeUnits, &VelocityUnits, Time);
+
+      float NumberDensityUnits = DensityUnits / mh;
+
+      int specnum[NSPECIES] = {0};
+      if (MultiSpecies == NAUNET_SPECIES) {
+        IdentifyNaunetSpeciesFields(specnum);
+      }
+
+      // Initial abundances
+      float yab[NSPECIES] = {0.0};
+      yab[IDX_H2I] = 0.5;
+      yab[IDX_HI]  = 5.0e-5;
+      yab[IDX_HeI] = 9.75e-2;
+      yab[IDX_NI]  = 7.5e-5;
+      yab[IDX_OI]  = 1.8e-4;
+      yab[IDX_COI] = 1.4e-4;
+      yab[IDX_MgI] = 7.0e-9;
+      yab[IDX_SiI] = 8.0e-9;
+
+      Naunet naunet;
+      naunet.SetReferenceAbund(yab, 1);
+
+      // for (int igrid = 0; igrid < size; igrid++) {
+      for (int k = 0; k < GridDimension[2]; k++) {
+        for (int j = 0; j < GridDimension[1]; j++) {
+          int igrid = (k * GridDimension[1] + j) * GridDimension[0];
+          for (int i = 0; i < GridDimension[0]; i++, igrid++) {
+
+            // printf("%d\n", igrid);
+            for (int sidx = 0; sidx < NSPECIES; sidx++) {
+              int snum = specnum[sidx];
+              yab[sidx] = BaryonField[snum][igrid] * NumberDensityUnits / A_Table[sidx];
+            }
+
+            int flag = naunet.Renorm(yab);
+
+            // Fail to Renormalize
+            if (flag == NAUNET_FAIL) {
+              ENZO_FAIL("Naunet renorm failed!");
+            }
+
+            for (int sidx = 0; sidx < NSPECIES; sidx++) {
+              int snum = specnum[sidx];
+              BaryonField[snum][igrid] = yab[sidx] * A_Table[sidx] / NumberDensityUnits;
+            }
+          }
+        }
+      }
+    }
+
+#endif
 
     if(UseMHDCT){
       int MHDParentTempDims[3][3], MHDChildTempDims[3][3];
