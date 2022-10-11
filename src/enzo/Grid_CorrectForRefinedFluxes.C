@@ -365,8 +365,15 @@ int grid::CorrectForRefinedFluxes(fluxes *InitialFluxes,
       // like density, total energy, and internal energy
       if (FluxCorrection == 2){
         for (field = 0; field < NumberOfBaryonFields; field++) {
-          if (FieldType[field] >= ElectronDensity &&
-              FieldType[field] <= ExtraType1) {
+          if ((FieldType[field] >= ElectronDensity &&
+               FieldType[field] <= ExtraType1)
+           || (FieldType[field] >= CIDensity && 
+               FieldType[field] <= O2IDensity)
+#ifdef USE_NAUNET
+           || (FieldType[field] >= GH2CNIDensity && 
+               FieldType[field] <= NIDensity)
+#endif
+             ) {
             fieldNumberList.push_back(field);
           }
         }
@@ -406,6 +413,12 @@ int grid::CorrectForRefinedFluxes(fluxes *InitialFluxes,
             )
             || FieldType[field] == MetalSNIaDensity
             || FieldType[field] == MetalSNIIDensity
+            || (FieldType[field] >= CIDensity && 
+               FieldType[field] <= O2IDensity)
+#ifdef USE_NAUNET
+            || (FieldType[field] >= GH2CNIDensity && 
+               FieldType[field] <= NIDensity)
+#endif
           )
           && FieldTypeNoInterpolate(FieldType[field]) == FALSE
           && FieldTypeIsRadiation(FieldType[field]) == FALSE
@@ -547,6 +560,12 @@ int grid::CorrectForRefinedFluxes(fluxes *InitialFluxes,
 			 FieldType[field] == InternalEnergy ||
                          ( FieldType[field] >= ElectronDensity &&
                            FieldType[field] <= ExtraType1 )
+                      || (FieldType[field] >= CIDensity && 
+                          FieldType[field] <= O2IDensity)
+#ifdef USE_NAUNET
+                      || (FieldType[field] >= GH2CNIDensity && 
+                          FieldType[field] <= NIDensity)
+#endif
                          )) {
 
 		      /* If new density & energy is < 0 then undo the
@@ -722,6 +741,12 @@ int grid::CorrectForRefinedFluxes(fluxes *InitialFluxes,
 		     FieldType[field] == InternalEnergy  ||
                      ( FieldType[field] >= ElectronDensity &&
                        FieldType[field] <= ExtraType1 )
+                  || (FieldType[field] >= CIDensity && 
+                      FieldType[field] <= O2IDensity)
+#ifdef USE_NAUNET
+                  || (FieldType[field] >= GH2CNIDensity && 
+                      FieldType[field] <= NIDensity)
+#endif
                     ) &&
 		    BaryonField[field][FieldIndex] <= 0) {
 		  /*if (debug) {
@@ -749,6 +774,12 @@ int grid::CorrectForRefinedFluxes(fluxes *InitialFluxes,
 		     FieldType[field] == InternalEnergy ||
                      ( FieldType[field] >= ElectronDensity &&
                        FieldType[field] <= ExtraType1 )
+                  || (FieldType[field] >= CIDensity && 
+                      FieldType[field] <= O2IDensity)
+#ifdef USE_NAUNET
+                  || (FieldType[field] >= GH2CNIDensity && 
+                      FieldType[field] <= NIDensity)
+#endif
                     ) &&
 		    BaryonField[field][FieldIndex + Offset] <= 0.0) {
 		  /*if (debug) {
@@ -852,8 +883,14 @@ int grid::CorrectForRefinedFluxes(fluxes *InitialFluxes,
           if (FluxCorrection == 1) {
 	  for (field = 0; field < NumberOfBaryonFields; field++)
 	    if ( ((FieldType[field] >= ElectronDensity &&
-		   FieldType[field] <= ExtraType1) ||
-		  FieldType[field] == MetalSNIaDensity ||
+		   FieldType[field] <= ExtraType1)
+               || (FieldType[field] >= CIDensity && 
+                   FieldType[field] <= O2IDensity)
+#ifdef USE_NAUNET
+               || (FieldType[field] >= GH2CNIDensity && 
+                   FieldType[field] <= NIDensity)
+#endif
+               ||  FieldType[field] == MetalSNIaDensity ||
 		  FieldType[field] == MetalSNIIDensity) &&
 		 FieldTypeNoInterpolate(FieldType[field]) == FALSE &&
 		 FieldTypeIsRadiation(FieldType[field]) == FALSE)
