@@ -1072,6 +1072,7 @@ int SetDefaultGlobalValues(TopGridData &MetaData)
   use_naunet = 0;
   use_naunetstep = 0;
   use_naunetrenorm = 0;
+  use_interprenorm = 0;
   grackle_primordial = 0;
   opt_freeze = 1.0;
   opt_thd = 1;

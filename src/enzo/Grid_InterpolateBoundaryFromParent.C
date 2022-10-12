@@ -493,7 +493,7 @@ int grid::InterpolateBoundaryFromParent(grid *ParentGrid)
 
 #ifdef USE_NAUNET
 
-    if (use_naunetrenorm) {
+    if (use_interprenorm) {
 
       float TemperatureUnits = 1, DensityUnits = 1, LengthUnits = 1,
             VelocityUnits = 1, TimeUnits = 1, aUnits = 1;

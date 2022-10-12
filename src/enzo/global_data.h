@@ -1227,6 +1227,9 @@ EXTERN float MagneticSupernovaEnergy;
 EXTERN int use_naunet;
 EXTERN int use_naunetstep;
 EXTERN int use_naunetrenorm;
+// renorm species in interpolation for element conservation
+// it doesn't give better result as normal interpolation
+EXTERN int use_interprenorm;
 EXTERN int grackle_primordial;
 EXTERN float opt_freeze;
 EXTERN int opt_thd;

@@ -335,10 +335,10 @@ int grid::NaunetWrapper()
         //   ENZO_FAIL("Naunet renorm failed in Grid_NaunetWrapper!");
         // }
 
-        // for (int sidx = 0; sidx < NSPECIES; sidx++) {
-        //   int snum = specnum[sidx];
-        //   BaryonField[snum][igrid] = y[sidx] * A_Table[sidx] / NumberDensityUnits;
-        // }
+        for (int sidx = 0; sidx < NSPECIES; sidx++) {
+          int snum = specnum[sidx];
+          BaryonField[snum][igrid] = y[sidx] * A_Table[sidx] / NumberDensityUnits;
+        }
         
       }
     }

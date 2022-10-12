@@ -1178,6 +1178,7 @@ int WriteParameterFile(FILE *fptr, TopGridData &MetaData, char *name = NULL)
   fprintf(fptr, "use_naunet           = %"ISYM"\n", use_naunet);
   fprintf(fptr, "use_naunetstep       = %"ISYM"\n", use_naunetstep);
   fprintf(fptr, "use_naunetrenorm     = %"ISYM"\n", use_naunetrenorm);
+  fprintf(fptr, "use_interprenorm     = %"ISYM"\n", use_interprenorm);
   fprintf(fptr, "grackle_primordial   = %"ISYM"\n", grackle_primordial);
   fprintf(fptr, "opt_freeze           = %"GOUTSYM"\n", opt_freeze);
   fprintf(fptr, "opt_thd              = %"ISYM"\n", opt_thd);
