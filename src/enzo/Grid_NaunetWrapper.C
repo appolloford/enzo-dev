@@ -293,7 +293,7 @@ int grid::NaunetWrapper()
 
         for (int sidx = 0; sidx < NSPECIES; sidx++) {
           int snum = specnum[sidx];
-          y[sidx] = BaryonField[snum][igrid] * NumberDensityUnits / A_Table[sidx];
+          y[sidx] = max(BaryonField[snum][igrid] * NumberDensityUnits / A_Table[sidx], 1e-40);
           y_init[sidx] = y[sidx];
         }
 
@@ -337,7 +337,7 @@ int grid::NaunetWrapper()
 
         for (int sidx = 0; sidx < NSPECIES; sidx++) {
           int snum = specnum[sidx];
-          BaryonField[snum][igrid] = y[sidx] * A_Table[sidx] / NumberDensityUnits;
+          BaryonField[snum][igrid] = max(y[sidx] * A_Table[sidx] / NumberDensityUnits, 1e-40);
         }
         
       }
