@@ -125,7 +125,7 @@ int grid::NaunetWrapper()
   if (ProcessorNumber != MyProcessorNumber)
     return SUCCESS;
 
-  if (use_naunetstep == 1 && (TopGridCycle != NaunetCycle || TopGridCycle == 0))
+  if ((use_naunetstep == 1 || use_naunetstep == 2) && (TopGridCycle != NaunetCycle || TopGridCycle == 0))
     return SUCCESS;
 
   if (MultiSpecies != NAUNET_SPECIES) {
@@ -135,7 +135,7 @@ int grid::NaunetWrapper()
   }
 
   if (debug && MyProcessorNumber == ROOT_PROCESSOR) {
-    if (use_naunetstep == 1 && TopGridCycle == NaunetCycle) {
+    if ((use_naunetstep == 1 || use_naunetstep == 2) && TopGridCycle == NaunetCycle) {
       printf("NaunetWrapper: GridLevel=%d, TopGridCycle=%d, NaunetCycle=%d, NaunetCycleSkip:%d\n",
               GridLevel, TopGridCycle, NaunetCycle, NaunetCycleSkip);
     }
@@ -148,7 +148,7 @@ int grid::NaunetWrapper()
 
   double dt_chem = dtFixed;
 
-  if (use_naunetstep == 1) dt_chem = Time - NaunetTime;
+  if (use_naunetstep == 1 || use_naunetstep == 2) dt_chem = Time - NaunetTime;
 
   if (MyProcessorNumber == ROOT_PROCESSOR) printf("NaunetWrapper: dt_chem = %13.7e\n", dt_chem);
   

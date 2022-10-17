@@ -65,8 +65,10 @@ int grid::MultiSpeciesHandler()
 
 #ifdef USE_NAUNET
   if (use_naunet == TRUE) {
-    if (this->NaunetWrapper() == FAIL) {
-      ENZO_FAIL("Error in NaunetWrapper.\n");
+    if (use_naunetstep == 0 || use_naunetstep == 1) {
+      if (this->NaunetWrapper() == FAIL) {
+        ENZO_FAIL("Error in NaunetWrapper.\n");
+      }
     }
     return SUCCESS;
   }

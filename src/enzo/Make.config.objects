@@ -941,6 +941,7 @@ OBJS_CONFIG_LIB = \
     star_maker_ssn.o \
 	StratifiedMediumExplosionInitialize.o \
         SupernovaRestartInitialize.o \
+        SuperMultiSpeciesHandler.o \
         SysMkdir.o \
         TestGravityCheckResults.o \
         TestGravityInitialize.o \

@@ -130,6 +130,14 @@ int SetEvolveRefineRegion(FLOAT time);
 
 int SetStellarMassThreshold(FLOAT time);
 
+int SuperMultiSpeciesHandler(TopGridData *MetaData,
+                             LevelHierarchyEntry *LevelArray[], 
+                             ExternalBoundary *Exterior
+#ifdef TRANSFER
+                           , ImplicitProblemABC *ImplicitSolver
+#endif
+                          );
+
 #ifdef MEM_TRACE
 Eint64 mused(void);
 #endif
@@ -530,8 +538,14 @@ int EvolveHierarchy(HierarchyEntry &TopGrid, TopGridData &MetaData,
     tlev1 = MPI_Wtime();
 #endif
 
+    SuperMultiSpeciesHandler(&MetaData, LevelArray, Exterior
+#ifdef TRANSFER
+                           , ImplicitSolver
+#endif
+                            );
+
 #ifdef USE_NAUNET
-    if (use_naunetstep == 1) {
+    if (use_naunetstep == 1 || use_naunetstep == 2) {
       if (MetaData.CycleNumber == MetaData.NaunetCycle)
         MetaData.NaunetCycle += MetaData.NaunetCycleSkip;
     }
