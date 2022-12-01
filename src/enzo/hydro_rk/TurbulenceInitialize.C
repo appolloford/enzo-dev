@@ -8,6 +8,7 @@
 /
 /
 ************************************************************************/
+// clang-format off
 #ifdef USE_MPI
 #include <mpi.h>
 #endif /* USE_MPI */
@@ -16,6 +17,9 @@
 #include <map>
 #include <string>
 #include <math.h>
+#ifdef USE_NAUNET
+#include "naunet_enzo.h"
+#endif
 #include "macros_and_parameters.h"
 #include "typedefs.h"
 #include "global_data.h"
@@ -85,6 +89,117 @@ int TurbulenceInitialize(FILE *fptr, FILE *Outfptr,
   char *MetalName = "Metal_Density";
   char *Phi_pName = "Phip";
   
+#ifdef USE_NAUNET
+  /* Additional species in deuterium network*/
+  const char *GH2CNIName             = "GH2CNI_Density";
+  const char *GHNCIName              = "GHNCI_Density";
+  const char *GNO2IName              = "GNO2I_Density";
+  const char *GSiOIName              = "GSiOI_Density";
+  const char *GCOIName               = "GCOI_Density";
+  const char *GHNCOIName             = "GHNCOI_Density";
+  const char *GMgIName               = "GMgI_Density";
+  const char *GNOIName               = "GNOI_Density";
+  const char *GO2IName               = "GO2I_Density";
+  const char *GO2HIName              = "GO2HI_Density";
+  const char *GSiCIName              = "GSiCI_Density";
+  const char *GSiC2IName             = "GSiC2I_Density";
+  const char *GSiC3IName             = "GSiC3I_Density";
+  const char *GCH3OHIName            = "GCH3OHI_Density";
+  const char *GCO2IName              = "GCO2I_Density";
+  const char *GH2SiOIName            = "GH2SiOI_Density";
+  const char *GHNOIName              = "GHNOI_Density";
+  const char *GN2IName               = "GN2I_Density";
+  const char *GH2COIName             = "GH2COI_Density";
+  const char *GHCNIName              = "GHCNI_Density";
+  const char *GH2OIName              = "GH2OI_Density";
+  const char *GNH3IName              = "GNH3I_Density";
+  const char *SiC3IIName             = "SiC3II_Density";
+  const char *H2CNIName              = "H2CNI_Density";
+  const char *GCH4IName              = "GCH4I_Density";
+  const char *H2NOIIName             = "H2NOII_Density";
+  const char *H2SiOIName             = "H2SiOI_Density";
+  const char *HeHIIName              = "HeHII_Density";
+  const char *HNCOIName              = "HNCOI_Density";
+  const char *HOCIIName              = "HOCII_Density";
+  const char *SiC2IIName             = "SiC2II_Density";
+  const char *GSiH4IName             = "GSiH4I_Density";
+  const char *SiC2IName              = "SiC2I_Density";
+  const char *SiC3IName              = "SiC3I_Density";
+  const char *SiH5IIName             = "SiH5II_Density";
+  const char *SiH4IIName             = "SiH4II_Density";
+  const char *SiCIIName              = "SiCII_Density";
+  const char *O2HIName               = "O2HI_Density";
+  const char *SiCIName               = "SiCI_Density";
+  const char *NO2IName               = "NO2I_Density";
+  const char *SiH3IIName             = "SiH3II_Density";
+  const char *SiH2IIName             = "SiH2II_Density";
+  const char *OCNIName               = "OCNI_Density";
+  const char *SiH2IName              = "SiH2I_Density";
+  const char *SiOHIIName             = "SiOHII_Density";
+  const char *SiHIIName              = "SiHII_Density";
+  const char *SiH4IName              = "SiH4I_Density";
+  const char *SiHIName               = "SiHI_Density";
+  const char *SiH3IName              = "SiH3I_Density";
+  const char *SiOIIName              = "SiOII_Density";
+  const char *HCO2IIName             = "HCO2II_Density";
+  const char *HNOIName               = "HNOI_Density";
+  const char *CH3OHIName             = "CH3OHI_Density";
+  const char *MgIName                = "MgI_Density";
+  const char *MgIIName               = "MgII_Density";
+  const char *CH4IIName              = "CH4II_Density";
+  const char *SiOIName               = "SiOI_Density";
+  const char *CNIIName               = "CNII_Density";
+  const char *HCNHIIName             = "HCNHII_Density";
+  const char *N2HIIName              = "N2HII_Density";
+  const char *O2HIIName              = "O2HII_Density";
+  const char *SiIIName               = "SiII_Density";
+  const char *SiIName                = "SiI_Density";
+  const char *HNCIName               = "HNCI_Density";
+  const char *HNOIIName              = "HNOII_Density";
+  const char *N2IIName               = "N2II_Density";
+  const char *H3COIIName             = "H3COII_Density";
+  const char *CH4IName               = "CH4I_Density";
+  const char *COIIName               = "COII_Density";
+  const char *NH3IName               = "NH3I_Density";
+  const char *CH3IName               = "CH3I_Density";
+  const char *CO2IName               = "CO2I_Density";
+  const char *NIIName                = "NII_Density";
+  const char *OIIName                = "OII_Density";
+  const char *HCNIIName              = "HCNII_Density";
+  const char *NH2IIName              = "NH2II_Density";
+  const char *NHIIName               = "NHII_Density";
+  const char *O2IIName               = "O2II_Density";
+  const char *CH3IIName              = "CH3II_Density";
+  const char *NH2IName               = "NH2I_Density";
+  const char *CH2IIName              = "CH2II_Density";
+  const char *H2OIIName              = "H2OII_Density";
+  const char *NH3IIName              = "NH3II_Density";
+  const char *NOIIName               = "NOII_Density";
+  const char *H3OIIName              = "H3OII_Density";
+  const char *N2IName                = "N2I_Density";
+  const char *CIIName                = "CII_Density";
+  const char *HCNIName               = "HCNI_Density";
+  const char *CHIIName               = "CHII_Density";
+  const char *CH2IName               = "CH2I_Density";
+  const char *H2COIIName             = "H2COII_Density";
+  const char *NHIName                = "NHI_Density";
+  const char *OHIIName               = "OHII_Density";
+  const char *CNIName                = "CNI_Density";
+  const char *H2COIName              = "H2COI_Density";
+  const char *HCOIName               = "HCOI_Density";
+  const char *CHIName                = "CHI_Density";
+  const char *H3IIName               = "H3II_Density";
+  const char *NOIName                = "NOI_Density";
+  const char *NIName                 = "NI_Density";
+  const char *OHIName                = "OHI_Density";
+  const char *O2IName                = "O2I_Density";
+  const char *CIName                 = "CI_Density";
+  const char *HCOIIName              = "HCOII_Density";
+  const char *H2OIName               = "H2OI_Density";
+  const char *OIName                 = "OI_Density";
+  const char *COIName                = "COI_Density";
+  #endif
+
   /* declarations */
 
   char  line[MAX_LINE_LENGTH];
@@ -301,6 +416,118 @@ printf("Plasma beta=%"GSYM"\n", CloudDensity*CloudSoundSpeed*CloudSoundSpeed/(In
       DataLabel[count++] = DIIName;
       DataLabel[count++] = HDIName;
     }
+#ifdef USE_NAUNET
+    if (MultiSpecies == NAUNET_SPECIES) {
+      DataLabel[count++] = (char*) GH2CNIName;
+      DataLabel[count++] = (char*) GHNCIName;
+      DataLabel[count++] = (char*) GNO2IName;
+      DataLabel[count++] = (char*) GSiOIName;
+      DataLabel[count++] = (char*) GCOIName;
+      DataLabel[count++] = (char*) GHNCOIName;
+      DataLabel[count++] = (char*) GMgIName;
+      DataLabel[count++] = (char*) GNOIName;
+      DataLabel[count++] = (char*) GO2IName;
+      DataLabel[count++] = (char*) GO2HIName;
+      DataLabel[count++] = (char*) GSiCIName;
+      DataLabel[count++] = (char*) GSiC2IName;
+      DataLabel[count++] = (char*) GSiC3IName;
+      DataLabel[count++] = (char*) GCH3OHIName;
+      DataLabel[count++] = (char*) GCO2IName;
+      DataLabel[count++] = (char*) GH2SiOIName;
+      DataLabel[count++] = (char*) GHNOIName;
+      DataLabel[count++] = (char*) GN2IName;
+      DataLabel[count++] = (char*) GH2COIName;
+      DataLabel[count++] = (char*) GHCNIName;
+      DataLabel[count++] = (char*) GH2OIName;
+      DataLabel[count++] = (char*) GNH3IName;
+      DataLabel[count++] = (char*) SiC3IIName;
+      DataLabel[count++] = (char*) H2CNIName;
+      DataLabel[count++] = (char*) GCH4IName;
+      DataLabel[count++] = (char*) H2NOIIName;
+      DataLabel[count++] = (char*) H2SiOIName;
+      DataLabel[count++] = (char*) HeHIIName;
+      DataLabel[count++] = (char*) HNCOIName;
+      DataLabel[count++] = (char*) HOCIIName;
+      DataLabel[count++] = (char*) SiC2IIName;
+      DataLabel[count++] = (char*) GSiH4IName;
+      DataLabel[count++] = (char*) SiC2IName;
+      DataLabel[count++] = (char*) SiC3IName;
+      DataLabel[count++] = (char*) SiH5IIName;
+      DataLabel[count++] = (char*) SiH4IIName;
+      DataLabel[count++] = (char*) SiCIIName;
+      DataLabel[count++] = (char*) O2HIName;
+      DataLabel[count++] = (char*) SiCIName;
+      DataLabel[count++] = (char*) NO2IName;
+      DataLabel[count++] = (char*) SiH3IIName;
+      DataLabel[count++] = (char*) SiH2IIName;
+      DataLabel[count++] = (char*) OCNIName;
+      DataLabel[count++] = (char*) SiH2IName;
+      DataLabel[count++] = (char*) SiOHIIName;
+      DataLabel[count++] = (char*) SiHIIName;
+      DataLabel[count++] = (char*) SiH4IName;
+      DataLabel[count++] = (char*) SiHIName;
+      DataLabel[count++] = (char*) SiH3IName;
+      DataLabel[count++] = (char*) SiOIIName;
+      DataLabel[count++] = (char*) HCO2IIName;
+      DataLabel[count++] = (char*) HNOIName;
+      DataLabel[count++] = (char*) CH3OHIName;
+      DataLabel[count++] = (char*) MgIName;
+      DataLabel[count++] = (char*) MgIIName;
+      DataLabel[count++] = (char*) CH4IIName;
+      DataLabel[count++] = (char*) SiOIName;
+      DataLabel[count++] = (char*) CNIIName;
+      DataLabel[count++] = (char*) HCNHIIName;
+      DataLabel[count++] = (char*) N2HIIName;
+      DataLabel[count++] = (char*) O2HIIName;
+      DataLabel[count++] = (char*) SiIIName;
+      DataLabel[count++] = (char*) SiIName;
+      DataLabel[count++] = (char*) HNCIName;
+      DataLabel[count++] = (char*) HNOIIName;
+      DataLabel[count++] = (char*) N2IIName;
+      DataLabel[count++] = (char*) H3COIIName;
+      DataLabel[count++] = (char*) CH4IName;
+      DataLabel[count++] = (char*) COIIName;
+      DataLabel[count++] = (char*) NH3IName;
+      DataLabel[count++] = (char*) CH3IName;
+      DataLabel[count++] = (char*) CO2IName;
+      DataLabel[count++] = (char*) NIIName;
+      DataLabel[count++] = (char*) OIIName;
+      DataLabel[count++] = (char*) HCNIIName;
+      DataLabel[count++] = (char*) NH2IIName;
+      DataLabel[count++] = (char*) NHIIName;
+      DataLabel[count++] = (char*) O2IIName;
+      DataLabel[count++] = (char*) CH3IIName;
+      DataLabel[count++] = (char*) NH2IName;
+      DataLabel[count++] = (char*) CH2IIName;
+      DataLabel[count++] = (char*) H2OIIName;
+      DataLabel[count++] = (char*) NH3IIName;
+      DataLabel[count++] = (char*) NOIIName;
+      DataLabel[count++] = (char*) H3OIIName;
+      DataLabel[count++] = (char*) N2IName;
+      DataLabel[count++] = (char*) CIIName;
+      DataLabel[count++] = (char*) HCNIName;
+      DataLabel[count++] = (char*) CHIIName;
+      DataLabel[count++] = (char*) CH2IName;
+      DataLabel[count++] = (char*) H2COIIName;
+      DataLabel[count++] = (char*) NHIName;
+      DataLabel[count++] = (char*) OHIIName;
+      DataLabel[count++] = (char*) CNIName;
+      DataLabel[count++] = (char*) H2COIName;
+      DataLabel[count++] = (char*) HCOIName;
+      DataLabel[count++] = (char*) CHIName;
+      DataLabel[count++] = (char*) H3IIName;
+      DataLabel[count++] = (char*) NOIName;
+      DataLabel[count++] = (char*) NIName;
+      DataLabel[count++] = (char*) OHIName;
+      DataLabel[count++] = (char*) O2IName;
+      DataLabel[count++] = (char*) CIName;
+      DataLabel[count++] = (char*) HCOIIName;
+      DataLabel[count++] = (char*) H2OIName;
+      DataLabel[count++] = (char*) OIName;
+      DataLabel[count++] = (char*) COIName;
+      
+    }
+#endif
   }  // if Multispecies                                                                                                   
   //  DataLabel[count++] = MetalName;
   //if (PhotonTestUseColour)
