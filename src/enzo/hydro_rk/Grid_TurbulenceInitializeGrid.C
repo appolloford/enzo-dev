@@ -24,8 +24,6 @@
 #include "EOS.h"
 #include "phys_constants.h"
 
-//int FindField(int f, int farray[], int n);  // tried adding for GMC color using InitializeUniform
-
 int GetUnits(float *DensityUnits, float *LengthUnits,
 	     float *TemperatureUnits, float *TimeUnits,
 	     float *VelocityUnits, FLOAT Time);
@@ -36,8 +34,7 @@ void Turbulence_Generator(float **vel, int dim0, int dim1, int dim2, int ind,
 int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FLOAT CloudRadius, 
 				   float CloudMachNumber, float CloudAngularVelocity, float InitialBField,
 				   int SetTurbulence, int CloudType, int TurbulenceSeed, int PutSink, int level,
-				   int SetBaryonFields, //)
-				   float RelativeVelocity, float Btheta, float ImpactParameter)  // GMC collision parameters
+				   int SetBaryonFields)
 {
 
   /* declarations */
@@ -46,11 +43,7 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
   int DeNum, HINum, HIINum, HeINum, HeIINum, HeIIINum, HMNum, H2INum, H2IINum,
     DINum, DIINum, HDINum,  kphHINum, gammaNum, kphHeINum,
     kphHeIINum, kdissH2INum, RPresNum1, RPresNum2, RPresNum3;
-  //int GMC1Num, GMC2Num;
-  ////GMC1Num = FindField(GMC1, FieldType, NumberOfBaryonFields);
-  ////GMC2Num = FindField(GMC2, FieldType, NumberOfBaryonFields);
-  ////int ColourNum;
-  ////ColourNum = 0; //
+  int ColourNum;
 
   NumberOfBaryonFields = 0;
   FieldType[NumberOfBaryonFields++] = Density;
@@ -143,8 +136,6 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
     FieldType[NumberOfBaryonFields++] = AccelerationField3;
   }
 
-  //FieldType[GMC1Num=NumberOfBaryonFields++] = GMC1; 
-  //FieldType[GMC2Num=NumberOfBaryonFields++] = GMC2;
 
   float DensityUnits = 1.0, LengthUnits = 1.0, TemperatureUnits = 1.0, TimeUnits = 1.0,
     VelocityUnits = 1.0;
@@ -212,57 +203,15 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
   float InitialFractionHeII = 1.0e-14;
   float InitialFractionHeIII = 1.0e-17;  
 
+  /* if (CloudType == 3) {
+    CloudRadius = 10.0;
+    } */
+
   /* Cloud center is box center. */
-  float Cloud2Radius = CloudRadius*0.5; // r1 = 1/2*r2
   FLOAT xc = 0.5, yc = 0.5, zc = 0.5, xpos, ypos, zpos,
-    x, y, z, r;
-    //cosphi, sinphi, x, y, z, r;
-  FLOAT r2d, r1, r2;
-  FLOAT vcol, Bparam;
-  FLOAT tcross = sqrt(1.0/(GravConst*(4.0/3.0)*pi*CloudDensity*DensityUnits))/TimeUnits;
-  FLOAT Dsep, x1c, y1c, z1c, x2c, y2c, z2c;
-
-  /* test: colliding, small, identical, no separation */
-  if (CloudType >= 201 && CloudType <= 209) { 
-      if (CloudType == 201) {
-          Bparam=0.0;
-      } else if (CloudType == 202) {
-          Bparam=0.5;
-      }
-      //vcol = 5.75e5/VelocityUnits; //mach 25 collision test for small clouds
-      vcol = 10e5/VelocityUnits; //10 km/s for large clouds (for filament_paper nonturbulent)
-      Dsep = 0.0;
-      x1c = 0.5-(CloudRadius), y1c = 0.5, z1c = 0.5, x2c = 0.5+(CloudRadius), y2c = 0.5+(Bparam*CloudRadius), z2c = 0.5;
-      } else {     // with separation, different clouds
-      vcol = 10e5/VelocityUnits; // v_rel=10km/s fiducial collision
-      //Dsep = vcol*tcross;
-      //x1c = 0.5-(CloudRadius+Dsep/2.0), y1c = 0.5, z1c = 0.5, x2c = 0.5+(Cloud2Radius+Dsep/2.0), y2c = 0.5, z2c = 0.5;
-      }
-  /* colliding, big, identical, no separation */
-  if (CloudType >= 211 && CloudType <= 219) {
-      Bparam = ImpactParameter;    //  GMC collision parameters
-      vcol = RelativeVelocity;     //  GMC collision parameters
-      Dsep = 0.0;
-      x1c = 0.5-(CloudRadius), y1c = 0.5, z1c = 0.5, x2c = 0.5+(CloudRadius), y2c = 0.5+(Bparam*CloudRadius), z2c = 0.5;
-      }
-  /* same as before but cloud-only velocities */
-  if (CloudType >= 221 && CloudType <= 229) { 
-      Bparam = ImpactParameter;    //  GMC collision parameters
-      vcol = RelativeVelocity;     //  GMC collision parameters
-      Dsep = 0.0;
-      x1c = 0.5-(CloudRadius), y1c = 0.5, z1c = 0.5, x2c = 0.5+(CloudRadius), y2c = 0.5+(Bparam*CloudRadius), z2c = 0.5;
-      }
-
-
+    cosphi, sinphi, x, y, z, r;
+  FLOAT costheta = cos(17.5*M_PI/180.0), sintheta = sin(17.5*M_PI/180);
   float Density, eint, Velx, Vely, Velz;
-  //float GMC1Val, GMC2Val;
-  //float GMC1, GMC2;
-  /* angled B-field */
-  float theta = 90.0, phi = Btheta;   // GMC parameters
-  float costheta = cos(theta*M_PI/180.0), sintheta = sin(theta*M_PI/180);
-  float cosphi = cos(phi*M_PI/180.0), sinphi = sin(phi*M_PI/180);
-
-
   n = 0;
   for (k = 0; k < GridDimension[2]; k++) {
     for (j = 0; j < GridDimension[1]; j++) {
@@ -274,21 +223,13 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
 	r = sqrt(pow(x-xc,2) + pow(y-yc,2) + pow(z-zc,2));
 	r = max(r, CellWidth[0][0]);
 
-        r2d = sqrt(pow(x-xc,2) + pow(y-yc,2));
-        r2d = max(r2d, CellWidth[0][0]);
-
-        r1 = sqrt(pow(x-x1c,2) + pow(y-y1c,2) + pow(z-z1c,2));
-        r1 = max(r1, CellWidth[0][0]);
-        r2 = sqrt(pow(x-x2c,2) + pow(y-y2c,2) + pow(z-z2c,2));
-        r2 = max(r2, CellWidth[0][0]);
-
 	xpos = x - xc;
 	ypos = y - yc;
 	zpos = z - zc;
 
 	/* compute the azimuthal angle */
-	//cosphi = xpos/sqrt(xpos*xpos+ypos*ypos);
-	//sinphi = ypos/sqrt(xpos*xpos+ypos*ypos);
+	cosphi = xpos/sqrt(xpos*xpos+ypos*ypos);
+	sinphi = ypos/sqrt(xpos*xpos+ypos*ypos);
 
 	Velx = Vely = Velz = 0.0;
 
@@ -296,10 +237,8 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
 	Density = CloudDensity;
 	eint = CloudInternalEnergy;
 
-        /* CloudType >=100 cylinder */
 
-	//if (r < CloudRadius) {
-        if (r < CloudRadius && CloudType < 100) {
+	if (r < CloudRadius) {
 
 	  /* Type 0: uniform cloud, 7: uniform cloud (only turb k=1-2) */
 
@@ -366,43 +305,6 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
 	    eint = CloudInternalEnergy;
 	  }
 
-	  /* Type 8: cooling test problem, sphere w high density range (not used) */
-
-	  if (CloudType == 8) {
-	    Density = CloudDensity / (0.001 + pow(99*r/CloudRadius,2));
-	    eint = CloudInternalEnergy;
-	  }
-
-
-        } else if (r2d < CloudRadius && CloudType == 100) {
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-
-        } else if ((r1 < CloudRadius || r2 < Cloud2Radius) && CloudType == 200) {
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-
-	/* two identical clouds */
-        } else if ((r1 < CloudRadius) && (CloudType >= 201 && CloudType <= 219)) { 
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-            //GMC1 = 1.0;  //
-            //GMC2 = 0.01;  //
-
-        } else if ((r2 < CloudRadius) && (CloudType >= 201 && CloudType <= 219)) { 
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-            //GMC1 = 0.01;  //
-            //GMC2 = 1.0;  //
-
-        } else if (r1 < CloudRadius && CloudType == 300 ) {
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-
-	/* centered isolated cloud */
-        } else if (r < CloudRadius && (CloudType >= 301 && CloudType <=309)) { 
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
 
 	} else {
 
@@ -421,7 +323,7 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
 	    eint = CloudInternalEnergy * 10.0;
 	  }
 
-          if (CloudType == 3) {
+          if (CloudType ==3) {
 	    Density = max(DensityUnits, CloudDensity/(1.0 + pow(6.0*r/CloudRadius,2)));
 	    eint = CloudInternalEnergy;
 	  }
@@ -432,37 +334,11 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
 	  }
 
 
-          if (CloudType == 6) {
+          if (CloudType ==6) {
 	    //Density = max(DensityUnits, 0.5*CloudDensity/(1.0 + pow(4.0*r/CloudRadius,2)));
 	    Density = 0.1*CloudDensity/(1.0 + pow(4.0,2));
 	    eint = CloudInternalEnergy*100.0; //400.0;
 	  }
-
-	  if (CloudType == 8) {//
-	    Density = CloudDensity/1e4;
-	    eint = CloudInternalEnergy*1e4;
-	  }
-
-
-          /* cylinder */
-          if (CloudType == 100) {
-            Density = CloudDensity/10.0;
-            eint = CloudInternalEnergy*10.;
-          }
-
-          /* two clouds */
-          if (CloudType >= 200 && CloudType <= 299 ) {
-            Density = CloudDensity/10.0;
-            eint = CloudInternalEnergy*10.;
-            //GMC1 = 0.01;  //
-            //GMC2 = 0.01;  //
-          }
-
-          /* isolated cloud */
-          if (CloudType >= 300) {
-            Density = CloudDensity/10.0;
-            eint = CloudInternalEnergy*10.;
-          }
 
 	}
 
@@ -477,25 +353,14 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
 	if (DualEnergyFormalism) {
 	  BaryonField[ieint][n] = eint;
 	}
-	//BaryonField[GMC1Num][n] = GMC1; //
-	//BaryonField[GMC2Num][n] = GMC2; //
-
-
+	
 	if(Velx != 0.0) 
 	  printf("    PROBLEM!!!! eint = %g, Velx = %g, Vely = %g, Velz = %g \n", eint, Velx, Vely, Velz);
 
-// original B-field
-//	if (UseMHD) {
-//	  BaryonField[iBx  ][n]  = 0.0;//-InitialBField*sinphi;
-//	  BaryonField[iBy  ][n]  = 0.0;//InitialBField*sintheta;
-//	  BaryonField[iBz  ][n]  = InitialBField;
-//	  BaryonField[ietot][n] += 0.5 * pow(InitialBField,2) / Density;
-//	}
-// redefined B-field for GMC collision
 	if (UseMHD) {
-          BaryonField[iBx  ][n]  = InitialBField*sintheta*cosphi;
-          BaryonField[iBy  ][n]  = InitialBField*sintheta*sinphi;
-          BaryonField[iBz  ][n]  = InitialBField*costheta;
+	  BaryonField[iBx  ][n]  = 0.0;//-InitialBField*sinphi;
+	  BaryonField[iBy  ][n]  = 0.0;//InitialBField*sintheta;
+	  BaryonField[iBz  ][n]  = InitialBField;
 	  BaryonField[ietot][n] += 0.5 * pow(InitialBField,2) / Density;
 	}
     if( HydroMethod == MHD_RK ){
@@ -558,6 +423,7 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
     }
   }
 
+
   /* Initialize turbulent velocity field */
 
   if (SetTurbulence) {
@@ -596,62 +462,6 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
       dk = 0.5;
     }
 
-    if (CloudType == 8) { //
-      k1 = 0.0;
-      k2 = 0.0;
-      dk = 0.0;
-    }
-
-
-    if (CloudType == 100) {
-      k1 = 2.0;
-      k2 = 10.0;
-      dk = 1.0;
-    }
-
-    if (CloudType == 200) {
-      k1 = 10.0;
-      k2 = 30.0;
-      dk = 1.0;
-    }
-
-    if (CloudType == 201) {
-      k1 = 0.0;
-      k2 = 0.0;
-      dk = 0.0;
-    }
-
-    if (CloudType == 300) {
-      k1 = 10.0;
-      k2 = 30.0;
-      dk = 1.0;
-    }
-
-    if (CloudType == 301 || CloudType == 211) { // 
-      k1 = 2.0;
-      k2 = 20.0;
-      dk = 1.0;
-    }
-
-    if (CloudType == 302 || CloudType == 212) {
-      k1 = 20.0;
-      k2 = 40.0;
-      dk = 1.0;
-    }
-
-    if (CloudType == 303 || CloudType == 213) {
-      k1 = 4.0;
-      k2 = 20.0;
-      dk = 1.0;
-    }
-
-    if (CloudType == 304 || CloudType == 214) {
-      k1 = 4.0;
-      k2 = 30.0;
-      dk = 1.0;
-    }
-
-
 
     printf("Begin generating turbulent velocity spectrum...\n");
     Turbulence_Generator(TurbulenceVelocity, GridDimension[0], 
@@ -671,18 +481,14 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
 // for level > 0 grids the CloudMachNumber passed in is actuall the Velocity normalization factor
   if (level > 0) VelocityNormalization = CloudMachNumber; 
   printf("Cloud Mach Number = %"GSYM" \n",CloudMachNumber);
-  //for (i = 0; i < 3; i++) {
-    //for (n = 0; n < activesize; n++) {
-      //TurbulenceVelocity[i][n] *= VelocityNormalization;
-    //}
-  //}
+  for (i = 0; i < 3; i++) {
+    for (n = 0; n < activesize; n++) {
+      TurbulenceVelocity[i][n] *= VelocityNormalization;
+    }
+  }
 
 
     /* Set turbulent velocity field */
-
-    if (level == 0) VelocityNormalization = 1;
-
-    float velfact = 0;
 
     n = 0;
     for (k = 0; k < GridDimension[2]; k++) {
@@ -698,198 +504,16 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
 	  
 	  r = sqrt(pow(fabs(x-xc),2)+pow(fabs(y-yc),2)+pow(fabs(z-zc),2));
 	  r = max(r, 0.1*CellWidth[0][0]);
-
-          r2d = sqrt(pow(fabs(x-xc),2)+pow(fabs(y-yc),2));
-          r2d = max(r2d, 0.1*CellWidth[0][0]);
-
-          r1 = sqrt(pow(x-x1c,2) + pow(y-y1c,2) + pow(z-z1c,2));
-          r1 = max(r1, CellWidth[0][0]);
-          r2 = sqrt(pow(x-x2c,2) + pow(y-y2c,2) + pow(z-z2c,2));
-          r2 = max(r2, CellWidth[0][0]);
-
-          if (CloudType < 100) {
-            if (r < CloudRadius) {
-
-              TurbulenceVelocity[0][n] *= VelocityNormalization;
-              TurbulenceVelocity[1][n] *= VelocityNormalization;
-              TurbulenceVelocity[2][n] *= VelocityNormalization;
-
-              BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
-              BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
-              BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(TurbulenceVelocity[0][n],2) +
-                       pow(TurbulenceVelocity[1][n],2) +
-                       pow(TurbulenceVelocity[2][n],2));
-            }
-          }
-
-          if (CloudType == 100) {
-            if (r2d < CloudRadius) {
-              TurbulenceVelocity[0][n] *= VelocityNormalization;
-              TurbulenceVelocity[1][n] *= VelocityNormalization;
-              TurbulenceVelocity[2][n] *= VelocityNormalization;
-
-              BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
-              BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
-              BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(TurbulenceVelocity[0][n],2) +
-                       pow(TurbulenceVelocity[1][n],2) +
-                       pow(TurbulenceVelocity[2][n],2));
-            }
-          }
-
-          if (CloudType == 200) {
-            if (r1 < CloudRadius) {
-              TurbulenceVelocity[0][n] *= VelocityNormalization;
-              TurbulenceVelocity[1][n] *= VelocityNormalization;
-              TurbulenceVelocity[2][n] *= VelocityNormalization;
-
-              BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
-              BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
-              BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
-            }
-
-            if (r2 < Cloud2Radius) {
-              TurbulenceVelocity[0][n] *= VelocityNormalization*Cloud2Radius/CloudRadius;
-              TurbulenceVelocity[1][n] *= VelocityNormalization*Cloud2Radius/CloudRadius;
-              TurbulenceVelocity[2][n] *= VelocityNormalization*Cloud2Radius/CloudRadius;
-
-              BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
-              BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
-              BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
-            }
-              /* velocity scale: 1=2km/s (prev:velfact=2.0) */
-              if (level > 0 && x < 0.5) {
-                velfact = 2.5;
-              } else if (level > 0 && x >= 0.5) {
-                velfact = -2.5;
-              } else {
-                velfact = 0;
-              }
-              BaryonField[ivx][igrid] += velfact;
-
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
-          }
-
-          if (CloudType >= 211 && CloudType <= 219) {     // large colliding identical clouds
-            if (r1 < CloudRadius || r2 < CloudRadius) {
-              TurbulenceVelocity[0][n] *= VelocityNormalization;
-              TurbulenceVelocity[1][n] *= VelocityNormalization;
-              TurbulenceVelocity[2][n] *= VelocityNormalization;
-
-              BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
-              BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
-              BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
-            }
-              /* velocity scale: 1=2km/s */
-              //if (x < 0.5) {
-              if (level > 0 && x < 0.5) {
-                velfact = 0.5*vcol; 
-              //} else if (x >= 0.5) {
-              } else if (level > 0 && x >= 0.5) {
-                velfact = -0.5*vcol;
-              //} else {
-                //velfact = 0;
-              }
-              BaryonField[ivx][igrid] += velfact; // (adds bulk flow; also changes in Grid_NormalizeVelocity.C)
-
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
-          }
-
-          if (CloudType >= 221 && CloudType <= 229) {     // large colliding identical clouds, vel in cloud only
-            if (r1 < CloudRadius || r2 < CloudRadius) {
-              TurbulenceVelocity[0][n] *= VelocityNormalization;
-              TurbulenceVelocity[1][n] *= VelocityNormalization;
-              TurbulenceVelocity[2][n] *= VelocityNormalization;
-
-              BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
-              BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
-              BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
-            }
-              /* velocity scale: 1=2km/s */
-              if (level > 0 && r1 < CloudRadius ) {
-                velfact = 0.5*vcol;
-              } else if (level > 0 && r2 < CloudRadius) {
-                velfact = -0.5*vcol;
-              } else {
-                velfact = 0;
-              }
-              BaryonField[ivx][igrid] += velfact;
-
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
-          }
-
-
-          if (CloudType == 300) {
-            if (r1 < CloudRadius) {
-              TurbulenceVelocity[0][n] *= VelocityNormalization;
-              TurbulenceVelocity[1][n] *= VelocityNormalization;
-              TurbulenceVelocity[2][n] *= VelocityNormalization;
-
-              BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
-              BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
-              BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
-            }
-
-              /* velocity scale: 1=2km/s (prev:velfact=2.0) */
-              if (level > 0) {
-                velfact = -2.5;
-              } else {
-                velfact = 0;
-              }
-              BaryonField[ivx][igrid] += velfact;
-
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
-
-          }
-
-          if (CloudType >= 301 && CloudType <= 309) {
-            if (r < CloudRadius) {
-              TurbulenceVelocity[0][n] *= VelocityNormalization;
-              TurbulenceVelocity[1][n] *= VelocityNormalization;
-              TurbulenceVelocity[2][n] *= VelocityNormalization;
-
-              BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
-              BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
-              BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
-            }
-
-              /* velocity scale: 1=2km/s (prev:velfact=2.0) */
-              velfact = 0;
-              BaryonField[ivx][igrid] += velfact;
-
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
-
-          }
-
-
 	  
-	  //if (r < CloudRadius) {
-	    //BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
-	    //BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
-	    //BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
-	    //BaryonField[ietot][igrid] += 
-	      //0.5 * (pow(TurbulenceVelocity[0][n],2) + 
-		     //pow(TurbulenceVelocity[1][n],2) + 
-		     //pow(TurbulenceVelocity[2][n],2));
-	  //}
+	  if (r < CloudRadius) {
+	    BaryonField[ivx][igrid] += TurbulenceVelocity[0][n];
+	    BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
+	    BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
+	    BaryonField[ietot][igrid] += 
+	      0.5 * (pow(TurbulenceVelocity[0][n],2) + 
+		     pow(TurbulenceVelocity[1][n],2) + 
+		     pow(TurbulenceVelocity[2][n],2));
+	  }
 	} 
       }
     }    

@@ -84,10 +84,7 @@ int TurbulenceInitialize(FILE *fptr, FILE *Outfptr,
   char *Acce3Name = "AccelerationField3";
   char *MetalName = "Metal_Density";
   char *Phi_pName = "Phip";
-
-  //char *GMC1Name = "GMC_1";
-  //char *GMC2Name = "GMC_2";
-
+  
   /* declarations */
 
   char  line[MAX_LINE_LENGTH];
@@ -103,7 +100,6 @@ int TurbulenceInitialize(FILE *fptr, FILE *Outfptr,
     CloudAngularVelocity = 0.0, InitialBField = 0.0;
   FLOAT CloudRadius = 0.05;
   int CloudType = 1;
-  float RelativeVelocity=0.0, Btheta=0.0, ImpactParameter=0.0;  // new params
 
   /* read input from parameter file */
 
@@ -122,9 +118,6 @@ int TurbulenceInitialize(FILE *fptr, FILE *Outfptr,
     ret += sscanf(line, "RandomSeed = %"ISYM, &RandomSeed);
     ret += sscanf(line, "InitialBfield = %"FSYM, &InitialBField);
     ret += sscanf(line, "CloudType = %"ISYM, &CloudType);
-    ret += sscanf(line, "RelativeVelocity = %"FSYM, &RelativeVelocity); // new params
-    ret += sscanf(line, "Btheta = %"FSYM, &Btheta);                     // new params
-    ret += sscanf(line, "ImpactParameter = %"FSYM, &ImpactParameter);   // new params
   }
 
   /* Convert to code units */
@@ -140,7 +133,6 @@ int TurbulenceInitialize(FILE *fptr, FILE *Outfptr,
   CloudSoundSpeed /= VelocityUnits;
   InitialBField /= MagneticUnits;
   CloudAngularVelocity *= TimeUnits;
-  RelativeVelocity /= VelocityUnits;  // new params
 
   printf("Magnetic Units=%"GSYM"\n", MagneticUnits);  
   printf("B field=%"GSYM"\n", InitialBField);  
@@ -157,11 +149,8 @@ printf("Plasma beta=%"GSYM"\n", CloudDensity*CloudSoundSpeed*CloudSoundSpeed/(In
   CurrentGrid = &TopGrid;
   while (CurrentGrid != NULL) {
     if (CurrentGrid->GridData->TurbulenceInitializeGrid(
-                //CloudDensity, CloudSoundSpeed, CloudRadius, CloudMachNumber, CloudAngularVelocity, InitialBField, 
-		//SetTurbulence, CloudType, RandomSeed, PutSink, 0, SetBaryonFields) == FAIL) {
                 CloudDensity, CloudSoundSpeed, CloudRadius, CloudMachNumber, CloudAngularVelocity, InitialBField, 
-		SetTurbulence, CloudType, RandomSeed, PutSink, 0, SetBaryonFields, 
-                RelativeVelocity, Btheta, ImpactParameter) == FAIL) {   // 123456 New Parameters!!
+		SetTurbulence, CloudType, RandomSeed, PutSink, 0, SetBaryonFields) == FAIL) {
       fprintf(stderr, "Error in TurbulenceInitializeGrid.\n");
       return FAIL;
     }
@@ -248,9 +237,7 @@ printf("Plasma beta=%"GSYM"\n", CloudDensity*CloudSoundSpeed*CloudSoundSpeed/(In
       while (Temp != NULL) {
 	if (Temp->GridData->TurbulenceInitializeGrid(
 		  CloudDensity, CloudSoundSpeed, CloudRadius, fac, CloudAngularVelocity, InitialBField,
-		  //SetTurbulence, CloudType, RandomSeed, PutSink, level+1, SetBaryonFields) == FAIL) {
-		  SetTurbulence, CloudType, RandomSeed, PutSink, level+1, SetBaryonFields,
-                  RelativeVelocity, Btheta, ImpactParameter) == FAIL) { // 123456 New Parameters !!
+		  SetTurbulence, CloudType, RandomSeed, PutSink, level+1, SetBaryonFields) == FAIL) {
 	  fprintf(stderr, "Error in TurbulenceInitializeGrid.\n");
 	  return FAIL;
 	}
@@ -349,11 +336,6 @@ printf("Plasma beta=%"GSYM"\n", CloudDensity*CloudSoundSpeed*CloudSoundSpeed/(In
     DataLabel[count++] = Acce3Name;
   }
   MHDCTSetupFieldLabels();
-
-  //if (ProblemType == 106) {
-  //  DataLabel[count++] = GMC1Name;
-  //  DataLabel[count++] = GMC2Name;
-  //}
 
   for (i = 0; i < count; i++) {
     DataUnits[i] = NULL;
