@@ -3096,17 +3096,17 @@ int zEulerSweep(int j, int NumberOfSubgrids, fluxes *SubgridFluxes[],
   int Hydro3D(float **Prim, float **dU, float dt,
 	      fluxes *SubgridFluxes[], int NumberOfSubgrids,
 	      float fluxcoef, float min_coeff, int fallback);
-  //int TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FLOAT CloudRadius, 
-  //                             float CloudMachNumber, float CloudAngularVelocity, float InitialBField,
-  //                             int SetTurbulence, int CloudType, int TurbulenceSeed, int PutSink, 
-  //                             int level, int SetBaryonFields);
+  int TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FLOAT CloudRadius, 
+                               float CloudMachNumber, float CloudAngularVelocity, float InitialBField,
+                               int SetTurbulence, int CloudType, int TurbulenceSeed, int PutSink, 
+                               int level, int SetBaryonFields);
 
   // Modified Version for Cloud Collision Simulation
-  int TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FLOAT CloudRadius,
-                               float CloudMachNumber, float CloudAngularVelocity, float InitialBField,
-                               int SetTurbulence, int CloudType, int TurbulenceSeed, int PutSink,
-                               int level, int SetBaryonFields,
-                               float RelativeVelocity, float Btheta, float ImpactParameter);
+  // int TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FLOAT CloudRadius,
+  //                              float CloudMachNumber, float CloudAngularVelocity, float InitialBField,
+  //                              int SetTurbulence, int CloudType, int TurbulenceSeed, int PutSink,
+  //                              int level, int SetBaryonFields,
+  //                              float RelativeVelocity, float Btheta, float ImpactParameter);
   int CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed, FLOAT CloudRadius,
                                    float CloudMachNumber, float CloudAngularVelocity, float InitialBField,
                                    int SetTurbulence, int CloudType, int TurbulenceSeed, int PutSink,
