@@ -336,7 +336,7 @@ int grid::UpdatePrim(float **dU, float c1, float c2)
 	Prim[field][n] *= Prim[iden][n];
   
 #ifdef USE_NAUNET
-  if (!use_naunet)
+  if (!use_naunet || use_naunetneutral)
     this->UpdateElectronDensity();
 #else
   this->UpdateElectronDensity();
