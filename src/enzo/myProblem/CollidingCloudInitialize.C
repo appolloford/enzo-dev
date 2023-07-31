@@ -90,7 +90,6 @@ int CollidingCloudInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
   //char *GMC2Name = "GMC_2";
 
 #ifdef USE_NAUNET
-  /* Additional species in deuterium network*/
   const char *GH2CNIName             = "GH2CNI_Density";
   const char *GHNCIName              = "GHNCI_Density";
   const char *GNO2IName              = "GNO2I_Density";
