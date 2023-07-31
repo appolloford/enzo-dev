@@ -31,6 +31,11 @@
 StochasticForcing Forcing;
 void MHDCTSetupFieldLabels();
 
+int GetUnits(float *DensityUnits, float *LengthUnits,
+		      float *TemperatureUnits, float *TimeUnits,
+		      float *VelocityUnits, FLOAT Time);
+
+
 int DrivenFlowInitialize(FILE *fptr, FILE *Outfptr, 
              HierarchyEntry &TopGrid, TopGridData &MetaData, 
              int SetBaryonFields)
@@ -237,6 +242,22 @@ int DrivenFlowInitialize(FILE *fptr, FILE *Outfptr,
       fprintf(stderr, "warning: the following parameter line was not interpreted:\n%s\n", line);
 
   }
+
+  /* Convert to code units */
+  
+  float DensityUnits = 1.0, LengthUnits = 1.0, TemperatureUnits = 1.0, TimeUnits = 1.0, VelocityUnits = 1.0, 
+    PressureUnits = 1.0, MagneticUnits = 1.0;
+  if (UsePhysicalUnit) 
+    GetUnits(&DensityUnits, &LengthUnits, &TemperatureUnits, &TimeUnits, &VelocityUnits, MetaData.Time);
+  PressureUnits = DensityUnits * pow(VelocityUnits,2);
+  MagneticUnits = sqrt(PressureUnits*4.0*M_PI);
+  
+  DrivenFlowDensity /= DensityUnits;
+  DrivenFlowPressure /= PressureUnits;
+  DrivenFlowMagField /= MagneticUnits;
+  
+  printf("DensityUnits = %f, LengthUnits = %f, TemperatureUnits = %f, TimeUnits = %f", DensityUnits, LengthUnits, TemperatureUnits, TimeUnits); 
+
 
 
   /* thermodynamic initial values */
