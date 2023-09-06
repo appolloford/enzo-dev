@@ -350,9 +350,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
 
   /* Cloud center is box center. */
   float Cloud2Radius = CloudRadius*0.5; // r1 = 1/2*r2
-  FLOAT xc = 0.5, yc = 0.5, zc = 0.5, xpos, ypos, zpos,
-    x, y, z, r;
-    //cosphi, sinphi, x, y, z, r;
+  FLOAT xc = 0.5, yc = 0.5, zc = 0.5, xpos, ypos, zpos, x, y, z, r;
   FLOAT r2d, r1, r2;
   FLOAT vcol, Bparam;
   FLOAT tcross = sqrt(1.0/(GravConst*(4.0/3.0)*pi*CloudDensity*DensityUnits))/TimeUnits;
@@ -360,44 +358,44 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
 
   /* test: colliding, small, identical, no separation */
   if (CloudType >= 201 && CloudType <= 209) { 
-      if (CloudType == 201) {
-          Bparam=0.0;
-      } else if (CloudType == 202) {
-          Bparam=0.5;
-      }
-      //vcol = 5.75e5/VelocityUnits; //mach 25 collision test for small clouds
-      vcol = 10e5/VelocityUnits; //10 km/s for large clouds (for filament_paper nonturbulent)
-      Dsep = 0.0;
-      x1c = 0.5-(CloudRadius), y1c = 0.5, z1c = 0.5, x2c = 0.5+(CloudRadius), y2c = 0.5+(Bparam*CloudRadius), z2c = 0.5;
-      } else {     // with separation, different clouds
-      vcol = 10e5/VelocityUnits; // v_rel=10km/s fiducial collision
-      //Dsep = vcol*tcross;
-      //x1c = 0.5-(CloudRadius+Dsep/2.0), y1c = 0.5, z1c = 0.5, x2c = 0.5+(Cloud2Radius+Dsep/2.0), y2c = 0.5, z2c = 0.5;
-      }
+    if (CloudType == 201) {
+        Bparam=0.0;
+    } else if (CloudType == 202) {
+        Bparam=0.5;
+    }
+    // vcol = 5.75e5/VelocityUnits;
+    // mach 25 collision test for small clouds
+    vcol = 10e5/VelocityUnits; // 10 km/s for large clouds (for filament_paper nonturbulent)
+    Dsep = 0.0;
+    x1c = 0.5-(CloudRadius), y1c = 0.5, z1c = 0.5, x2c = 0.5+(CloudRadius), y2c = 0.5+(Bparam*CloudRadius), z2c = 0.5;
+  } else {
+    // with separation, different clouds
+    vcol = 10e5/VelocityUnits; // v_rel=10km/s fiducial collision
+    // Dsep = vcol*tcross;
+    // x1c = 0.5-(CloudRadius+Dsep/2.0), y1c = 0.5, z1c = 0.5, x2c = 0.5+(Cloud2Radius+Dsep/2.0), y2c = 0.5, z2c = 0.5;
+  }
   /* colliding, big, identical, no separation */
   if (CloudType >= 211 && CloudType <= 219) {
-      Bparam = ImpactParameter;    //  GMC collision parameters
-      vcol = RelativeVelocity;     //  GMC collision parameters
-      Dsep = 0.0;
-      x1c = 0.5-(CloudRadius), y1c = 0.5, z1c = 0.5, x2c = 0.5+(CloudRadius), y2c = 0.5+(Bparam*CloudRadius), z2c = 0.5;
-      }
+    Bparam = ImpactParameter;    //  GMC collision parameters
+    vcol = RelativeVelocity;     //  GMC collision parameters
+    Dsep = 0.0;
+    x1c = 0.5-(CloudRadius), y1c = 0.5, z1c = 0.5, x2c = 0.5+(CloudRadius), y2c = 0.5+(Bparam*CloudRadius), z2c = 0.5;
+  }
   /* same as before but cloud-only velocities */
   if (CloudType >= 221 && CloudType <= 229) { 
-      Bparam = ImpactParameter;    //  GMC collision parameters
-      vcol = RelativeVelocity;     //  GMC collision parameters
-      Dsep = 0.0;
-      x1c = 0.5-(CloudRadius), y1c = 0.5, z1c = 0.5, x2c = 0.5+(CloudRadius), y2c = 0.5+(Bparam*CloudRadius), z2c = 0.5;
-      }
-
+    Bparam = ImpactParameter;    //  GMC collision parameters
+    vcol = RelativeVelocity;     //  GMC collision parameters
+    Dsep = 0.0;
+    x1c = 0.5-(CloudRadius), y1c = 0.5, z1c = 0.5, x2c = 0.5+(CloudRadius), y2c = 0.5+(Bparam*CloudRadius), z2c = 0.5;
+  }
 
   float Density, eint, Velx, Vely, Velz;
-  //float GMC1Val, GMC2Val;
-  //float GMC1, GMC2;
+  // float GMC1Val, GMC2Val;
+  // float GMC1, GMC2;
   /* angled B-field */
   float theta = 90.0, phi = Btheta;   // GMC parameters
   float costheta = cos(theta*M_PI/180.0), sintheta = sin(theta*M_PI/180);
   float cosphi = cos(phi*M_PI/180.0), sinphi = sin(phi*M_PI/180);
-
 
   n = 0;
   for (k = 0; k < GridDimension[2]; k++) {
@@ -422,71 +420,84 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         ypos = y - yc;
         zpos = z - zc;
 
-        /* compute the azimuthal angle */
-        //cosphi = xpos/sqrt(xpos*xpos+ypos*ypos);
-        //sinphi = ypos/sqrt(xpos*xpos+ypos*ypos);
-
-        Velx = Vely = Velz = 0.0;
-
-        // default values:
         Density = CloudDensity;
         eint = CloudInternalEnergy;
+        Velx = Vely = Velz = 0.0;
 
-        /* CloudType >=100 cylinder */
-
-        //if (r < CloudRadius) {
-        if (r < CloudRadius && CloudType < 100) {
-
-          /* Type 0: uniform cloud, 7: uniform cloud (only turb k=1-2) */
-
-          if (CloudType == 0 || CloudType == 7) {
+        /* Type 0: uniform cloud, 7: uniform cloud (only turb k=1-2) */
+        if (CloudType == 0 || CloudType == 7) {
+          if (r < CloudRadius) {
             Density = CloudDensity;
             eint = CloudInternalEnergy;
           }
+          else {
+            Density = CloudDensity / 100.0;
+            eint = CloudInternalEnergy * 100.0;
+          }
+        }
 
-          /* Type 1: cloud density profile is the same as that of Nakamura & Li, ApJ, 662, 395 */
-
-          if (CloudType == 1) {
+        /* Type 1: cloud density profile is the same as that of Nakamura & Li, ApJ, 662, 395 */
+        if (CloudType == 1) {
+          if (r < CloudRadius) {
             Density = CloudDensity / (1.0 + pow(3.0*r/CloudRadius,2));
             eint = CloudInternalEnergy;
             Velx = -CloudAngularVelocity * ypos;
             Vely =  CloudAngularVelocity * xpos;
-            /*else {
-              Velx = -CloudAngularVelocity * (CloudRadius-r) * 1.5 / CloudRadius * ypos;
-              Vely =  CloudAngularVelocity * (CloudRadius-r) * 1.5 / CloudRadius * xpos;
-              }*/
           }
+          else {
+            Density = CloudDensity/20.0;
+            eint = CloudInternalEnergy;
+            // Velx = -CloudAngularVelocity * (CloudRadius-r) * 1.5 / CloudRadius * ypos;
+            // Vely =  CloudAngularVelocity * (CloudRadius-r) * 1.5 / CloudRadius * xpos;
+          }
+        }
 
-          /* Type 2: cloud density is uniform sphere embeded in low density medium */
-
-          if (CloudType == 2) {
+        /* Type 2: cloud density is uniform sphere embeded in low density medium */
+        if (CloudType == 2) {
+          if (r < CloudRadius) {
             Density = CloudDensity;
             eint = CloudInternalEnergy;
             Velx = -CloudAngularVelocity * ypos;
             Vely =  CloudAngularVelocity * xpos;
           }
+          else {
+            Density = CloudDensity / 10.0;
+            eint = CloudInternalEnergy * 10.0;
+          }
+        }
 
-          /* Type 3: flattened 1/r^2 profile without ambient medium. */
-
-          if (CloudType == 3) {
+        /* Type 3: flattened 1/r^2 profile without ambient medium. */
+        if (CloudType == 3) {
+          if (r < CloudRadius) {
             Density = CloudDensity / (1.0 + pow(6.0*r/CloudRadius,2));
             eint = CloudInternalEnergy;
           }
- 
-          /* Type 4: 1/r^2 profile with a smaller core.
-             This is a model for massive star formation with a seed
-             protostar in the center */
+          else {
+            Density = max(DensityUnits, CloudDensity/(1.0 + pow(6.0*r/CloudRadius,2)));
+            eint = CloudInternalEnergy;
+          }
+        }
 
-          if (CloudType == 4) {
+        /* Type 4: 1/r^2 profile with a smaller core.
+            This is a model for massive star formation with a seed
+            protostar in the center */
+        if (CloudType == 4) {
+          if (r < CloudRadius) {
             Density = 4.2508525*CloudDensity / (1.0 + pow(9.0*r/CloudRadius,2));
             eint = CloudInternalEnergy;
             Velx = -CloudAngularVelocity * ypos;
             Vely =  CloudAngularVelocity * xpos;
           }
+          else {
+            Density = max(DensityUnits,0.5*4.25*CloudDensity/(1.0 + pow(9.0*r/CloudRadius,2)));
+            eint = CloudInternalEnergy*200.0; //400.0;
+          }
+        }
 
-          if (CloudType == 5) {
+        if (CloudType == 5) {
+          if (r < CloudRadius) {
             float drho = rand();
-            drho = 0.0;//drho/RAND_MAX;
+            drho = 0.0; // drho/RAND_MAX;
             if (r < 5) {
               Density = CloudDensity*(1.0+0.1*drho);
             } else {
@@ -494,116 +505,101 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
             }
             eint = CloudInternalEnergy/(1.0+0.1*drho);
           }
+        }
 
-          /* Type 6: flattened 1/r^2 profile with large core and with ambient medium. */
-
-          if (CloudType == 6) {
+        /* Type 6: flattened 1/r^2 profile with large core and with ambient medium. */
+        if (CloudType == 6) {
+          if (r < CloudRadius) {
             Density = 1.0522054*CloudDensity / (1.0 + pow(4.0*r/CloudRadius,2));
             eint = CloudInternalEnergy;
           }
-
-          /* Type 8: cooling test problem, sphere w high density range (not used) */
-
-          if (CloudType == 8) {
-            Density = CloudDensity / (0.001 + pow(99*r/CloudRadius,2));
-            eint = CloudInternalEnergy;
-          }
-
-
-        } else if (r2d < CloudRadius && CloudType == 100) {
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-
-        } else if ((r1 < CloudRadius || r2 < Cloud2Radius) && CloudType == 200) {
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-
-        /* two identical clouds */
-        } else if ((r1 < CloudRadius) && (CloudType >= 201 && CloudType <= 219)) { 
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-            //GMC1 = 1.0;  //
-            //GMC2 = 0.01;  //
-
-        } else if ((r2 < CloudRadius) && (CloudType >= 201 && CloudType <= 219)) { 
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-            //GMC1 = 0.01;  //
-            //GMC2 = 1.0;  //
-
-        } else if (r1 < CloudRadius && CloudType == 300 ) {
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-
-        /* centered isolated cloud */
-        } else if (r < CloudRadius && (CloudType >= 301 && CloudType <=309)) { 
-            Density = CloudDensity;
-            eint = CloudInternalEnergy;
-
-        } else {
-
-          if (CloudType == 0 || CloudType == 7 ) {
-            Density = CloudDensity/100.0;
-            eint = CloudInternalEnergy*100.;
-          }
-
-          if (CloudType == 1) {
-            Density = CloudDensity/20.0;
-            eint = CloudInternalEnergy;
-          }
-
-          if (CloudType == 2) {
-            Density = CloudDensity / 10.0;
-            eint = CloudInternalEnergy * 10.0;
-          }
-
-          if (CloudType == 3) {
-            Density = max(DensityUnits, CloudDensity/(1.0 + pow(6.0*r/CloudRadius,2)));
-            eint = CloudInternalEnergy;
-          }
-
-          if (CloudType == 4) {
-            Density = max(DensityUnits,0.5*4.25*CloudDensity/(1.0 + pow(9.0*r/CloudRadius,2)));
-            eint = CloudInternalEnergy*200.0; //400.0;
-          }
-
-
-          if (CloudType == 6) {
-            //Density = max(DensityUnits, 0.5*CloudDensity/(1.0 + pow(4.0*r/CloudRadius,2)));
+          else {
+            // Density = max(DensityUnits, 0.5*CloudDensity/(1.0 + pow(4.0*r/CloudRadius,2)));
             Density = 0.1*CloudDensity/(1.0 + pow(4.0,2));
             eint = CloudInternalEnergy*100.0; //400.0;
           }
+        }
 
-          if (CloudType == 8) {//
+        /* Type 8: cooling test problem, sphere w high density range (not used) */
+        if (CloudType == 8) {
+          if (r < CloudRadius) {
+            Density = CloudDensity / (0.001 + pow(99*r/CloudRadius,2));
+            eint = CloudInternalEnergy;
+          }
+          else {
             Density = CloudDensity/1e4;
             eint = CloudInternalEnergy*1e4;
           }
+        }
 
-
-          /* cylinder */
-          if (CloudType == 100) {
-            Density = CloudDensity/10.0;
-            eint = CloudInternalEnergy*10.;
+        /* cylinder */
+        if (CloudType == 100) {
+          if (r2d < CloudRadius) {
+            Density = CloudDensity;
+            eint = CloudInternalEnergy;
           }
-
-          /* two clouds */
-          if (CloudType >= 200 && CloudType <= 299 ) {
-            Density = CloudDensity/10.0;
-            eint = CloudInternalEnergy*10.;
-            //GMC1 = 0.01;  //
-            //GMC2 = 0.01;  //
+          else {
+            Density = CloudDensity / 10.0;
+            eint = CloudInternalEnergy * 10.0;
           }
+        }
 
-          /* isolated cloud */
-          if (CloudType >= 300) {
-            Density = CloudDensity/10.0;
-            eint = CloudInternalEnergy*10.;
+        /* two clouds */
+        if (CloudType == 200) {
+          if ((r1 < CloudRadius || r2 < Cloud2Radius)) {
+            Density = CloudDensity;
+            eint = CloudInternalEnergy;
           }
+          else {
+            Density = CloudDensity / 10.0;
+            eint = CloudInternalEnergy * 10.0;
+            // GMC1 = 0.01;
+            // GMC2 = 0.01;
+          }
+        }
 
+        /* two identical clouds */
+        if (CloudType >= 201 && CloudType <= 219) { 
+          if ((r1 < CloudRadius) || (r2 < CloudRadius)) {
+            Density = CloudDensity;
+            eint = CloudInternalEnergy;
+            // GMC1 = 1.0;
+            // GMC2 = 0.01;
+          }
+          else {
+            Density = CloudDensity / 10.0;
+            eint = CloudInternalEnergy * 10.;
+            // GMC1 = 0.01;
+            // GMC2 = 0.01;
+          }
+        }
+
+        /* isolated cloud */
+        if (CloudType == 300 ) {
+          if (r1 < CloudRadius) {
+            Density = CloudDensity;
+            eint = CloudInternalEnergy;
+          }
+          else {
+            Density = CloudDensity / 10.0;
+            eint = CloudInternalEnergy * 10.0;
+          }
+        }
+
+        /* centered isolated cloud */
+        if (CloudType >= 301 && CloudType <=309) {
+          if (r < CloudRadius) {
+            Density = CloudDensity;
+            eint = CloudInternalEnergy;
+          }
+          else {
+            Density = CloudDensity / 10.0;
+            eint = CloudInternalEnergy * 10.0;
+          }
         }
 
         BaryonField[iden ][n] = Density;
-        //        BaryonField[ColourNum][n] = Density*0.018477;
+        // BaryonField[ColourNum][n] = Density*0.018477;
         BaryonField[ivx  ][n] = Velx;
         BaryonField[ivy  ][n] = Vely;
         BaryonField[ivz  ][n] = Velz;
@@ -613,9 +609,8 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         if (DualEnergyFormalism) {
           BaryonField[ieint][n] = eint;
         }
-        //BaryonField[GMC1Num][n] = GMC1; //
-        //BaryonField[GMC2Num][n] = GMC2; //
-
+        // BaryonField[GMC1Num][n] = GMC1;
+        // BaryonField[GMC2Num][n] = GMC2;
 
         if(Velx != 0.0) 
           printf("    PROBLEM!!!! eint = %g, Velx = %g, Vely = %g, Velz = %g \n", eint, Velx, Vely, Velz);
@@ -718,40 +713,44 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
       k2 = 10.0;
       dk = 1.0;
     }
+
     if (CloudType == 1) {
       k1 = 2, k2 = 4, dk = 1;
       k1 = int(1.0/CloudRadius);
       dk = int(0.5/CloudRadius);
       k2 = k1 + 8.0*dk;
     }
+
     if (CloudType == 2) {
       k1 = 2.;
       k2 = 37;
       dk = 5;
     }
+
     if (CloudType == 3) {
       k1 = 2.0;
       k2 = 10.0;
       dk = 1.0;
     }
+
     if (CloudType == 4 || CloudType == 6) {
       k1 = 2.0;
       k2 = min(34.0, int(GridDimension[0]/10));
       printf("                GridDimension[0] = %"ISYM"\n",GridDimension[0] );
       dk = max(1.0,int((k2-k1)/10));
     }
+
     if (CloudType == 7) {
       k1 = 1.0;
       k2 = 2.0;
       dk = 0.5;
     }
 
-    if (CloudType == 8) { //
+    if (CloudType == 8) {
       k1 = 0.0;
       k2 = 0.0;
       dk = 0.0;
     }
-
 
     if (CloudType == 100) {
       k1 = 2.0;
@@ -777,7 +776,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
       dk = 1.0;
     }
 
-    if (CloudType == 301 || CloudType == 211) { // 
+    if (CloudType == 301 || CloudType == 211) {
       k1 = 2.0;
       k2 = 20.0;
       dk = 1.0;
@@ -800,8 +799,6 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
       k2 = 30.0;
       dk = 1.0;
     }
-
-
 
     printf("Begin generating turbulent velocity spectrum...\n");
     Turbulence_Generator(TurbulenceVelocity, GridDimension[0], 
@@ -910,20 +907,20 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
               BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
               BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
             }
-              /* velocity scale: 1=2km/s (prev:velfact=2.0) */
-              if (level > 0 && x < 0.5) {
-                velfact = 2.5;
-              } else if (level > 0 && x >= 0.5) {
-                velfact = -2.5;
-              } else {
-                velfact = 0;
-              }
-              BaryonField[ivx][igrid] += velfact;
+            /* velocity scale: 1=2km/s (prev:velfact=2.0) */
+            if (level > 0 && x < 0.5) {
+              velfact = 2.5;
+            } else if (level > 0 && x >= 0.5) {
+              velfact = -2.5;
+            } else {
+              velfact = 0;
+            }
+            BaryonField[ivx][igrid] += velfact;
 
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
+            BaryonField[ietot][igrid] +=
+              0.5 * (pow(BaryonField[ivx][igrid],2) +
+                      pow(BaryonField[ivy][igrid],2) +
+                      pow(BaryonField[ivz][igrid],2));
           }
 
           if (CloudType >= 211 && CloudType <= 219) {     // large colliding identical clouds
@@ -937,12 +934,10 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
               BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
             }
             /* velocity scale: 1=2km/s */
-            if (level > 0 && x < 0.5)
-            {
+            if (level > 0 && x < 0.5) {
               velfact = 0.5 * vcol;
             }
-            else if (level > 0 && x >= 0.5)
-            {
+            else if (level > 0 && x >= 0.5) {
               velfact = -0.5 * vcol;
             }
             BaryonField[ivx][igrid] += velfact; // (adds bulk flow; also changes in Grid_SetBulkVelocity.C)
@@ -962,20 +957,20 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
               BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
               BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
             }
-              /* velocity scale: 1=2km/s */
-              if (level > 0 && r1 < CloudRadius ) {
-                velfact = 0.5*vcol;
-              } else if (level > 0 && r2 < CloudRadius) {
-                velfact = -0.5*vcol;
-              } else {
-                velfact = 0;
-              }
-              BaryonField[ivx][igrid] += velfact;
+            /* velocity scale: 1=2km/s */
+            if (level > 0 && r1 < CloudRadius ) {
+              velfact = 0.5*vcol;
+            } else if (level > 0 && r2 < CloudRadius) {
+              velfact = -0.5*vcol;
+            } else {
+              velfact = 0;
+            }
+            BaryonField[ivx][igrid] += velfact;
 
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
+            BaryonField[ietot][igrid] +=
+              0.5 * (pow(BaryonField[ivx][igrid],2) +
+                      pow(BaryonField[ivy][igrid],2) +
+                      pow(BaryonField[ivz][igrid],2));
           }
 
 
@@ -989,19 +984,18 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
               BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
               BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
             }
+            /* velocity scale: 1=2km/s (prev:velfact=2.0) */
+            if (level > 0) {
+              velfact = -2.5;
+            } else {
+              velfact = 0;
+            }
+            BaryonField[ivx][igrid] += velfact;
 
-              /* velocity scale: 1=2km/s (prev:velfact=2.0) */
-              if (level > 0) {
-                velfact = -2.5;
-              } else {
-                velfact = 0;
-              }
-              BaryonField[ivx][igrid] += velfact;
-
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
+            BaryonField[ietot][igrid] +=
+              0.5 * (pow(BaryonField[ivx][igrid],2) +
+                      pow(BaryonField[ivy][igrid],2) +
+                      pow(BaryonField[ivz][igrid],2));
 
           }
 
@@ -1015,15 +1009,14 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
               BaryonField[ivy][igrid] += TurbulenceVelocity[1][n];
               BaryonField[ivz][igrid] += TurbulenceVelocity[2][n];
             }
+            /* velocity scale: 1=2km/s (prev:velfact=2.0) */
+            velfact = 0;
+            BaryonField[ivx][igrid] += velfact;
 
-              /* velocity scale: 1=2km/s (prev:velfact=2.0) */
-              velfact = 0;
-              BaryonField[ivx][igrid] += velfact;
-
-              BaryonField[ietot][igrid] +=
-                0.5 * (pow(BaryonField[ivx][igrid],2) +
-                       pow(BaryonField[ivy][igrid],2) +
-                       pow(BaryonField[ivz][igrid],2));
+            BaryonField[ietot][igrid] +=
+              0.5 * (pow(BaryonField[ivx][igrid],2) +
+                      pow(BaryonField[ivy][igrid],2) +
+                      pow(BaryonField[ivz][igrid],2));
 
           }
 
