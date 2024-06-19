@@ -310,30 +310,34 @@ int grid::DrivenFlowInitializeGrid(float DrivenFlowDensity,
     }
   }
 #else
-    if (MultiSpecies > 0) {
-      for( int i = 0; i < size; i++){
-          BaryonField[HIINum][i] = InitialFractionHII *
-            CoolData.HydrogenFractionByMass * BaryonField[iden][i];
-          BaryonField[HeIINum][i] = InitialFractionHeII*
-            BaryonField[iden][i] * 4.0 * (1.0-CoolData.HydrogenFractionByMass);
-          BaryonField[HeIIINum][i] = InitialFractionHeIII*
-            BaryonField[iden][i] * 4.0 * (1.0-CoolData.HydrogenFractionByMass);
-          BaryonField[HeINum][i] =
-            (1.0 - CoolData.HydrogenFractionByMass)*BaryonField[iden][i] -
-            BaryonField[HeIINum][i] - BaryonField[HeIIINum][i];
+  float InitialFractionHII = 1.2e-5;
+  float InitialFractionHeII = 1.0e-14;
+  float InitialFractionHeIII = 1.0e-17;
+
+  if (MultiSpecies > 0) {
+    for( int i = 0; i < size; i++){
+        BaryonField[HIINum][i] = InitialFractionHII *
+          CoolData.HydrogenFractionByMass * BaryonField[iden][i];
+        BaryonField[HeIINum][i] = InitialFractionHeII*
+          BaryonField[iden][i] * 4.0 * (1.0-CoolData.HydrogenFractionByMass);
+        BaryonField[HeIIINum][i] = InitialFractionHeIII*
+          BaryonField[iden][i] * 4.0 * (1.0-CoolData.HydrogenFractionByMass);
+        BaryonField[HeINum][i] =
+          (1.0 - CoolData.HydrogenFractionByMass)*BaryonField[iden][i] -
+          BaryonField[HeIINum][i] - BaryonField[HeIIINum][i];
+  
     
-      
-          BaryonField[HINum][i] =
-            CoolData.HydrogenFractionByMass*BaryonField[iden][i]
-            - BaryonField[HIINum][i];
-          
-    
-          /* electron "density": n_e * m_p */
-          
-          BaryonField[DeNum][i] = BaryonField[HIINum][i] +
-            0.25*BaryonField[HeIINum][i] + 0.5*BaryonField[HeIIINum][i];
-      }
+        BaryonField[HINum][i] =
+          CoolData.HydrogenFractionByMass*BaryonField[iden][i]
+          - BaryonField[HIINum][i];
+        
+  
+        /* electron "density": n_e * m_p */
+        
+        BaryonField[DeNum][i] = BaryonField[HIINum][i] +
+          0.25*BaryonField[HeIINum][i] + 0.5*BaryonField[HeIIINum][i];
     }
+  }
 #endif
 
 
