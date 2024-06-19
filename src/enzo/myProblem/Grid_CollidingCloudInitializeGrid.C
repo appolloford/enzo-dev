@@ -420,10 +420,6 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         ypos = y - yc;
         zpos = z - zc;
 
-        Density = CloudDensity;
-        eint = CloudInternalEnergy;
-        Velx = Vely = Velz = 0.0;
-
         /* Type 0: uniform cloud, 7: uniform cloud (only turb k=1-2) */
         if (CloudType == 0 || CloudType == 7) {
           if (r < CloudRadius) {
@@ -597,6 +593,11 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
             eint = CloudInternalEnergy * 10.0;
           }
         }
+        else {
+          Density = CloudDensity;
+          eint = CloudInternalEnergy;
+          Velx = Vely = Velz = 0.0;
+        }
 
         BaryonField[iden ][n] = Density;
         // BaryonField[ColourNum][n] = Density*0.018477;
@@ -713,90 +714,81 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
       k2 = 10.0;
       dk = 1.0;
     }
-
-    if (CloudType == 1) {
+    else if (CloudType == 1) {
       k1 = 2, k2 = 4, dk = 1;
       k1 = int(1.0/CloudRadius);
       dk = int(0.5/CloudRadius);
       k2 = k1 + 8.0*dk;
     }
-
-    if (CloudType == 2) {
+    else if (CloudType == 2) {
       k1 = 2.;
       k2 = 37;
       dk = 5;
     }
-
-    if (CloudType == 3) {
+    else if (CloudType == 3) {
       k1 = 2.0;
       k2 = 10.0;
       dk = 1.0;
     }
-
-    if (CloudType == 4 || CloudType == 6) {
+    else if (CloudType == 4 || CloudType == 6) {
       k1 = 2.0;
       k2 = min(34.0, int(GridDimension[0]/10));
       printf("                GridDimension[0] = %"ISYM"\n",GridDimension[0] );
       dk = max(1.0,int((k2-k1)/10));
     }
-
-    if (CloudType == 7) {
+    else if (CloudType == 7) {
       k1 = 1.0;
       k2 = 2.0;
       dk = 0.5;
     }
-
-    if (CloudType == 8) {
+    else if (CloudType == 8) {
       k1 = 0.0;
       k2 = 0.0;
       dk = 0.0;
     }
-
-    if (CloudType == 100) {
+    else if (CloudType == 100) {
       k1 = 2.0;
       k2 = 10.0;
       dk = 1.0;
     }
-
-    if (CloudType == 200) {
+    else if (CloudType == 200) {
       k1 = 10.0;
       k2 = 30.0;
       dk = 1.0;
     }
-
-    if (CloudType == 201) {
+    else if (CloudType == 201) {
       k1 = 0.0;
       k2 = 0.0;
       dk = 0.0;
     }
-
-    if (CloudType == 300) {
+    else if (CloudType == 300) {
       k1 = 10.0;
       k2 = 30.0;
       dk = 1.0;
     }
-
-    if (CloudType == 301 || CloudType == 211) {
+    else if (CloudType == 301 || CloudType == 211) {
       k1 = 2.0;
       k2 = 20.0;
       dk = 1.0;
     }
-
-    if (CloudType == 302 || CloudType == 212) {
+    else if (CloudType == 302 || CloudType == 212) {
       k1 = 20.0;
       k2 = 40.0;
       dk = 1.0;
     }
-
-    if (CloudType == 303 || CloudType == 213) {
+    else if (CloudType == 303 || CloudType == 213) {
       k1 = 4.0;
       k2 = 20.0;
       dk = 1.0;
     }
-
-    if (CloudType == 304 || CloudType == 214) {
+    else if (CloudType == 304 || CloudType == 214) {
       k1 = 4.0;
       k2 = 30.0;
+      dk = 1.0;
+    }
+    else {
+      k1 = 0.0;
+      k2 = 0.0;
       dk = 1.0;
     }
 
