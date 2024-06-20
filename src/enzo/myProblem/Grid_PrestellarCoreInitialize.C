@@ -365,6 +365,12 @@ int grid::PrestellarCoreInitializeGrid(
       }
     }
 #else
+    // initial fraction copied from Grid_TurbulenceInitializeGrid.C
+    // feel free to change
+    float InitialFractionHII = 1.2e-5;
+    float InitialFractionHeII = 1.0e-14;
+    float InitialFractionHeIII = 1.0e-17;
+
     if (MultiSpecies) {
       BaryonField[HIINum][n] = InitialFractionHII *
         CoolData.HydrogenFractionByMass * BaryonField[iden][n];
