@@ -433,7 +433,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         }
 
         /* Type 1: cloud density profile is the same as that of Nakamura & Li, ApJ, 662, 395 */
-        if (CloudType == 1) {
+        else if (CloudType == 1) {
           if (r < CloudRadius) {
             Density = CloudDensity / (1.0 + pow(3.0*r/CloudRadius,2));
             eint = CloudInternalEnergy;
@@ -449,7 +449,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         }
 
         /* Type 2: cloud density is uniform sphere embeded in low density medium */
-        if (CloudType == 2) {
+        else if (CloudType == 2) {
           if (r < CloudRadius) {
             Density = CloudDensity;
             eint = CloudInternalEnergy;
@@ -477,7 +477,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         /* Type 4: 1/r^2 profile with a smaller core.
             This is a model for massive star formation with a seed
             protostar in the center */
-        if (CloudType == 4) {
+        else if (CloudType == 4) {
           if (r < CloudRadius) {
             Density = 4.2508525*CloudDensity / (1.0 + pow(9.0*r/CloudRadius,2));
             eint = CloudInternalEnergy;
@@ -490,7 +490,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
           }
         }
 
-        if (CloudType == 5) {
+        else if (CloudType == 5) {
           if (r < CloudRadius) {
             float drho = rand();
             drho = 0.0; // drho/RAND_MAX;
@@ -504,7 +504,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         }
 
         /* Type 6: flattened 1/r^2 profile with large core and with ambient medium. */
-        if (CloudType == 6) {
+        else if (CloudType == 6) {
           if (r < CloudRadius) {
             Density = 1.0522054*CloudDensity / (1.0 + pow(4.0*r/CloudRadius,2));
             eint = CloudInternalEnergy;
@@ -517,7 +517,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         }
 
         /* Type 8: cooling test problem, sphere w high density range (not used) */
-        if (CloudType == 8) {
+        else if (CloudType == 8) {
           if (r < CloudRadius) {
             Density = CloudDensity / (0.001 + pow(99*r/CloudRadius,2));
             eint = CloudInternalEnergy;
@@ -529,7 +529,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         }
 
         /* cylinder */
-        if (CloudType == 100) {
+        else if (CloudType == 100) {
           if (r2d < CloudRadius) {
             Density = CloudDensity;
             eint = CloudInternalEnergy;
@@ -541,7 +541,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         }
 
         /* two clouds */
-        if (CloudType == 200) {
+        else if (CloudType == 200) {
           if ((r1 < CloudRadius || r2 < Cloud2Radius)) {
             Density = CloudDensity;
             eint = CloudInternalEnergy;
@@ -555,7 +555,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         }
 
         /* two identical clouds */
-        if (CloudType >= 201 && CloudType <= 219) { 
+        else if (CloudType >= 201 && CloudType <= 219) { 
           if ((r1 < CloudRadius) || (r2 < CloudRadius)) {
             Density = CloudDensity;
             eint = CloudInternalEnergy;
@@ -571,7 +571,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         }
 
         /* isolated cloud */
-        if (CloudType == 300 ) {
+        else if (CloudType == 300 ) {
           if (r1 < CloudRadius) {
             Density = CloudDensity;
             eint = CloudInternalEnergy;
@@ -583,7 +583,7 @@ int grid::CollidingCloudInitializeGrid(float CloudDensity, float CloudSoundSpeed
         }
 
         /* centered isolated cloud */
-        if (CloudType >= 301 && CloudType <=309) {
+        else if (CloudType >= 301 && CloudType <=309) {
           if (r < CloudRadius) {
             Density = CloudDensity;
             eint = CloudInternalEnergy;
