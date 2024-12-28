@@ -53,10 +53,16 @@ int LightBosonInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
         TopGridData &MetaData);//FDM
 int FDMCollapseInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
         TopGridData &MetaData);//FDM collapse
+int ParallelFDMCollapseInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
+        TopGridData &MetaData);//FDM collapse, ParallelIO
+int ParallelFDMCollapseReInitialize(HierarchyEntry *TopGrid,
+            TopGridData &MetaData);//FDM collapse, ParallelIo
 int HydroShockTubesInitialize(FILE *fptr, FILE *Outfptr,
 			      HierarchyEntry &TopGrid, TopGridData &MetaData);
 int CRShockTubesInitialize(FILE *fptr, FILE *Outfptr,
 			   HierarchyEntry &TopGrid, TopGridData &MetaData);
+int CRTransportTestInitialize(FILE *fptr, FILE *Outfptr,
+			      HierarchyEntry &TopGrid, TopGridData &MetaData);
 int WavePoolInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
 		       TopGridData &MetaData);
 int ShockPoolInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
@@ -196,6 +202,8 @@ int RHIonizationSteepInitialize(FILE *fptr, FILE *Outfptr,
 int CosmoIonizationInitialize(FILE *fptr, FILE *Outfptr,
 			      HierarchyEntry &TopGrid,
 			      TopGridData &MetaData, int local);
+int TestRadiatingStarParticleInitialize(FILE *fptr, FILE *Outfptr, HierarchyEntry &TopGrid,
+			       TopGridData &MetaData, float *Initialdt);
 #endif /* TRANSFER */
 
 
@@ -655,6 +663,11 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
     ret = FDMCollapseInitialize(fptr, Outfptr, TopGrid, MetaData);
   }
 
+  // 192) FDM collapse
+  if ( ProblemType == 192 ){
+    ret = ParallelFDMCollapseInitialize(fptr, Outfptr, TopGrid, MetaData);
+  }
+
   /* 200) 1D MHD Test */
   if (ProblemType == 200) {
     ret = MHD1DTestInitialize(fptr, Outfptr, TopGrid, MetaData);
@@ -705,6 +718,10 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
     ret = CRShockTubesInitialize(fptr, Outfptr, TopGrid, MetaData);
   }
 
+  // 251 ) Cosmic Ray Transport Test
+  if (ProblemType == 251){
+    ret = CRTransportTestInitialize(fptr, Outfptr, TopGrid, MetaData);
+  }
 
 
   /* ???? */
@@ -750,7 +767,6 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
   if ((ProblemType == 414) || (ProblemType == 415))
     ret = CosmoIonizationInitialize(fptr, Outfptr, TopGrid, MetaData, 0);
 
-
   // 450-452) Free-streaming radiation tests
   if ((ProblemType == 450) || (ProblemType == 451) || (ProblemType == 452))
     ret = FSMultiSourceInitialize(fptr, Outfptr, TopGrid, MetaData, 0);
@@ -770,7 +786,13 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
 #endif
 
   // Insert new problem intializer here...
-
+  
+  // 252) Test a star particle explosion
+  #ifdef TRANSFER
+  if (ProblemType == 252)
+    ret = TestRadiatingStarParticleInitialize(fptr, Outfptr, TopGrid, MetaData, 
+				     Initialdt);
+  #endif /* TRANSFER */
   
   if (ret == INT_UNDEFINED) {
     ENZO_VFAIL("Problem Type %"ISYM" undefined.\n", ProblemType)
@@ -896,7 +918,7 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
   // Make changes required for Zeus solver, and turn the TotalEnergy
   // variable (should be renamed just Energy) into GasEnergy
   
-  if (HydroMethod == Zeus_Hydro &&
+  if (UseHydro && HydroMethod == Zeus_Hydro &&
       ProblemType != 10 &&  // BWO (Rotating cylinder)
       ProblemType != 11 &&  // BWO (radiating shock)
       ProblemType != 13 &&  // BWO (Rotating Sphere)
@@ -1035,6 +1057,11 @@ int InitializeNew(char *filename, HierarchyEntry &TopGrid,
       ENZO_FAIL("Error in CollidingCloudReInitialize.\n");
     }
     //  if (HydroMethod == Zeus_Hydro) ConvertTotalEnergyToGasEnergy(&TopGrid);
+  }
+
+  if (ParallelRootGridIO == TRUE && ProblemType == 192){
+    if (ParallelFDMCollapseReInitialize(&TopGrid, MetaData) == FAIL)
+      ENZO_FAIL("Error in ParallelFDMCollapseReInitialize.");
   }
 
   if (ProblemType == 201)

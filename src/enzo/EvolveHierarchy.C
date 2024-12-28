@@ -129,6 +129,7 @@ void PrintMemoryUsage(char *str);
 int SetEvolveRefineRegion(FLOAT time);
 
 int SetStellarMassThreshold(FLOAT time);
+int SetStellarFeedbackEfficiency(FLOAT time);
 
 int SuperMultiSpeciesHandler(TopGridData *MetaData,
                              LevelHierarchyEntry *LevelArray[], 
@@ -279,10 +280,9 @@ int EvolveHierarchy(HierarchyEntry &TopGrid, TopGridData &MetaData,
   }
 */
 
-
   /* Particle Splitter. Split particles into 13 (=1+12) child
      particles. The hierarchy is rebuilt inside this routine. */
-  
+
   if (MetaData.FirstTimestepAfterRestart == TRUE &&
       ParticleSplitterIterations > 0) {
 
@@ -291,7 +291,7 @@ int EvolveHierarchy(HierarchyEntry &TopGrid, TopGridData &MetaData,
   } else {
 
   /* Do the first grid regeneration. */
- 
+
     if(CheckpointRestart == FALSE) {
       RebuildHierarchy(&MetaData, LevelArray, 0);
     }
@@ -471,8 +471,8 @@ int EvolveHierarchy(HierarchyEntry &TopGrid, TopGridData &MetaData,
        OR set MustRefineRegion from evolving MustRefineRegion 
        OR set CoolingRefineRegion from evolving CoolingRefineRegion */
     if ((RefineRegionTimeType == 1) || (RefineRegionTimeType == 0)
-	|| (MustRefineRegionTimeType == 1) || (MustRefineRegionTimeType == 0)
-	|| (CoolingRefineRegionTimeType == 1) || (CoolingRefineRegionTimeType == 0)) {
+        || (MustRefineRegionTimeType == 1) || (MustRefineRegionTimeType == 0)
+        || (CoolingRefineRegionTimeType == 1) || (CoolingRefineRegionTimeType == 0)) {
         if (SetEvolveRefineRegion(MetaData.Time) == FAIL) 
 	  ENZO_FAIL("Error in SetEvolveRefineRegion.");
     }
@@ -481,6 +481,12 @@ int EvolveHierarchy(HierarchyEntry &TopGrid, TopGridData &MetaData,
     if (StarMakerMinimumMassRamp > 0) {
         if (SetStellarMassThreshold(MetaData.Time) == FAIL) 
 	  ENZO_FAIL("Error in SetStellarMassThreshold.");
+    }
+
+    /* Set evolving feedback efficiency */
+    if (StarFeedbackThermalEfficiencyRamp > 0) {
+        if (SetStellarFeedbackEfficiency(MetaData.Time) == FAIL) 
+	  ENZO_FAIL("Error in SetStellarFeedbackEfficiency.");
     }
 
     /* Evolve the stochastic forcing spectrum and add
@@ -510,7 +516,7 @@ int EvolveHierarchy(HierarchyEntry &TopGrid, TopGridData &MetaData,
     }
 */
 #endif
- 
+
     if (EvolveLevel(&MetaData, LevelArray, 0, dt, Exterior
 #ifdef TRANSFER
                 , ImplicitSolver

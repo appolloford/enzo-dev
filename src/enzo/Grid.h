@@ -149,8 +149,8 @@ class grid
 
 // For once-per-rootgrid-timestep star formation, the following flag
 // determines whether SF is about to occur or not. It's currently
-//(April 2012) only implemented for H2REG_STAR and completely
-// ignored for all other star makers.
+// (September 2023) only implemented for H2REG_STAR and NORMAL_STAR
+// but completely ignored for all other star makers.
   int MakeStars;
 
 //
@@ -474,8 +474,11 @@ public:
 
 /* Member functions for dealing with Cosmic Ray Diffusion */
 
-   int ComputeCRDiffusion(); // CR Diffusion Method 
-   int ComputeCRDiffusionTimeStep(float &dt);
+  int ComputeAnisotropicCRDiffusion(); // Anisotropic CR Diffusion Method
+  int ComputeCRDiffusion();            // Isotropic CR Diffusion Method 
+  int ComputeCRDiffusionTimeStep(float &dt);
+  int ComputeCRStreaming();            // Anisotropic CR Streaming Method
+  int ComputeCRStreamingTimeStep(float &dt);
 
 /* Baryons: Copy current solution to Old solution (returns success/fail)
     (for step #16) */
@@ -643,6 +646,20 @@ gradient force to gravitational force for one-zone collapse test. */
 /* Baryons: compute the cooling time. */
 
    int ComputeCoolingTime(float *cooling_time, int CoolingTimeOnly=FALSE);
+
+/* Baryons: compute cooling rate for user supplied data */
+
+   int GrackleCustomCoolRate(int rank, int *dim, float *cool_rate,
+			     float *dens, float *thrmeng,
+			     float *velx, float *vely, float *velz,
+			     float *HIdens=NULL, float *HIIdens=NULL,
+			     float *HeIdens=NULL, float *HeIIdens=NULL, float *HeIIIdens=NULL,
+			     float *edens=NULL,
+			     float *HMdens=NULL, float *H2Idens=NULL, float *H2IIdens=NULL,
+			     float *DIdens=NULL, float *DIIdens=NULL, float *HDIdens=NULL,
+			     float *metaldens=NULL,
+			     float *kphHI=NULL, float *kphHeI=NULL, float *kphHeII=NULL,
+			     float *kdissH2I=NULL, float *gamma=NULL);
 
 /* Baryons & DualEnergyFormalism: Restore consistency between total and
                                   internal energy fields. */
@@ -1154,7 +1171,7 @@ gradient force to gravitational force for one-zone collapse test. */
    };
 
    void PrintBaryonFieldValues(int field, int index)
-     {fprintf(stdout, "Baryonfield[field = %"ISYM"][index = %"ISYM"] = %g\n", 
+     {fprintf(stdout, "Baryonfield[field = %" ISYM "][index = %" ISYM "] = %g\n", 
 	      field, index, BaryonField[field][index]);};
 
 // -------------------------------------------------------------------------
@@ -2027,26 +2044,42 @@ int zEulerSweep(int j, int NumberOfSubgrids, fluxes *SubgridFluxes[],
 /* Cosmic Ray Shock Tube Problems: Initialize grid (returns SUCCESS or FAIL) */
 
   int CRShockTubesInitializeGrid(float InitialDiscontinuity,
-				 float LeftDensity, float RightDensity,
-				 float LeftVelocityX, float RightVelocityX,
-				 float LeftVelocityY, float RightVelocityY,
-				 float LeftVelocityZ, float RightVelocityZ,
-				 float LeftPressure, float RightPressure,
-				 float LeftCRDensity, float RightCRDensity);
+                                 float LeftDensity, float RightDensity,
+                                 float LeftVelocityX, float RightVelocityX,
+                                 float LeftVelocityY, float RightVelocityY,
+                                 float LeftVelocityZ, float RightVelocityZ,
+                                 float LeftPressure, float RightPressure,
+                                 float LeftCRDensity, float RightCRDensity,
+                                 float LeftBx, float RightBx,
+                                 float LeftBy, float RightBy,
+                                 float LeftBz, float RightBz);
   int CRShockTubesInitializeGrid(float InitialDiscontinuity,
-				 float SecondDiscontinuity,
-				 float LeftDensity, float RightDensity,
-				 float CenterDensity,
-				 float LeftVelocityX, float RightVelocityX,
-				 float CenterVelocityX,
-				 float LeftVelocityY, float RightVelocityY,
-				 float CenterVelocityY,
-				 float LeftVelocityZ, float RightVelocityZ,
-				 float CenterVelocityZ,
-				 float LeftPressure, float RightPressure,
-				 float CenterPressure,
-				 float LeftCRDensity, float RightCRDensity,
-				 float CenterCRDensity);
+                                 float SecondDiscontinuity,
+                                 float LeftDensity, float RightDensity,
+                                 float CenterDensity,
+                                 float LeftVelocityX, float RightVelocityX,
+                                 float CenterVelocityX,
+                                 float LeftVelocityY, float RightVelocityY,
+                                 float CenterVelocityY,
+                                 float LeftVelocityZ, float RightVelocityZ,
+                                 float CenterVelocityZ,
+                                 float LeftPressure, float RightPressure,
+                                 float CenterPressure,
+                                 float LeftCRDensity, float RightCRDensity,
+                                 float CenterCRDensity,
+                                 float LeftBx, float RightBx,
+                                 float CenterBx,
+                                 float LeftBy, float RightBy,
+                                 float CenterBy,
+                                 float LeftBz, float RightBz,
+                                 float CenterBz);
+
+  int  CRTransportTestInitializeGrid(int test_type, float center,
+                                     float rho, float vx,
+                                     float vy,  float vz,
+                                     float pg,  float ecr,
+                                     float bx,  float by,
+                                     float bz);
 
 /* Initialize for a uniform grid (returns SUCCESS or FAIL) */
 
@@ -2393,28 +2426,46 @@ int zEulerSweep(int j, int NumberOfSubgrids, fluxes *SubgridFluxes[],
 
 
   /* Initialization for isolated galaxy sims */
+  int _GalaxySimulationInitialization = 0;
   int GalaxySimulationInitializeGrid(
-				     FLOAT DiskRadius,
-				     float GalaxyMass,
-				     float GasMass,
+				     double DiskRadius,
+				     double GalaxyMass,
+				     double GasMass,
 				     FLOAT DiskPosition[MAX_DIMENSION], 
-				     FLOAT ScaleHeightz,
-				     FLOAT ScaleHeightR, 
-				     FLOAT GalaxyTruncationRadius,
-				     float DMConcentration,
-				     float DiskTemperature,
-				     float InitialTemperature,
-				     float UniformDensity,
+				     double ScaleHeightz,
+				     double ScaleHeightR, 
+				     double GalaxyTruncationRadius,
+                 double DiskDensityCap,
+				     double DMConcentration,
+				     double DiskTemperature,
+                 int    DiskPressureBalance,
+				     double InitialTemperature,
+				     double UniformDensity,
+				     int   EquilibrateChem,
 				     int   GasHalo,
-				     float GasHaloScaleRadius,
-				     float GasHaloDensity,
-				     float AngularMomentum[MAX_DIMENSION],
-				     float UniformVelocity[MAX_DIMENSION], 
+				     double GasHaloScaleRadius,
+				     double GasHaloDensity,
+				     double GasHaloDensity2,
+				     double GasTemperature,
+				     double GasAlpha,
+				     double GasZeta,
+				     double GasZeta2,
+				     double GasCoreEntropy,
+				     double GasHaloRatio,
+				     double GasMetallicity,
+				     int   UseHaloRotation,
+				     double RotationScaleVelocity,
+				     double RotationScaleRadius,
+				     double RotationPowerLawIndex,
+				     double DiskMetallicityEnhancementFactor,
+				     double AngularMomentum[MAX_DIMENSION],
+				     double UniformVelocity[MAX_DIMENSION], 
 				     int UseMetallicityField, 
-				     float GalaxySimulationInflowTime,
-				     float GalaxySimulationInflowDensity,
+				     FLOAT GalaxySimulationInflowTime,
+				     double GalaxySimulationInflowDensity,
 				     int level,
-				     float GalaxySimulationCR = 0.0 );
+				     double GalaxySimulationCR = 0.0
+                 );
 
   /* Free expansion test */
   int FreeExpansionInitializeGrid(int FreeExpansionFullBox,
@@ -2782,7 +2833,15 @@ int zEulerSweep(int j, int NumberOfSubgrids, fluxes *SubgridFluxes[],
 /* FDM: Test Problem Initialize Grid for Fuzzy Dark Matter */
   int LightBosonInitializeGrid(float CenterPosition, int LightBosonProblemType);
 /* FDM: Test Problem Initialize Grid for Fuzzy Dark Matter */
-  int FDMCollapseInitializeGrid();
+  int FDMCollapseInitializeGrid(int UseParticles, float ParticleMeanDensity);
+/* FDM: ParallelIO version of the problem */
+  int ParallelFDMCollapseInitializeGrid(char *FDMCollapseRePsiName, 
+                                    char *FDMCollapseImPsiName,
+                                    char *FDMCollapseAbsBdName,
+                                    int FDMUseParticles,
+                                    float FDMParticleMeanDensity,
+                                    int FDMCollapseSubgridsAreStatic,
+                                    int TotalRefinement);
 // -------------------------------------------------------------------------
 // Analysis functions for AnalysisBaseClass and it's derivatives.
 //

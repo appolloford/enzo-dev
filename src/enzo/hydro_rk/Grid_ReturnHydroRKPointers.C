@@ -38,7 +38,7 @@ int grid::ReturnHydroRKPointers(float **Prim, bool ReturnMassFractions)
 
   int i, n, dim, size, nfield, n0;
   int DensNum, GENum, TENum, Vel1Num, Vel2Num, Vel3Num;
-  int B1Num, B2Num, B3Num, PhiNum;
+  int B1Num, B2Num, B3Num, PhiNum, CRNum;
   int DeNum, HINum, HIINum, HeINum, HeIINum, HeIIINum, HMNum, H2INum, H2IINum,
       DINum, DIINum, HDINum;
 #ifdef USE_NAUNET
@@ -68,7 +68,11 @@ int grid::ReturnHydroRKPointers(float **Prim, bool ReturnMassFractions)
   }
 
   else if (HydroMethod == MHD_RK) {
-    this->IdentifyPhysicalQuantities(DensNum, GENum, Vel1Num, Vel2Num, 
+    if (CRModel)
+      this->IdentifyPhysicalQuantities(DensNum, GENum, Vel1Num, Vel2Num,
+				       Vel3Num, TENum, B1Num, B2Num, B3Num, PhiNum, CRNum);
+    else 
+      this->IdentifyPhysicalQuantities(DensNum, GENum, Vel1Num, Vel2Num, 
 				     Vel3Num, TENum, B1Num, B2Num, B3Num, 
 				     PhiNum);
     nfield = n0 = NEQ_MHD;
@@ -88,6 +92,11 @@ int grid::ReturnHydroRKPointers(float **Prim, bool ReturnMassFractions)
     Prim[iBz] = BaryonField[B3Num];
     Prim[iPhi]= BaryonField[PhiNum];
   }
+
+  if (CRModel){
+    Prim[iCR] = BaryonField[CRNum];
+  }
+
   /*
   printf("Physical Quantities: %"ISYM" %"ISYM"  %"ISYM" %"ISYM" %"ISYM"  %"ISYM"  %"ISYM" %"ISYM" %"ISYM" %"ISYM"\n", 
 	 DensNum, GENum, Vel1Num, Vel2Num, 
