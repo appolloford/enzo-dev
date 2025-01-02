@@ -10,9 +10,9 @@
 #
 #=======================================================================
 
-MACH_TEXT  = VERA
+MACH_TEXT  = VERA-ZEN4
 MACH_VALID = 1
-MACH_FILE  = Make.mach.vera
+MACH_FILE  = Make.mach.vera-zen4
 
 MACHINE_NOTES =
 
@@ -31,11 +31,9 @@ LOCAL_MPI_INSTALL         =
 LOCAL_FC_INSTALL          = 
 LOCAL_HDF5_INSTALL        = 
 LOCAL_HYPRE_INSTALL       = $(HOME)
-LOCAL_GRACKLE_INSTALL     = $(HOME)/usr/2022a/grackle-3.2
-#LOCAL_GRACKLE_INSTALL     = $(HOME)/usr/2019a/grackle-3.1.1
-#LOCAL_NAUNET_INSTALL      = $(HOME)/naunet_libs/naunet_klu_cloud_custom_sputter_2
-LOCAL_NAUNET_INSTALL      = $(HOME)/naunet_libs/naunet_klu_cloud_custom
-LOCAL_SUNDIALS_INSTALL    = $(HOME)/usr/sundials
+LOCAL_GRACKLE_INSTALL     =
+LOCAL_NAUNET_INSTALL      =
+LOCAL_SUNDIALS_INSTALL    =
 LOCAL_SUITESPARSE_INSTALL = 
 LOCAL_FFTW_INSTALL        = 
 
@@ -47,19 +45,19 @@ MACH_CPP       = /usr/bin/cpp
 
 # With MPI
 
-MACH_CC_MPI    = mpiicc
-MACH_CXX_MPI   = mpiicpc
-MACH_FC_MPI    = mpiifort
-MACH_F90_MPI   = mpiifort
-MACH_LD_MPI    = mpiicpc
+MACH_CC_MPI    = mpicc
+MACH_CXX_MPI   = mpicxx
+MACH_FC_MPI    = mpif90
+MACH_F90_MPI   = mpif90
+MACH_LD_MPI    = mpicxx
 
 # Without MPI
 
-MACH_CC_NOMPI  = icc  # C compiler when not using MPI
-MACH_CXX_NOMPI = icpc # C++ compiler when not using MPI
-MACH_FC_NOMPI  = ifort # Fortran 77 compiler when not using MPI
-MACH_F90_NOMPI = ifort # Fortran 90 compiler when not using MPI
-MACH_LD_NOMPI  = icpc # Linker when not using MPI
+MACH_CC_NOMPI  = gcc      # C compiler when not using MPI
+MACH_CXX_NOMPI = g++      # C++ compiler when not using MPI
+MACH_FC_NOMPI  = gfortran # Fortran 77 compiler when not using MPI
+MACH_F90_NOMPI = gfortran # Fortran 90 compiler when not using MPI
+MACH_LD_NOMPI  = g++      # Linker when not using MPI
 
 #-----------------------------------------------------------------------
 # Machine-dependent defines
@@ -78,9 +76,9 @@ MACH_DEFINES   = -DLINUX -DH5_USE_16_API
 MACH_CPPFLAGS = -P -traditional 
 MACH_CFLAGS   = 
 MACH_CXXFLAGS =
-MACH_FFLAGS   = -132
-MACH_F90FLAGS = 
-MACH_LDFLAGS  = -mkl
+MACH_FFLAGS   = -std=legacy -fno-second-underscore -ffixed-line-length-132
+MACH_F90FLAGS = -std=legacy -fno-second-underscore
+MACH_LDFLAGS  = 
 
 #-----------------------------------------------------------------------
 # Optimization flags
@@ -89,7 +87,7 @@ MACH_LDFLAGS  = -mkl
 MACH_OPT_WARN        = -Wall -g
 MACH_OPT_DEBUG       = -g
 MACH_OPT_HIGH        = -O2
-MACH_OPT_AGGRESSIVE  = -O3
+MACH_OPT_AGGRESSIVE  = -O3 -g
 #MACH_OPT_AGGRESSIVE  = -ipo -O3
 
 #-----------------------------------------------------------------------
@@ -121,7 +119,7 @@ MACH_INCLUDES_SUITESPARSE = $(LOCAL_INCLUDES_SUITESPARSE)
 # Libraries
 #-----------------------------------------------------------------------
 
-LOCAL_LIBS_MACH       = -L$(LOCAL_FC_INSTALL)/lib64 -lifcore -lifport
+LOCAL_LIBS_MACH       = -lgfortran
 LOCAL_LIBS_HDF5       = -L$(LOCAL_HDF5_INSTALL)/lib -L$(HOME)/local/lib \
                         -lhdf5 -lsz -lz
 LOCAL_LIBS_GRACKLE    = -L$(LOCAL_GRACKLE_INSTALL)/lib -lgrackle

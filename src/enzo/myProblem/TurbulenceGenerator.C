@@ -13,7 +13,9 @@
 /
 ************************************************************************/
 #include <iostream>
+#ifdef USE_FFTW
 #include <fftw3.h>
+#endif
 #include <cstdlib>
 #include <cmath>
 #include "phys_constants.h"
@@ -48,7 +50,7 @@ public:
   static const unsigned_long_int a2 = 35;
   static const unsigned_long_int a3 = 4;
   static const unsigned_long_int amod = 4768777513237032717;
-  static const float invrandmax = 1.0/1.84467440737095e19;
+  static constexpr float invrandmax = 1.0/1.84467440737095e19;
 
 
  //public:
@@ -130,7 +132,7 @@ void TurbulenceGenerator_FFTW
   const float power_turb,             ///< [in] Power spectrum index
   float *vfield)                      ///< [out] Array containing velocity field grid
 {
-
+#ifdef USE_FFTW
   XorshiftRand *randnumb = new XorshiftRand(randomSeed);
 
   int ndim=3;
@@ -357,7 +359,7 @@ void TurbulenceGenerator_FFTW
 
   }
   //-----------------------------------------------------------------------------------------------
-
+#endif
   return;
 }
 

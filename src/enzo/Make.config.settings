@@ -348,9 +348,9 @@
 #======================================================================= 
 # CONFIG_FFTW
 #======================================================================= 
-#    yes           Compile with Grackle support
-#    no            Compile without Grackle support
+#    yes           Compile with FFTW
+#    no            Compile without FFTW
 #----------------------------------------------------------------------- 
  
-     CONFIG_FFTW = yes
+     CONFIG_FFTW = no
 

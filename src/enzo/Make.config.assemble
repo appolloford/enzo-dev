@@ -1047,6 +1047,7 @@
 
     ifeq ($(CONFIG_FFTW),yes)
         ERROR_FFTW = 0
+        ASSEMBLE_FFTW_DEFINES     = -DUSE_FFTW
         ASSEMBLE_FFTW_INCLUDES    = $(MACH_INCLUDES_FFTW)
         ASSEMBLE_FFTW_LIBS        = $(MACH_LIBS_FFTW)
     endif

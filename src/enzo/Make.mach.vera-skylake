@@ -1,0 +1,140 @@
+#=======================================================================
+#
+# FILE:        Make.mach.vera
+#
+# DESCRIPTION: Modified from Make.mach.nasa-discover
+#
+# AUTHOR:      Chia-Jung Hsu
+#
+# DATE:        2019-02-05
+#
+#=======================================================================
+
+MACH_TEXT  = VERA-SKYLAKE
+MACH_VALID = 1
+MACH_FILE  = Make.mach.vera-skylake
+
+MACHINE_NOTES =
+
+#-----------------------------------------------------------------------
+# Commands to run test executables
+#-----------------------------------------------------------------------
+
+
+#-----------------------------------------------------------------------
+# Install paths (local variables)
+#-----------------------------------------------------------------------
+
+LOCAL_PACKAGES            = 
+
+LOCAL_MPI_INSTALL         = 
+LOCAL_FC_INSTALL          = 
+LOCAL_HDF5_INSTALL        = 
+LOCAL_HYPRE_INSTALL       = $(HOME)
+LOCAL_GRACKLE_INSTALL     = 
+LOCAL_NAUNET_INSTALL      = 
+LOCAL_SUNDIALS_INSTALL    = 
+LOCAL_SUITESPARSE_INSTALL = 
+LOCAL_FFTW_INSTALL        = 
+
+#-----------------------------------------------------------------------
+# Compiler settings
+#-----------------------------------------------------------------------
+
+MACH_CPP       = /usr/bin/cpp
+
+# With MPI
+
+MACH_CC_MPI    = mpiicc
+MACH_CXX_MPI   = mpiicpc
+MACH_FC_MPI    = mpiifort
+MACH_F90_MPI   = mpiifort
+MACH_LD_MPI    = mpiicpc
+
+# Without MPI
+
+MACH_CC_NOMPI  = icc  # C compiler when not using MPI
+MACH_CXX_NOMPI = icpc # C++ compiler when not using MPI
+MACH_FC_NOMPI  = ifort # Fortran 77 compiler when not using MPI
+MACH_F90_NOMPI = ifort # Fortran 90 compiler when not using MPI
+MACH_LD_NOMPI  = icpc # Linker when not using MPI
+
+#-----------------------------------------------------------------------
+# Machine-dependent defines
+#-----------------------------------------------------------------------
+
+# Note: When compiling against HDF5 version 1.8 or greater, you need to
+# compile HDF5 with --with-default-api-version=v16, or Enzo with
+# -DH5_USE_16_API.
+
+MACH_DEFINES   = -DLINUX -DH5_USE_16_API
+
+#-----------------------------------------------------------------------
+# Compiler flag settings
+#-----------------------------------------------------------------------
+
+MACH_CPPFLAGS = -P -traditional 
+MACH_CFLAGS   = 
+MACH_CXXFLAGS =
+MACH_FFLAGS   = -132
+MACH_F90FLAGS = 
+MACH_LDFLAGS  = -mkl
+
+#-----------------------------------------------------------------------
+# Optimization flags
+#-----------------------------------------------------------------------
+
+MACH_OPT_WARN        = -Wall -g
+MACH_OPT_DEBUG       = -g
+MACH_OPT_HIGH        = -O2
+MACH_OPT_AGGRESSIVE  = -O3
+#MACH_OPT_AGGRESSIVE  = -ipo -O3
+
+#-----------------------------------------------------------------------
+# Includes
+#-----------------------------------------------------------------------
+
+LOCAL_INCLUDES_MPI         = 
+#LOCAL_INCLUDES_MPI         = -I$(LOCAL_MPI_INSTALL)/include64
+LOCAL_INCLUDES_HDF5        = -I$(LOCAL_HDF5_INSTALL)/include
+LOCAL_INCLUDES_HYPRE       = 
+LOCAL_INCLUDES_PAPI        = # PAPI includes
+LOCAL_INCLUDES_GRACKLE     = -I$(LOCAL_GRACKLE_INSTALL)/include
+LOCAL_INCLUDES_NAUNET      = -I$(LOCAL_NAUNET_INSTALL)/include
+LOCAL_INCLUDES_SUNDIALS    = -I$(LOCAL_SUNDIALS_INSTALL)/include
+LOCAL_INCLUDES_SUITESPARSE = 
+LOCAL_INCLUDES_FFTW        =
+
+MACH_INCLUDES             = $(LOCAL_INCLUDES_HDF5)
+
+MACH_INCLUDES_MPI         = $(LOCAL_INCLUDES_MPI)
+MACH_INCLUDES_HYPRE       = $(LOCAL_INCLUDES_HYPRE)
+MACH_INCLUDES_GRACKLE     = $(LOCAL_INCLUDES_GRACKLE)
+MACH_INCLUDES_NAUNET      = $(LOCAL_INCLUDES_NAUNET)
+MACH_INCLUDES_SUNDIALS    = $(LOCAL_INCLUDES_SUNDIALS)
+MACH_INCLUDES_SUITESPARSE = $(LOCAL_INCLUDES_SUITESPARSE)
+
+
+#-----------------------------------------------------------------------
+# Libraries
+#-----------------------------------------------------------------------
+
+LOCAL_LIBS_MACH       = -L$(LOCAL_FC_INSTALL)/lib64 -lifcore -lifport
+LOCAL_LIBS_HDF5       = -L$(LOCAL_HDF5_INSTALL)/lib -L$(HOME)/local/lib \
+                        -lhdf5 -lsz -lz
+LOCAL_LIBS_GRACKLE    = -L$(LOCAL_GRACKLE_INSTALL)/lib -lgrackle
+LOCAL_LIBS_NAUNET     = -L$(LOCAL_NAUNET_INSTALL)/lib -lnaunet
+LOCAL_LIBS_SUNDIALS   = -L$(LOCAL_SUNDIALS_INSTALL)/lib64 -lsundials_cvode \
+                        -lsundials_sunlinsolklu -lsundials_sunmatrixsparse
+LOCAL_LIBS_FFTW       = -lfftw3
+
+MACH_LIBS             = $(LOCAL_LIBS_HDF5) $(LOCAL_LIBS_MACH)
+MACH_LIBS_MPI         = $(LOCAL_LIBS_MPI)
+MACH_LIBS_HYPRE       = $(LOCAL_LIBS_HYPRE)
+MACH_LIBS_PAPI        = $(LOCAL_LIBS_PAPI)
+MACH_LIBS_GRACKLE     = $(LOCAL_LIBS_GRACKLE)
+MACH_LIBS_NAUNET      = $(LOCAL_LIBS_NAUNET)
+MACH_LIBS_SUNDIALS    = $(LOCAL_LIBS_SUNDIALS)
+MACH_LIBS_SUITESPARSE = $(LOCAL_LIBS_SUITESPARSE)
+MACH_LIBS_FFTW        = $(LOCAL_LIBS_FFTW)
+

@@ -286,6 +286,8 @@ show-config:
 	@echo "   CONFIG_GRACKLE  [grackle-{yes,no}]                        : $(CONFIG_GRACKLE)"
 	@echo "   CONFIG_LOG2ALLOC  [log2alloc-{yes,no}]                    : $(CONFIG_LOG2ALLOC)"
 	@echo "   CONFIG_UUID  [uuid-{yes,no}]                              : $(CONFIG_UUID)"
+	@echo "   CONFIG_NAUNET  [naunet-{yes,no}]                          : $(CONFIG_NAUNET)"
+	@echo "   CONFIG_FFTW  [fftw-{yes,no}]                              : $(CONFIG_FFTW)"
 	@echo
 
 #-----------------------------------------------------------------------
